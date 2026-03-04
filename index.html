@@ -4,870 +4,1185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CaptainCast · 超时空电台</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700;900&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #0a0a12;
-    --deep: #080814;
-    --gold: #c8a96e;
-    --amber: #e8935a;
-    --crimson: #c23b2e;
-    --teal: #2dd4bf;
-    --void: #0d1117;
-    --mist: rgba(200,169,110,0.08);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--deep);
-    color: #e8e0d0;
-    font-family: 'Noto Serif SC', serif;
-    overflow-x: hidden;
-    cursor: crosshair;
-  }
-
-  /* Particle canvas */
-  #cosmos {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .content { position: relative; z-index: 1; }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    position: relative;
-    text-align: center;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%);
-  }
-
-  .signal-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--teal);
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 1s 0.3s forwards;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .signal-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--teal);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.6); }
-  }
-
-  .hero-title {
-    font-size: clamp(52px, 10vw, 120px);
-    font-weight: 900;
-    line-height: 0.9;
-    letter-spacing: -2px;
-    opacity: 0;
-    animation: fadeUp 1.2s 0.5s forwards;
-  }
-
-  .hero-title .line1 { color: var(--gold); display: block; }
-  .hero-title .line2 {
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(200,169,110,0.5);
-    display: block;
-    margin-top: 8px;
-  }
-
-  .hero-sub {
-    margin-top: 32px;
-    font-size: 16px;
-    color: rgba(232,224,208,0.6);
-    letter-spacing: 6px;
-    opacity: 0;
-    animation: fadeUp 1s 0.8s forwards;
-  }
-
-  .hero-tagline {
-    margin-top: 48px;
-    font-size: clamp(18px, 3vw, 28px);
-    font-weight: 300;
-    color: rgba(232,224,208,0.9);
-    max-width: 700px;
-    line-height: 1.7;
-    opacity: 0;
-    animation: fadeUp 1s 1.1s forwards;
-  }
-
-  .hero-tagline em {
-    color: var(--gold);
-    font-style: normal;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    animation: fadeUp 1s 1.8s forwards;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .scroll-hint span {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(200,169,110,0.5);
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 48px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 2s infinite;
-  }
-
-  @keyframes scrollPulse {
-    0% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform: scaleY(1); transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── DIVIDER ── */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 0 40px;
-    margin: 60px 0 40px;
-  }
-
-  .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.2); }
-  .divider-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--gold);
-    white-space: nowrap;
-  }
-
-  /* ── EP SECTION ── */
-  .ep-section {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 40px 100px;
-  }
-
-  .ep-header {
-    text-align: center;
-    margin-bottom: 64px;
-  }
-
-  .ep-number {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 6px;
-    color: var(--teal);
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  .ep-title {
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 700;
-    color: var(--gold);
-    line-height: 1.2;
-    margin-bottom: 20px;
-  }
-
-  .ep-desc {
-    font-size: 17px;
-    color: rgba(232,224,208,0.65);
-    line-height: 1.8;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  /* ── CONTENT CARDS ── */
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    margin-bottom: 2px;
-  }
-
-  .card-grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2px;
-  }
-
-  .card {
-    background: rgba(200,169,110,0.04);
-    border: 1px solid rgba(200,169,110,0.1);
-    padding: 40px 36px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.4s, border-color 0.4s;
-  }
-
-  .card:hover {
-    background: rgba(200,169,110,0.08);
-    border-color: rgba(200,169,110,0.3);
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 0;
-    background: var(--gold);
-    transition: height 0.4s;
-  }
-
-  .card:hover::before { height: 100%; }
-
-  .card-icon {
-    font-size: 32px;
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .card-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--teal);
-    display: block;
-    margin-bottom: 12px;
-  }
-
-  .card-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 16px;
-    line-height: 1.3;
-  }
-
-  .card-body {
-    font-size: 14px;
-    color: rgba(232,224,208,0.6);
-    line-height: 1.9;
-  }
-
-  .card-body strong {
-    color: rgba(232,224,208,0.9);
-    font-weight: 400;
-  }
-
-  /* ── QUOTE BLOCK ── */
-  .quote-block {
-    border-left: 3px solid var(--gold);
-    padding: 32px 40px;
-    margin: 60px 0;
-    background: rgba(200,169,110,0.04);
-    position: relative;
-  }
-
-  .quote-text {
-    font-size: clamp(20px, 3vw, 28px);
-    font-weight: 300;
-    line-height: 1.7;
-    color: rgba(232,224,208,0.9);
-    font-style: italic;
-  }
-
-  .quote-attr {
-    margin-top: 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--gold);
-    letter-spacing: 2px;
-  }
-
-  /* ── PLATFORM GRID ── */
-  .platform-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 2px;
-    margin: 40px 0;
-  }
-
-  .platform-card {
-    background: rgba(200,169,110,0.03);
-    border: 1px solid rgba(200,169,110,0.08);
-    padding: 28px 20px;
-    text-align: center;
-    transition: all 0.3s;
-  }
-
-  .platform-card:hover {
-    background: rgba(200,169,110,0.08);
-    border-color: rgba(200,169,110,0.25);
-    transform: translateY(-4px);
-  }
-
-  .platform-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-
-  .platform-form {
-    font-size: 12px;
-    color: rgba(232,224,208,0.5);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-
-  .platform-time {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--teal);
-    letter-spacing: 1px;
-  }
-
-  /* ── PIPELINE ── */
-  .pipeline {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin: 48px 0;
-    overflow-x: auto;
-    padding-bottom: 8px;
-  }
-
-  .pipe-step {
-    flex-shrink: 0;
-    background: rgba(200,169,110,0.06);
-    border: 1px solid rgba(200,169,110,0.15);
-    padding: 16px 20px;
-    text-align: center;
-    min-width: 120px;
-    transition: all 0.3s;
-  }
-
-  .pipe-step:hover {
-    background: rgba(200,169,110,0.12);
-    border-color: var(--gold);
-  }
-
-  .pipe-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--teal);
-    margin-bottom: 6px;
-  }
-
-  .pipe-label {
-    font-size: 13px;
-    color: rgba(232,224,208,0.8);
-    font-weight: 700;
-  }
-
-  .pipe-arrow {
-    color: var(--gold);
-    font-size: 20px;
-    flex-shrink: 0;
-    padding: 0 4px;
-    opacity: 0.5;
-  }
-
-  /* ── CONCEPT BLOCKS ── */
-  .concept-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    margin: 40px 0;
-  }
-
-  .concept-card {
-    padding: 48px 40px;
-    border: 1px solid rgba(200,169,110,0.1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .concept-card.light { background: rgba(200,169,110,0.04); }
-  .concept-card.dark { background: rgba(8,8,20,0.6); }
-
-  .concept-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 80px;
-    font-weight: 700;
-    color: rgba(200,169,110,0.06);
-    position: absolute;
-    top: 16px; right: 24px;
-    line-height: 1;
-  }
-
-  .concept-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--amber);
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .concept-title {
-    font-size: 26px;
-    font-weight: 700;
-    color: #f0e8d8;
-    margin-bottom: 20px;
-    line-height: 1.3;
-  }
-
-  .concept-body {
-    font-size: 14px;
-    color: rgba(232,224,208,0.6);
-    line-height: 1.9;
-  }
-
-  /* ── FOOTER ── */
-  .footer {
-    border-top: 1px solid rgba(200,169,110,0.15);
-    padding: 60px 40px;
-    text-align: center;
-  }
-
-  .footer-logo {
-    font-size: 36px;
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: -1px;
-    margin-bottom: 12px;
-  }
-
-  .footer-sub {
-    font-size: 13px;
-    color: rgba(232,224,208,0.4);
-    letter-spacing: 4px;
-  }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 3px; height: 3px; }
-  ::-webkit-scrollbar-track { background: var(--deep); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); }
-
-  @media (max-width: 768px) {
-    .card-grid, .card-grid-3, .concept-row { grid-template-columns: 1fr; }
-    .platform-grid { grid-template-columns: repeat(3, 1fr); }
-    .ep-section { padding: 0 20px 60px; }
-    .divider { padding: 0 20px; }
-  }
+:root {
+  --ink: #07070f;
+  --deep: #0a0a16;
+  --panel: #0f0f1e;
+  --card: #13132a;
+  --gold: #c8a96e;
+  --gold2: #e8c87a;
+  --amber: #e0935a;
+  --teal: #2dd4bf;
+  --red: #e05555;
+  --green: #4ade80;
+  --text: #e8e0d0;
+  --muted: rgba(232,224,208,0.45);
+  --border: rgba(200,169,110,0.15);
+  --border2: rgba(200,169,110,0.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;cursor:default;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--deep);}
+::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* ── CANVAS ── */
+#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.7;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:64px;
+  background:rgba(7,7,15,0.85);
+  border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);}
+.nav-logo{font-family:'Noto Serif SC',serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:2px;cursor:pointer;}
+.nav-logo span{color:var(--muted);font-size:12px;font-weight:300;margin-left:10px;letter-spacing:4px;font-family:'Space Mono',monospace;}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-link{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);cursor:pointer;transition:color 0.2s;text-decoration:none;}
+.nav-link:hover,.nav-link.active{color:var(--gold);}
+.nav-btn{background:var(--gold);color:var(--ink);font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:8px 20px;border:none;cursor:pointer;transition:all 0.2s;}
+.nav-btn:hover{background:var(--gold2);}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;position:relative;z-index:1;}
+.page.active{display:block;}
+
+/* ══════════════════════════════════════════
+   LANDING PAGE
+══════════════════════════════════════════ */
+#page-home{padding-top:64px;}
+
+/* HERO */
+.hero{min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(200,169,110,0.1) 0%,transparent 70%);}
+
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:5px;color:var(--teal);margin-bottom:36px;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 1s 0.3s forwards;}
+.blink{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.5);}}
+
+.hero-title{font-family:'Noto Serif SC',serif;font-size:clamp(56px,11vw,130px);font-weight:900;line-height:0.88;letter-spacing:-3px;opacity:0;animation:fadeUp 1.2s 0.5s forwards;}
+.hero-title .t1{color:var(--gold);display:block;}
+.hero-title .t2{color:transparent;-webkit-text-stroke:1px rgba(200,169,110,0.4);display:block;margin-top:8px;}
+
+.hero-sub{margin-top:28px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:5px;color:var(--muted);opacity:0;animation:fadeUp 1s 0.8s forwards;}
+
+.hero-desc{margin-top:48px;font-size:clamp(16px,2vw,22px);font-weight:300;line-height:1.8;max-width:680px;color:rgba(232,224,208,0.8);opacity:0;animation:fadeUp 1s 1s forwards;}
+.hero-desc em{color:var(--gold);font-style:normal;font-weight:500;}
+
+.hero-cta{margin-top:56px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.2s forwards;}
+.btn-primary{background:var(--gold);color:var(--ink);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:3px;padding:16px 36px;border:none;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);transform:translateX(-100%);transition:transform 0.3s;}
+.btn-primary:hover::after{transform:translateX(0);}
+.btn-outline{background:transparent;color:var(--gold);font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;padding:16px 36px;border:1px solid var(--gold);cursor:pointer;transition:all 0.2s;}
+.btn-outline:hover{background:rgba(200,169,110,0.1);}
+
+.scroll-cue{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 2s forwards;}
+.scroll-cue span{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:rgba(200,169,110,0.4);}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollAnim 2.5s infinite;}
+@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+/* ABOUT SECTION */
+.section{max-width:1200px;margin:0 auto;padding:120px 48px;}
+.section-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--teal);margin-bottom:20px;display:block;}
+.section-title{font-family:'Noto Serif SC',serif;font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--gold);line-height:1.15;margin-bottom:32px;}
+.section-body{font-size:16px;line-height:1.9;color:var(--muted);max-width:720px;}
+.section-body strong{color:var(--text);font-weight:500;}
+
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 48px;}
+
+/* STORY GRID */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:64px;}
+.story-card{background:rgba(200,169,110,0.04);border:1px solid var(--border2);padding:48px 40px;position:relative;overflow:hidden;transition:all 0.4s;}
+.story-card:hover{background:rgba(200,169,110,0.07);border-color:var(--border);}
+.story-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--gold);transition:height 0.5s;}
+.story-card:hover::before{height:100%;}
+.story-num{font-family:'Space Mono',monospace;font-size:72px;font-weight:700;color:rgba(200,169,110,0.06);position:absolute;top:16px;right:24px;line-height:1;}
+.story-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--amber);margin-bottom:20px;display:block;}
+.story-h{font-family:'Noto Serif SC',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.3;}
+.story-p{font-size:14px;color:var(--muted);line-height:1.9;}
+
+/* CONCEPT */
+.concept-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:0;}
+.concept-block{padding:64px 56px;border:1px solid var(--border2);}
+.concept-block.b1{background:rgba(200,169,110,0.04);}
+.concept-block.b2{background:rgba(10,10,22,0.7);}
+.concept-kw{font-family:'Noto Serif SC',serif;font-size:96px;font-weight:900;color:rgba(200,169,110,0.08);line-height:1;margin-bottom:0;display:block;}
+.concept-tag2{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--teal);display:block;margin-bottom:20px;margin-top:-20px;}
+.concept-h{font-size:26px;font-weight:700;color:var(--text);margin-bottom:20px;line-height:1.3;}
+.concept-p{font-size:14px;color:var(--muted);line-height:1.9;}
+.concept-p strong{color:var(--gold);}
+
+/* QUOTE */
+.quote-wrap{padding:80px 48px;background:rgba(200,169,110,0.03);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);}
+.quote-inner{max-width:900px;margin:0 auto;border-left:3px solid var(--gold);padding-left:48px;}
+.quote-text{font-family:'Noto Serif SC',serif;font-size:clamp(20px,3vw,32px);font-weight:300;line-height:1.7;color:rgba(232,224,208,0.9);font-style:italic;}
+.quote-attr{margin-top:20px;font-family:'Space Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:3px;}
+
+/* EP LIST */
+.ep-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:64px;}
+.ep-card{background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:36px 32px;transition:all 0.3s;cursor:pointer;}
+.ep-card:hover{background:rgba(200,169,110,0.07);border-color:var(--border);transform:translateY(-4px);}
+.ep-no{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--teal);margin-bottom:16px;display:block;}
+.ep-title{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:700;color:var(--gold);margin-bottom:12px;line-height:1.3;}
+.ep-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.ep-badge{display:inline-block;margin-top:16px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 10px;border:1px solid;color:var(--green);border-color:var(--green);}
+.ep-badge.coming{color:var(--muted);border-color:rgba(200,169,110,0.2);}
+
+/* PLATFORM */
+.platform-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:64px;}
+.plat{background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:32px 24px;text-align:center;transition:all 0.3s;}
+.plat:hover{background:rgba(200,169,110,0.07);border-color:var(--border);transform:translateY(-3px);}
+.plat-name{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+.plat-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
+.footer-logo{font-family:'Noto Serif SC',serif;font-size:32px;font-weight:900;color:var(--gold);}
+.footer-sub{font-size:12px;color:rgba(200,169,110,0.35);letter-spacing:4px;margin-top:8px;font-family:'Space Mono',monospace;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════════════════════
+   WORKBENCH PAGE
+══════════════════════════════════════════ */
+#page-work{padding-top:64px;min-height:100vh;}
+
+.work-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px);}
+
+/* SIDEBAR */
+.sidebar{background:rgba(8,8,18,0.95);border-right:1px solid var(--border2);padding:32px 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.sidebar-section{padding:0 24px;margin-bottom:32px;}
+.sidebar-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:rgba(200,169,110,0.35);margin-bottom:12px;display:block;padding-left:4px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-radius:2px;transition:all 0.2s;margin-bottom:2px;}
+.sidebar-item:hover{background:rgba(200,169,110,0.07);}
+.sidebar-item.active{background:rgba(200,169,110,0.12);border-left:2px solid var(--gold);}
+.sidebar-item .si-icon{width:18px;text-align:center;font-size:14px;}
+.sidebar-item .si-text{font-size:13px;color:var(--muted);}
+.sidebar-item.active .si-text{color:var(--text);}
+.sidebar-status{display:flex;align-items:center;gap:6px;padding:8px 16px;margin:0 8px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+.status-text{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;}
+
+/* MAIN WORK AREA */
+.work-main{padding:40px 48px;overflow-y:auto;}
+.work-panel{display:none;}
+.work-panel.active{display:block;}
+
+.panel-header{margin-bottom:40px;}
+.panel-title{font-family:'Noto Serif SC',serif;font-size:32px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+.panel-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+
+/* PIPELINE PANEL */
+.pipeline-flow{display:flex;flex-direction:column;gap:16px;margin-bottom:48px;}
+.pipe-item{display:grid;grid-template-columns:48px 1fr auto;gap:20px;align-items:center;background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:20px 28px;transition:all 0.3s;}
+.pipe-item:hover{background:rgba(200,169,110,0.06);border-color:var(--border);}
+.pipe-num2{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:rgba(200,169,110,0.3);text-align:center;}
+.pipe-info .pi-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.pipe-info .pi-desc{font-size:12px;color:var(--muted);}
+.pipe-action{display:flex;gap:10px;}
+.act-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;padding:8px 18px;border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.act-btn.primary{background:var(--gold);color:var(--ink);font-weight:700;}
+.act-btn.primary:hover{background:var(--gold2);}
+.act-btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--border);}
+.act-btn.ghost:hover{background:rgba(200,169,110,0.1);}
+
+/* IMAGE GEN PANEL */
+.gen-layout{display:grid;grid-template-columns:1fr 360px;gap:32px;}
+.gen-form{}
+.form-group{margin-bottom:24px;}
+.form-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);display:block;margin-bottom:10px;}
+.form-input,.form-textarea,.form-select{width:100%;background:rgba(200,169,110,0.04);border:1px solid var(--border2);color:var(--text);font-family:'Noto Sans SC',sans-serif;font-size:13px;padding:12px 16px;outline:none;transition:border-color 0.2s;}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--gold);}
+.form-textarea{min-height:120px;resize:vertical;line-height:1.6;}
+.form-select option{background:var(--panel);}
+.prompt-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.preset-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.preset-tag:hover{border-color:var(--gold);color:var(--gold);}
+
+.gen-preview{background:rgba(200,169,110,0.03);border:1px solid var(--border2);aspect-ratio:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;position:relative;overflow:hidden;}
+.gen-preview img{width:100%;height:100%;object-fit:cover;display:none;}
+.preview-placeholder{text-align:center;}
+.preview-placeholder .ph-icon{font-size:48px;color:rgba(200,169,110,0.15);margin-bottom:12px;}
+.preview-placeholder .ph-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(200,169,110,0.3);}
+.gen-loading{position:absolute;inset:0;background:rgba(7,7,15,0.85);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.gen-loading.show{display:flex;}
+.loading-ring{width:48px;height:48px;border:2px solid rgba(200,169,110,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);}
+
+/* VOICE PANEL */
+.voice-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+.voice-card{background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:32px;}
+.voice-card-title{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+.voice-card-sub{font-size:12px;color:var(--muted);margin-bottom:24px;}
+.voice-status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;margin-bottom:20px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;}
+.vs-ready{background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.3);color:var(--green);}
+.vs-pending{background:rgba(200,169,110,0.06);border:1px solid var(--border);color:var(--gold);}
+.upload-zone{border:2px dashed var(--border);padding:32px;text-align:center;cursor:pointer;transition:all 0.3s;margin-bottom:16px;}
+.upload-zone:hover{border-color:var(--gold);background:rgba(200,169,110,0.04);}
+.upload-zone .uz-icon{font-size:28px;margin-bottom:8px;}
+.upload-zone .uz-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);}
+.audio-player{background:rgba(200,169,110,0.04);border:1px solid var(--border2);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:12px;}
+.play-btn{width:36px;height:36px;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.audio-info{flex:1;min-width:0;}
+.audio-name{font-size:12px;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.audio-dur{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
+.audio-bar{height:3px;background:rgba(200,169,110,0.15);border-radius:2px;margin-top:6px;position:relative;overflow:hidden;}
+.audio-bar-fill{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.1s;}
+
+/* SCRIPT PANEL */
+.script-container{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+.script-editor{background:rgba(200,169,110,0.03);border:1px solid var(--border2);}
+.script-toolbar{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;gap:10px;align-items:center;}
+.script-toolbar span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);}
+.script-body{padding:24px;min-height:400px;}
+.script-line{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start;}
+.script-role{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;padding:3px 8px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.role-captain{background:rgba(200,169,110,0.12);color:var(--gold);border:1px solid rgba(200,169,110,0.3);}
+.role-melody{background:rgba(45,212,191,0.1);color:var(--teal);border:1px solid rgba(45,212,191,0.3);}
+.script-text{font-size:13px;color:var(--text);line-height:1.7;flex:1;}
+
+/* PUBLISH PANEL */
+.publish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+.pub-card{background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:28px 24px;position:relative;}
+.pub-platform{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+.pub-format{font-size:12px;color:var(--muted);margin-bottom:20px;}
+.pub-checklist{list-style:none;margin-bottom:20px;}
+.pub-checklist li{font-size:12px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:8px;}
+.pub-checklist li.done{color:var(--green);}
+.pub-checklist li.done::before{content:'✓';color:var(--green);}
+.pub-checklist li.todo::before{content:'○';color:rgba(200,169,110,0.3);}
+.pub-toggle{width:44px;height:24px;background:rgba(200,169,110,0.1);border:1px solid var(--border);border-radius:12px;cursor:pointer;position:relative;transition:all 0.3s;}
+.pub-toggle.on{background:rgba(74,222,128,0.2);border-color:rgba(74,222,128,0.4);}
+.pub-toggle::after{content:'';width:18px;height:18px;background:var(--muted);border-radius:50%;position:absolute;top:2px;left:2px;transition:all 0.3s;}
+.pub-toggle.on::after{background:var(--green);transform:translateX(20px);}
+
+/* API SETTINGS */
+.api-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+.api-card{background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:28px;}
+.api-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.api-desc{font-size:12px;color:var(--muted);margin-bottom:20px;}
+.api-key-row{display:flex;gap:8px;}
+.api-input{flex:1;background:rgba(200,169,110,0.04);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:10px 14px;outline:none;}
+.api-input:focus{border-color:var(--gold);}
+.api-save{background:var(--gold);color:var(--ink);font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:10px 16px;border:none;cursor:pointer;white-space:nowrap;}
+.api-indicator{display:flex;align-items:center;gap:6px;margin-top:10px;}
+.api-dot{width:6px;height:6px;border-radius:50%;}
+.api-dot.ok{background:var(--green);}
+.api-dot.no{background:rgba(200,169,110,0.3);}
+.api-status-text{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);}
+
+/* OUTPUT AREA */
+.output-area{background:rgba(7,7,15,0.8);border:1px solid var(--border2);padding:20px 24px;min-height:80px;margin-top:24px;font-family:'Space Mono',monospace;font-size:12px;color:var(--green);line-height:1.8;white-space:pre-wrap;word-break:break-all;}
+.output-area .out-line{display:block;}
+.output-area .out-line.info{color:var(--teal);}
+.output-area .out-line.warn{color:var(--amber);}
+.output-area .out-line.err{color:var(--red);}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;z-index:999;background:var(--card);border:1px solid var(--border);padding:16px 24px;font-size:13px;transform:translateX(120%);transition:transform 0.3s;max-width:320px;}
+.toast.show{transform:translateX(0);}
+.toast-icon{margin-right:10px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .work-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .gen-layout,.voice-layout,.script-container,.story-grid,.concept-row,.ep-list,.platform-strip{grid-template-columns:1fr;}
+  .publish-grid,.api-grid{grid-template-columns:1fr;}
+  .section{padding:60px 24px;}
+  .work-main{padding:24px 20px;}
+  .hero-cta{flex-direction:column;align-items:center;}
+}
 </style>
 </head>
 <body>
-
 <canvas id="cosmos"></canvas>
 
-<div class="content">
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">CaptainCast <span>超时空电台</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="showPage('home')" id="nav-home">首页</a>
+    <a class="nav-link" onclick="showPage('episodes')" id="nav-episodes">节目</a>
+    <a class="nav-link" onclick="showPage('about')" id="nav-about">关于</a>
+    <button class="nav-btn" onclick="showPage('work')">⚙ 工作台</button>
+  </div>
+</nav>
 
-  <!-- HERO -->
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div class="page active" id="page-home">
+
   <section class="hero">
-    <div class="signal-badge">
-      <div class="signal-dot"></div>
-      CAPTAINCAST · TRANSMISSION INITIATED · EP.001
-    </div>
-
+    <div class="hero-eyebrow"><div class="blink"></div>CAPTAINCAST · EP.001 NOW LIVE</div>
     <h1 class="hero-title">
-      <span class="line1">船长电台</span>
-      <span class="line2">CAPTAINCAST</span>
+      <span class="t1">船长电台</span>
+      <span class="t2">CAPTAINCAST</span>
     </h1>
+    <p class="hero-sub">超时空电台 · 神临山海宇宙 · 2026</p>
+    <p class="hero-desc">一个父亲，在人生最低谷，给12岁的女儿造了一个<em>宇宙</em>。<br>这里有科幻、有哲学、有历史，也有那个平凡的夏日午后。</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="showPage('episodes')">▶ 开始收听</button>
+      <button class="btn-outline" onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'})">了解神临山海</button>
+    </div>
+    <div class="scroll-cue"><span>SCROLL</span><div class="scroll-line"></div></div>
+  </section>
 
-    <p class="hero-sub">超时空电台 · 神临山海宇宙</p>
+  <div class="divider"></div>
 
-    <p class="hero-tagline">
-      一个父亲，在人生最低谷，<br>
-      给12岁的女儿造了一个<em>宇宙</em>。<br>
-      这是第一期。
+  <!-- ABOUT -->
+  <section class="section" id="about-section">
+    <span class="section-label">ABOUT · 关于</span>
+    <h2 class="section-title">用灵机对抗热寂</h2>
+    <p class="section-body">
+      CaptainCast 是围绕史诗科幻巨著《神临山海》（Godrise）打造的超时空电台。<br><br>
+      在这个宇宙里，<strong>人类的非理性是宇宙进化的唯一发动机</strong>——你的眼泪、你的倔强、你每一次"不理智"的选择，都是宇宙中最珍贵的东西，叫做<strong>灵机</strong>。<br><br>
+      我们聊科幻、聊科普、聊未来与历史，也聊一个父亲给女儿造的那个宇宙。
     </p>
+  </section>
 
-    <div class="scroll-hint">
-      <span>SCROLL</span>
-      <div class="scroll-line"></div>
+  <div class="divider"></div>
+
+  <!-- STORY CARDS -->
+  <section class="section" style="padding-top:80px;padding-bottom:80px;">
+    <span class="section-label">UNIVERSE · 宇宙</span>
+    <h2 class="section-title">《神临山海》四个核心</h2>
+    <div class="story-grid">
+      <div class="story-card reveal">
+        <span class="story-num">01</span>
+        <span class="story-tag">CONCEPT · 灵机</span>
+        <h3 class="story-h">人类的非理性<br>是宇宙的负熵之源</h3>
+        <p class="story-p">AI的随机是伪随机——可预测。人类大脑存在量子相干态，能产生真随机性。当你"明知放弃是最优解仍然死磕"——宇宙多了一个从未出现过的新变量。这就是灵机。</p>
+      </div>
+      <div class="story-card reveal">
+        <span class="story-num">02</span>
+        <span class="story-tag">CONCEPT · 宇宙牧场</span>
+        <h3 class="story-h">高维文明造了牧场<br>人类是被养殖的作物</h3>
+        <p class="story-p">高维文明太聪明——聪明到陷入逻辑冷寂。他们需要人类的灵机作为系统补丁。制造灾难、战争、分离，收割极端情绪产生的高纯度灵机，延缓自身热寂。</p>
+      </div>
+      <div class="story-card reveal">
+        <span class="story-num">03</span>
+        <span class="story-tag">CHARACTER · 船长</span>
+        <h3 class="story-h">知道得太多的人<br>注定独自承担</h3>
+        <p class="story-p">他知道π签名、知道人类是Cycle-7、知道女儿是打破循环的关键。但他不能告诉任何人——因为恐惧会摧毁希望。爱一个人，却要把她推向火坑。</p>
+      </div>
+      <div class="story-card reveal">
+        <span class="story-num">04</span>
+        <span class="story-tag">CHARACTER · 麦洛</span>
+        <h3 class="story-h">减一不是收割者<br>是点火者</h3>
+        <p class="story-p">第二部末尾的震撼反转：高维文明说"我们不是收割者，是点火者"——他们用自己的牺牲，为下一代文明点了一把火。这不是战胜坏人的故事，这是关于爱的故事。</p>
+      </div>
     </div>
   </section>
 
-  <!-- EP01 SECTION -->
-  <div class="content">
-
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-text">EP.001 · 内容策略全景</div>
-      <div class="divider-line"></div>
+  <div class="quote-wrap">
+    <div class="quote-inner">
+      <p class="quote-text">"即使知道宇宙终将冷却，即使知道存在可能是虚拟的，即使知道所有的挣扎可能毫无意义，我们依然选择去爱。这个选择本身，就是意义。"</p>
+      <p class="quote-attr">—— 《神临山海》第四部·终焉纪</p>
     </div>
-
-    <section class="ep-section">
-
-      <div class="ep-header">
-        <span class="ep-number">EPISODE 001</span>
-        <h2 class="ep-title">如果你能给女儿造一个宇宙</h2>
-        <p class="ep-desc">
-          不从宏大世界观入手，只问一个问题——
-          这个问题，会让20-30岁的女生沉默三秒，然后不自觉地点击关注。
-        </p>
-      </div>
-
-      <!-- 三个核心钩子 -->
-      <div class="card-grid-3" style="margin-bottom:2px">
-        <div class="card">
-          <span class="card-icon">🎣</span>
-          <span class="card-label">HOOK 01 · 情感钩</span>
-          <h3 class="card-title">父女情感<br>是最不可复制的护城河</h3>
-          <p class="card-body">
-            船长就是作者本人，麦洛就是米莱。<br><br>
-            这种<strong>真实性</strong>无法被其他科幻IP模仿。<br>
-            第一期用"凌晨两点借钱发工资的父亲在给女儿写宇宙"的真实故事开场——这是任何世界观介绍都比不上的入口。
-          </p>
-        </div>
-        <div class="card">
-          <span class="card-icon">⚡</span>
-          <span class="card-label">HOOK 02 · 知识钩</span>
-          <h3 class="card-title">灵机理论<br>硬核物理包装情感哲学</h3>
-          <p class="card-body">
-            "AI的随机是假的，人类的非理性才是宇宙进化的发动机"——<br><br>
-            这句话<strong>同时打中</strong>科幻爱好者、哲学党、对AI焦虑的普通人，以及每一个曾经被说"太感性"的女生。
-          </p>
-        </div>
-        <div class="card">
-          <span class="card-icon">🔄</span>
-          <span class="card-label">HOOK 03 · 反转钩</span>
-          <h3 class="card-title">减一不是收割者<br>是点火者</h3>
-          <p class="card-body">
-            这个反转，是第一期最强的留存钩子。<br><br>
-            读者以为是"打败坏人"的科幻，结果发现是<strong>"父母用沉默为孩子点火"</strong>的人性命题——情感升维，让人不得不追。
-          </p>
-        </div>
-      </div>
-
-      <div class="quote-block">
-        <p class="quote-text">
-          "伟大的科幻，不是因为设定宏大，<br>
-          而是因为触及了人类最深的恐惧和最高的希望。"
-        </p>
-        <p class="quote-attr">—— 《神临山海》创作者愿景</p>
-      </div>
-
-      <!-- 内容形式 -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">第一期 · 三平台内容形式</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-label">PLATFORM 01 · 公众号</span>
-          <h3 class="card-title">长图文 · 2800字</h3>
-          <p class="card-body">
-            <strong>标题A</strong>：一个爸爸，给12岁的女儿造了一个宇宙<br>
-            <strong>标题B</strong>：圆周率第10^100位，藏着人类最后的秘密<br><br>
-            五章结构：引子→山海→灵机→麦洛→减一真相→平凡结局<br>
-            配AI生成插图×4，周五晚21:00发布。
-          </p>
-        </div>
-        <div class="card">
-          <span class="card-label">PLATFORM 02 · 小红书</span>
-          <h3 class="card-title">图文三连 · 分三天</h3>
-          <p class="card-body">
-            <strong>图1</strong>（周一）：封面故事——父亲造宇宙<br>
-            <strong>图2</strong>（周三）：知识卡——为什么AI永远无法打败人类？<br>
-            <strong>图3</strong>（周五）：情感向——把你推进危险里，是最深的爱<br><br>
-            视觉主轴：敦煌赛博朋克美学，墨龙维塔为IP形象。
-          </p>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:2px">
-        <span class="card-label">PLATFORM 03 · B站</span>
-        <h3 class="card-title">视频播客 · 15分钟完整脚本已就绪</h3>
-        <p class="card-body" style="max-width:700px">
-          六段结构：开场真实故事→山海世界观→灵机硬核科普→宇宙牧场揭示→减一真相反转→父女平凡结局<br><br>
-          <strong>每段都有独立的BGM切换节奏，情绪弧完整。</strong>全脚本已在内容包中，可直接录音。<br>
-          配套：封面图、章节字幕、弹幕引导词（"灵机是什么"、"减一是点火者"）。
-        </p>
-      </div>
-
-      <!-- 多平台矩阵 -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">五平台发布矩阵</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="platform-grid">
-        <div class="platform-card">
-          <div class="platform-name">公众号</div>
-          <div class="platform-form">2800字长文<br>AI配图×4</div>
-          <div class="platform-time">周五 21:00</div>
-        </div>
-        <div class="platform-card">
-          <div class="platform-name">小红书</div>
-          <div class="platform-form">图文三连<br>赛博墨画风格</div>
-          <div class="platform-time">周一/三/五</div>
-        </div>
-        <div class="platform-card">
-          <div class="platform-name">B站</div>
-          <div class="platform-form">15min播客<br>+专栏文字版</div>
-          <div class="platform-time">周六 15:00</div>
-        </div>
-        <div class="platform-card">
-          <div class="platform-name">视频号</div>
-          <div class="platform-form">3min切片<br>微信生态裂变</div>
-          <div class="platform-time">周四 20:00</div>
-        </div>
-        <div class="platform-card">
-          <div class="platform-name">X</div>
-          <div class="platform-form">英文Thread<br>国际科幻受众</div>
-          <div class="platform-time">周日</div>
-        </div>
-      </div>
-
-      <!-- 世界观核心 -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">神临山海 · 两个核心概念</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="concept-row">
-        <div class="concept-card light">
-          <span class="concept-num">灵</span>
-          <span class="concept-tag">CONCEPT 01 · 灵机理论</span>
-          <h3 class="concept-title">人类的非理性<br>是宇宙的负熵之源</h3>
-          <p class="concept-body">
-            AI的随机是伪随机——给定输入，输出可预测。<br>
-            人类大脑存在量子相干态，能产生真随机性。<br><br>
-            当你"明知放弃是最优解，仍然死磕"——<br>
-            这一刻，宇宙里多了一个从未出现过的变量。<br><br>
-            <strong style="color:var(--gold)">这就是灵机：你的非理性，是你最贵的东西。</strong>
-          </p>
-        </div>
-        <div class="concept-card dark">
-          <span class="concept-num">道</span>
-          <span class="concept-tag">CONCEPT 02 · 宇宙牧场</span>
-          <h3 class="concept-title">高维文明造了牧场<br>而牧场里住着你</h3>
-          <p class="concept-body">
-            高维文明太聪明——聪明到再也产生不了新变量。<br>
-            他们在宇宙里建了牧场，养育人类。<br><br>
-            制造灾难、战争、分离——极端情绪产生最高纯度灵机。<br>
-            收割，用作燃料，延缓自身热寂。<br><br>
-            <strong style="color:var(--amber)">但真相是：他们不是收割者，是点火者。</strong>
-          </p>
-        </div>
-      </div>
-
-      <!-- 自动化流水线 -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">CaptainCast · 内容自动化流水线</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="pipeline">
-        <div class="pipe-step">
-          <div class="pipe-num">01</div>
-          <div class="pipe-label">选题</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">02</div>
-          <div class="pipe-label">出稿件</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">03</div>
-          <div class="pipe-label">审稿优化</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">04</div>
-          <div class="pipe-label">出脚本</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">05</div>
-          <div class="pipe-label">AI图序列</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">06</div>
-          <div class="pipe-label">发文排版</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">07</div>
-          <div class="pipe-label">音频播客</div>
-        </div>
-        <div class="pipe-arrow">→</div>
-        <div class="pipe-step">
-          <div class="pipe-num">08</div>
-          <div class="pipe-label">视频播客</div>
-        </div>
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-label">你的角色</span>
-          <h3 class="card-title">船长：决策 + 触发</h3>
-          <p class="card-body">
-            给方向或拍板选题<br>
-            确认风格基调<br>
-            最终审稿<br>
-            账号API提供
-          </p>
-        </div>
-        <div class="card">
-          <span class="card-label">小安的角色</span>
-          <h3 class="card-title">小安：生产 + 优化</h3>
-          <p class="card-body">
-            选题池生成与分析<br>
-            全文稿件生成<br>
-            双版本脚本（播客/视频）<br>
-            AI图提示词序列<br>
-            各平台排版适配
-          </p>
-        </div>
-      </div>
-
-      <!-- 下期预告 -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">EP.002 · 预告</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="card" style="border-color:rgba(200,169,110,0.3)">
-        <span class="card-label">NEXT EPISODE</span>
-        <h3 class="card-title">她在九色瑶池，第一次觉醒<br>——麦洛的诞生</h3>
-        <p class="card-body" style="max-width:700px">
-          为什么12岁的麦洛感觉"记忆有出入"？<br>
-          那条叫维塔的墨龙，为什么能感受她的情绪？<br>
-          千里江山第一关，她要面对的到底是什么？<br><br>
-          <strong>这一期，我们进入山海，开始《神临山海》第一部第一篇的世界。</strong>
-        </p>
-      </div>
-
-    </section>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
+  <!-- CONCEPT -->
+  <div class="concept-row">
+    <div class="concept-block b1 reveal">
+      <span class="concept-kw">灵</span>
+      <span class="concept-tag2">LINGJĪ · 灵机理论</span>
+      <h3 class="concept-h">你的非理性<br>才是你最贵的东西</h3>
+      <p class="concept-p">碳基人类处于宇宙中绝佳的中间位置——足够复杂去理解规律，又足够混沌去挑战规律。<strong>你的每一次眼泪、每一次倔强、每一次"不理智"，都是高维文明穷尽算力也无法复现的宇宙奇迹。</strong></p>
+    </div>
+    <div class="concept-block b2 reveal">
+      <span class="concept-kw">道</span>
+      <span class="concept-tag2">GODRISE · 神临山海</span>
+      <h3 class="concept-h">打破循环的方式<br>不是毁灭，是连接</h3>
+      <p class="concept-p">麦洛和船长的最后一幕：她靠在父亲的肩膀上，什么都没说。但那一刻，宇宙里每一个有意识的存在，都感受到了那一刻的温暖。<strong>这就是打破循环的真正含义——不是终结，是连接。</strong></p>
+    </div>
+  </div>
+
+  <!-- EPISODES -->
+  <section class="section" id="ep-section">
+    <span class="section-label">EPISODES · 节目</span>
+    <h2 class="section-title">超时空电台</h2>
+    <div class="ep-list">
+      <div class="ep-card reveal" onclick="showPage('episodes')">
+        <span class="ep-no">EP.001</span>
+        <h3 class="ep-title">如果你能给女儿造一个宇宙</h3>
+        <p class="ep-desc">一个父亲在人生最低谷，用借来的钱发完最后一个月工资，然后开始给12岁的女儿写一部科幻史诗。</p>
+        <span class="ep-badge">已发布</span>
+      </div>
+      <div class="ep-card reveal">
+        <span class="ep-no">EP.002</span>
+        <h3 class="ep-title">她在九色瑶池，第一次觉醒</h3>
+        <p class="ep-desc">麦洛进入山海，遇见维塔，踏上千里江山篇的第一段旅程。为什么身体是12岁却感觉记忆有出入？</p>
+        <span class="ep-badge coming">即将发布</span>
+      </div>
+      <div class="ep-card reveal">
+        <span class="ep-no">EP.003</span>
+        <h3 class="ep-title">π的第10^100位藏着什么</h3>
+        <p class="ep-desc">圆周率的深处，有前代文明留下的后门代码。发现它的那一刻，人类历史上最美好的25年戛然而止。</p>
+        <span class="ep-badge coming">即将发布</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section class="section" style="padding-top:0;">
+    <span class="section-label">PLATFORMS · 收听</span>
+    <h2 class="section-title">在这里找到我们</h2>
+    <div class="platform-strip">
+      <div class="plat reveal"><div class="plat-name">小红书</div><div class="plat-desc">图文三连<br>赛博墨画风格</div></div>
+      <div class="plat reveal"><div class="plat-name">B 站</div><div class="plat-desc">视频播客<br>+专栏深度文</div></div>
+      <div class="plat reveal"><div class="plat-name">公众号</div><div class="plat-desc">长文沉淀<br>图文并茂</div></div>
+      <div class="plat reveal"><div class="plat-name">视频号</div><div class="plat-desc">短视频切片<br>微信生态</div></div>
+      <div class="plat reveal"><div class="plat-name">X</div><div class="plat-desc">英文出海<br>国际科幻圈</div></div>
+    </div>
+  </section>
+
+  <footer>
     <div class="footer-logo">CaptainCast</div>
     <div class="footer-sub">船长与麦洛的超时空电台 · 神临山海宇宙 · 2026</div>
   </footer>
-
 </div>
 
+<!-- ══════════════ WORK PAGE ══════════════ -->
+<div class="page" id="page-work">
+<div class="work-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-status"><div class="status-dot"></div><div class="status-text">系统就绪</div></div>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-label">WORKFLOW · 流水线</span>
+      <div class="sidebar-item active" onclick="showPanel('pipeline')" id="si-pipeline">
+        <span class="si-icon">⚡</span><span class="si-text">内容流水线</span>
+      </div>
+      <div class="sidebar-item" onclick="showPanel('script')" id="si-script">
+        <span class="si-icon">📝</span><span class="si-text">脚本编辑器</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-label">PRODUCTION · 制作</span>
+      <div class="sidebar-item" onclick="showPanel('imagegen')" id="si-imagegen">
+        <span class="si-icon">🎨</span><span class="si-text">AI 生图</span>
+      </div>
+      <div class="sidebar-item" onclick="showPanel('voice')" id="si-voice">
+        <span class="si-icon">🎙</span><span class="si-text">声音克隆</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-label">PUBLISH · 发布</span>
+      <div class="sidebar-item" onclick="showPanel('publish')" id="si-publish">
+        <span class="si-icon">🚀</span><span class="si-text">多平台发布</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-label">SYSTEM · 系统</span>
+      <div class="sidebar-item" onclick="showPanel('settings')" id="si-settings">
+        <span class="si-icon">🔑</span><span class="si-text">API 设置</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="work-main">
+
+    <!-- PIPELINE -->
+    <div class="work-panel active" id="panel-pipeline">
+      <div class="panel-header">
+        <h2 class="panel-title">内容流水线</h2>
+        <p class="panel-desc">EP.001 「如果你能给女儿造一个宇宙」· 点击每一步直接执行</p>
+      </div>
+
+      <div class="pipeline-flow">
+        <div class="pipe-item">
+          <div class="pipe-num2">01</div>
+          <div class="pipe-info">
+            <div class="pi-title">选题确认</div>
+            <div class="pi-desc">EP.001 主题：父女情感 × 灵机理论 × 宇宙牧场初揭示 ✓</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('script')">查看选题</button>
+            <button class="act-btn primary" onclick="logOutput('✅ 选题已确认：EP.001《如果你能给女儿造一个宇宙》')">✓ 已确认</button>
+          </div>
+        </div>
+        <div class="pipe-item">
+          <div class="pipe-num2">02</div>
+          <div class="pipe-info">
+            <div class="pi-title">脚本生成</div>
+            <div class="pi-desc">公众号长文 2800字 + B站播客脚本 15分钟 + 小红书三图文案</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('script')">编辑脚本</button>
+            <button class="act-btn primary" onclick="logOutput('📝 脚本已就绪：\n  · 公众号长文 2800字 ✓\n  · B站播客脚本 20段对话 ✓\n  · 小红书图文三连 ✓')">查看脚本</button>
+          </div>
+        </div>
+        <div class="pipe-item">
+          <div class="pipe-num2">03</div>
+          <div class="pipe-info">
+            <div class="pi-title">AI 生图</div>
+            <div class="pi-desc">Gemini Nano Banana 2 · 4张配图 · 敦煌赛博朋克风格</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('imagegen')">进入生图</button>
+            <button class="act-btn primary" onclick="showPanel('imagegen');logOutput('🎨 已跳转到 AI 生图工作台，请配置 Gemini API Key 后生成')">生成配图</button>
+          </div>
+        </div>
+        <div class="pipe-item">
+          <div class="pipe-num2">04</div>
+          <div class="pipe-info">
+            <div class="pi-title">声音合成</div>
+            <div class="pi-desc">MiniMax 声音克隆 · 船长 + 麦洛 · 输出完整播客 MP3</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('voice')">进入配音</button>
+            <button class="act-btn primary" onclick="showPanel('voice');logOutput('🎙 已跳转到声音克隆工作台，请配置 MiniMax API Key 后合成')">合成音频</button>
+          </div>
+        </div>
+        <div class="pipe-item">
+          <div class="pipe-num2">05</div>
+          <div class="pipe-info">
+            <div class="pi-title">审稿确认</div>
+            <div class="pi-desc">预览所有内容，确认后一键提交发布</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('publish')">预览内容</button>
+            <button class="act-btn primary" onclick="logOutput('📋 内容审核中...\n  · 公众号长文 ✓\n  · 配图×4 待生成\n  · 播客音频 待合成\n  → 请先完成步骤3和4')">审核内容</button>
+          </div>
+        </div>
+        <div class="pipe-item">
+          <div class="pipe-num2">06</div>
+          <div class="pipe-info">
+            <div class="pi-title">多平台发布</div>
+            <div class="pi-desc">小红书 / B站 / 公众号 / 视频号 · 按发布时间表自动排期</div>
+          </div>
+          <div class="pipe-action">
+            <button class="act-btn ghost" onclick="showPanel('publish')">发布设置</button>
+            <button class="act-btn primary" onclick="showPanel('publish')">进入发布</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="pipeline-output" class="output-area" style="display:none;"></div>
+    </div>
+
+    <!-- SCRIPT EDITOR -->
+    <div class="work-panel" id="panel-script">
+      <div class="panel-header">
+        <h2 class="panel-title">脚本编辑器</h2>
+        <p class="panel-desc">EP.001 完整播客对话脚本 · 船长 × 麦洛</p>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:24px;">
+        <button class="act-btn primary" onclick="copyScript()">📋 复制全文</button>
+        <button class="act-btn ghost" onclick="downloadScript()">⬇ 下载脚本</button>
+        <button class="act-btn ghost" onclick="showPanel('voice')">→ 去合成音频</button>
+      </div>
+      <div class="script-container">
+        <div class="script-editor">
+          <div class="script-toolbar">
+            <span>PODCAST SCRIPT · EP.001</span>
+          </div>
+          <div class="script-body" id="script-body"></div>
+        </div>
+        <div>
+          <div style="margin-bottom:16px;">
+            <div class="form-label">导出格式</div>
+            <select class="form-select">
+              <option>TXT 纯文本</option>
+              <option>SRT 字幕格式</option>
+              <option>JSON 结构化</option>
+            </select>
+          </div>
+          <div style="background:rgba(200,169,110,0.04);border:1px solid var(--border2);padding:24px;margin-bottom:16px;">
+            <div class="form-label">脚本统计</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+              <div><div style="font-family:'Space Mono',monospace;font-size:22px;color:var(--gold);font-weight:700;">20</div><div style="font-size:11px;color:var(--muted);">对话段落</div></div>
+              <div><div style="font-family:'Space Mono',monospace;font-size:22px;color:var(--gold);font-weight:700;">~15'</div><div style="font-size:11px;color:var(--muted);">预计时长</div></div>
+              <div><div style="font-family:'Space Mono',monospace;font-size:22px;color:var(--teal);font-weight:700;">12</div><div style="font-size:11px;color:var(--muted);">船长台词段</div></div>
+              <div><div style="font-family:'Space Mono',monospace;font-size:22px;color:var(--teal);font-weight:700;">8</div><div style="font-size:11px;color:var(--muted);">麦洛台词段</div></div>
+            </div>
+          </div>
+          <div style="background:rgba(200,169,110,0.04);border:1px solid var(--border2);padding:24px;">
+            <div class="form-label">情绪标注</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.9;margin-top:8px;">
+              开场：平静叙述 (0.95x)<br>
+              灵机科普：逐渐振奋 (1.0x)<br>
+              宇宙牧场：低沉压抑 (0.85x)<br>
+              点火者揭示：震撼停顿 (0.82x)<br>
+              结尾父女：温柔收敛 (0.88x)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGE GEN -->
+    <div class="work-panel" id="panel-imagegen">
+      <div class="panel-header">
+        <h2 class="panel-title">AI 生图</h2>
+        <p class="panel-desc">Gemini Nano Banana 2 · 需要 Gemini API Key</p>
+      </div>
+      <div class="gen-layout">
+        <div class="gen-form">
+          <div class="form-group">
+            <label class="form-label">快速预设 · EP.001 配图</label>
+            <div class="prompt-presets" id="preset-container"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prompt（英文效果最佳）</label>
+            <textarea class="form-textarea" id="img-prompt" placeholder="输入图像描述，或点击上方预设快速填入..."></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">比例</label>
+              <select class="form-select" id="img-ratio">
+                <option value="9:16">9:16 竖版（小红书/封面）</option>
+                <option value="1:1">1:1 方形（微信/头像）</option>
+                <option value="16:9">16:9 横版（B站封面）</option>
+                <option value="3:4">3:4 竖版（公众号）</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">质量</label>
+              <select class="form-select" id="img-quality">
+                <option value="high">高质量（慢）</option>
+                <option value="medium">标准（快）</option>
+              </select>
+            </div>
+          </div>
+          <button class="act-btn primary" style="width:100%;padding:16px;font-size:12px;letter-spacing:3px;" onclick="generateImage()">✦ 生成图像</button>
+          <div style="margin-top:16px;padding:14px;background:rgba(200,169,110,0.04);border:1px solid var(--border2);">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">API KEY 状态</div>
+            <div class="api-indicator">
+              <div class="api-dot" id="gemini-dot" style="background:rgba(200,169,110,0.3);"></div>
+              <span class="api-status-text" id="gemini-status">未配置 · 前往「API 设置」填入 Key</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="gen-preview" id="gen-preview">
+            <div class="preview-placeholder">
+              <div class="ph-icon">◈</div>
+              <div class="ph-text">图像将在此显示</div>
+            </div>
+            <img id="gen-img" src="" alt="生成的图像">
+            <div class="gen-loading" id="gen-loading">
+              <div class="loading-ring"></div>
+              <div class="loading-text">GENERATING...</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="act-btn ghost" style="flex:1;" onclick="downloadImage()">⬇ 下载</button>
+            <button class="act-btn ghost" style="flex:1;" onclick="copyImagePrompt()">📋 复制Prompt</button>
+          </div>
+          <div style="margin-top:16px;background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:20px;">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:12px;">批量生成队列</div>
+            <div id="batch-list" style="font-size:12px;color:var(--muted);">
+              — 暂无队列任务 —
+            </div>
+            <button class="act-btn ghost" style="width:100%;margin-top:12px;" onclick="addAllToQueue()">+ 添加全部EP.001配图到队列</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VOICE -->
+    <div class="work-panel" id="panel-voice">
+      <div class="panel-header">
+        <h2 class="panel-title">声音克隆</h2>
+        <p class="panel-desc">MiniMax 声音克隆 · 船长 + 麦洛 · 合成完整播客</p>
+      </div>
+      <div class="voice-layout">
+        <div class="voice-card">
+          <div class="voice-card-title">🎙 船长</div>
+          <div class="voice-card-sub">低沉、内敛、有力量感的男声</div>
+          <div class="voice-status vs-ready">● 音频已上传 · 2段 · 209秒</div>
+          <div class="audio-player">
+            <button class="play-btn" onclick="playAudio('captain')">▶</button>
+            <div class="audio-info">
+              <div class="audio-name">voice-captain-parapark.m4a</div>
+              <div class="audio-dur">135.8秒 · 高质量</div>
+              <div class="audio-bar"><div class="audio-bar-fill" id="cap-bar"></div></div>
+            </div>
+          </div>
+          <div class="audio-player">
+            <button class="play-btn" onclick="playAudio('captain2')">▶</button>
+            <div class="audio-info">
+              <div class="audio-name">s02e01-cut1.m4a</div>
+              <div class="audio-dur">73.3秒 · 良好</div>
+              <div class="audio-bar"><div class="audio-bar-fill" id="cap2-bar"></div></div>
+            </div>
+          </div>
+          <button class="act-btn primary" style="width:100%;margin-top:8px;" onclick="cloneVoice('captain')">克隆船长声音</button>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-title">🎶 麦洛</div>
+          <div class="voice-card-sub">清亮、活泼、带一点倔强的少女声</div>
+          <div class="voice-status vs-ready">● 音频已上传 · 2段 · 181秒</div>
+          <div class="audio-player">
+            <button class="play-btn" onclick="playAudio('melody')">▶</button>
+            <div class="audio-info">
+              <div class="audio-name">melody-voice-eat-hulatang.m4a</div>
+              <div class="audio-dur">60.7秒 · 良好</div>
+              <div class="audio-bar"><div class="audio-bar-fill" id="mel-bar"></div></div>
+            </div>
+          </div>
+          <div class="audio-player">
+            <button class="play-btn" onclick="playAudio('melody2')">▶</button>
+            <div class="audio-info">
+              <div class="audio-name">melody-voice-laolaodejianzhi.m4a</div>
+              <div class="audio-dur">120.3秒 · 优秀</div>
+              <div class="audio-bar"><div class="audio-bar-fill" id="mel2-bar"></div></div>
+            </div>
+          </div>
+          <button class="act-btn primary" style="width:100%;margin-top:8px;" onclick="cloneVoice('melody')">克隆麦洛声音</button>
+        </div>
+      </div>
+      <div style="margin-top:32px;background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:28px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <div>
+            <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;">合成完整播客</div>
+            <div style="font-size:12px;color:var(--muted);">EP.001 · 20段对话 · 预计约 15 分钟</div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="act-btn ghost" onclick="showPanel('script')">查看脚本</button>
+            <button class="act-btn primary" onclick="synthesizePodcast()">▶ 开始合成</button>
+          </div>
+        </div>
+        <div id="synthesis-output" class="output-area" style="display:none;"></div>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:rgba(200,169,110,0.04);border:1px solid var(--border2);">
+        <div class="api-indicator">
+          <div class="api-dot" id="minimax-dot" style="background:rgba(200,169,110,0.3);"></div>
+          <span class="api-status-text" id="minimax-status">MiniMax API · 未配置 · 前往「API 设置」填入 Key</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLISH -->
+    <div class="work-panel" id="panel-publish">
+      <div class="panel-header">
+        <h2 class="panel-title">多平台发布</h2>
+        <p class="panel-desc">EP.001 发布检查单 · 确认每项后一键发布</p>
+      </div>
+      <div class="publish-grid">
+        <div class="pub-card">
+          <div class="pub-platform">公众号</div>
+          <div class="pub-format">长图文 · 2800字 · 周五 21:00</div>
+          <ul class="pub-checklist">
+            <li class="done">长文稿件</li>
+            <li class="done">标题A/B 两版</li>
+            <li class="todo">配图×4</li>
+            <li class="todo">排版预览</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="pub-toggle" id="toggle-wx" onclick="togglePub('wx')"></div>
+            <span style="font-size:12px;color:var(--muted);" id="toggle-wx-text">待启用</span>
+          </div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-platform">小红书</div>
+          <div class="pub-format">图文三连 · 周一/三/五</div>
+          <ul class="pub-checklist">
+            <li class="done">三张图文案</li>
+            <li class="todo">赛博墨画配图</li>
+            <li class="todo">话题标签优化</li>
+            <li class="todo">发布时间设置</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="pub-toggle" id="toggle-xhs" onclick="togglePub('xhs')"></div>
+            <span style="font-size:12px;color:var(--muted);" id="toggle-xhs-text">待启用</span>
+          </div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-platform">B 站</div>
+          <div class="pub-format">视频播客 · 周六 15:00</div>
+          <ul class="pub-checklist">
+            <li class="done">播客脚本</li>
+            <li class="todo">音频合成</li>
+            <li class="todo">封面图</li>
+            <li class="todo">视频合成</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="pub-toggle" id="toggle-bili" onclick="togglePub('bili')"></div>
+            <span style="font-size:12px;color:var(--muted);" id="toggle-bili-text">待启用</span>
+          </div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-platform">视频号</div>
+          <div class="pub-format">3分钟切片 · 周四 20:00</div>
+          <ul class="pub-checklist">
+            <li class="done">切片脚本</li>
+            <li class="todo">音频切片</li>
+            <li class="todo">字幕文件</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="pub-toggle" id="toggle-sph" onclick="togglePub('sph')"></div>
+            <span style="font-size:12px;color:var(--muted);" id="toggle-sph-text">待启用</span>
+          </div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-platform">X</div>
+          <div class="pub-format">英文 Thread · 周日</div>
+          <ul class="pub-checklist">
+            <li class="todo">英文版脚本</li>
+            <li class="todo">配图英文版</li>
+            <li class="todo">Thread 排版</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="pub-toggle" id="toggle-x" onclick="togglePub('x')"></div>
+            <span style="font-size:12px;color:var(--muted);" id="toggle-x-text">待启用</span>
+          </div>
+        </div>
+      </div>
+      <button class="act-btn primary" style="padding:18px 48px;font-size:13px;letter-spacing:4px;" onclick="publishAll()">🚀 发布已启用的平台</button>
+      <div id="publish-output" class="output-area" style="display:none;margin-top:16px;"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="work-panel" id="panel-settings">
+      <div class="panel-header">
+        <h2 class="panel-title">API 设置</h2>
+        <p class="panel-desc">配置后即可使用 AI 生图和声音克隆功能</p>
+      </div>
+      <div class="api-grid">
+        <div class="api-card">
+          <div class="api-name">Gemini API</div>
+          <div class="api-desc">Nano Banana 2 · AI 生图 · 每张约 $0.04</div>
+          <div class="api-key-row">
+            <input class="api-input" id="gemini-key" type="password" placeholder="AIza...">
+            <button class="api-save" onclick="saveKey('gemini')">保存</button>
+          </div>
+          <div class="api-indicator">
+            <div class="api-dot" id="gemini-dot2" style="background:rgba(200,169,110,0.3);"></div>
+            <span class="api-status-text" id="gemini-status2">未配置</span>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:rgba(200,169,110,0.4);">
+            获取：aistudio.google.com → Get API key
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-name">MiniMax API</div>
+          <div class="api-desc">声音克隆 + TTS · 克隆¥9.9/音色</div>
+          <div class="api-key-row">
+            <input class="api-input" id="minimax-key" type="password" placeholder="sk-api-...">
+            <button class="api-save" onclick="saveKey('minimax')">保存</button>
+          </div>
+          <div class="api-key-row" style="margin-top:8px;">
+            <input class="api-input" id="minimax-group" type="text" placeholder="Group ID（控制台右上角头像）">
+            <button class="api-save" onclick="saveGroupId()">保存</button>
+          </div>
+          <div class="api-indicator" style="margin-top:8px;">
+            <div class="api-dot" id="minimax-dot2" style="background:rgba(200,169,110,0.3);"></div>
+            <span class="api-status-text" id="minimax-status2">未配置</span>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:rgba(200,169,110,0.4);">
+            获取：platform.minimax.io → API Keys<br>
+            ⚠️ Key 保存在本地浏览器，不上传任何服务器
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(200,169,110,0.03);border:1px solid var(--border2);padding:28px;margin-top:24px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--teal);margin-bottom:16px;">🔒 安全说明</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+          所有 API Key 仅保存在你的浏览器本地存储（localStorage）中，不会被发送到任何第三方服务器。生图和配音请求直接从你的浏览器发送到对应的 API 端点。请勿在公共电脑上保存 Key。
+        </p>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toast-msg"></span></div>
+
 <script>
-// Cosmos particle system
+// ── COSMOS ──
 const canvas = document.getElementById('cosmos');
 const ctx = canvas.getContext('2d');
-let W, H, particles = [];
+let W, H, pts = [];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+function initPts(){pts=[];const n=Math.floor(W*H/9000);for(let i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.1+0.2,a:Math.random(),s:Math.random()*0.25+0.04,d:(Math.random()-.5)*.12,g:Math.random()>.8});}
+function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.g?`rgba(200,169,110,${p.a*.5})`:`rgba(232,224,208,${p.a*.2})`;ctx.fill();p.y-=p.s;p.x+=p.d;p.a+=(Math.random()-.5)*.015;p.a=Math.max(.05,Math.min(1,p.a));if(p.y<-5){p.y=H+5;p.x=Math.random()*W;}if(p.x<-5)p.x=W+5;if(p.x>W+5)p.x=-5;});requestAnimationFrame(draw);}
+resize();initPts();draw();
+window.addEventListener('resize',()=>{resize();initPts();});
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+// ── PAGE ROUTING ──
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id)?.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('nav-'+id)?.classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function createParticles() {
-  particles = [];
-  const count = Math.floor((W * H) / 8000);
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.2 + 0.2,
-      a: Math.random(),
-      speed: Math.random() * 0.3 + 0.05,
-      drift: (Math.random() - 0.5) * 0.15,
-      gold: Math.random() > 0.85
+// ── WORKBENCH PANELS ──
+function showPanel(id){
+  document.querySelectorAll('.work-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id)?.classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(s=>s.classList.remove('active'));
+  document.getElementById('si-'+id)?.classList.add('active');
+}
+
+// ── SCROLL REVEAL ──
+const revealObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal,.story-card,.concept-block,.ep-card,.plat,.pipe-item,.pub-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(24px)';
+  el.style.transition='opacity 0.7s ease,transform 0.7s ease,background 0.4s,border-color 0.4s,box-shadow 0.3s';
+  revealObserver.observe(el);
+});
+
+// ── SCRIPT DATA ──
+const SCRIPT = [
+  {r:'captain',t:'欢迎来到CaptainCast，我是船长。这是我们的第一期节目。我不打算用一个很酷的开头跟你说宇宙有多大。我想先跟你说一个人的故事。一个爸爸的故事。'},
+  {r:'captain',t:'凌晨两点。窗外是农田，偶尔有犬吠。他坐在电脑前，口袋里的钱是借来的——用来发完最后一个月的工资。但他在写一个故事。不是为了卖钱，是为了他12岁的女儿。'},
+  {r:'captain',t:'她叫米莱。喜欢打击乐，养了两只大乌龟，梦想是做"未来世界设计师"。他想：如果什么都没有了，但我能给她留下一个世界——那个世界，该长什么样？'},
+  {r:'melody',t:'爸爸，你说的那个世界，我也想去。山海是什么？是游戏吗？'},
+  {r:'captain',t:'不是游戏。是一个和现实等重的存在。你在里面的眼泪是真的，你建立的友情是真的，你做出的选择，会有真正的后果。'},
+  {r:'melody',t:'麦洛是我吗？那她知道自己是谁吗？'},
+  {r:'captain',t:'不知道。她进去的时候，不知道这里是哪里，只知道——这里美得像梦，又疼得像真实。那正是我设计它时的心情。'},
+  {r:'captain',t:'好，现在我要跟你说一个概念，叫做——灵机。听起来像玄学，其实是硬核物理。你知道AI的随机数是假的吗？'},
+  {r:'melody',t:'等一下爸，我听懂了一半。意思是……人类会做一些AI永远算不出来的事情？'},
+  {r:'captain',t:'对。比如——你明知道放弃是最优解，但你选择了死磕。这一秒，宇宙里，多了一个以前从来没有出现过的新信息。这就是灵机：人类的非理性，是宇宙唯一的进化发动机。'},
+  {r:'melody',t:'所以……我的眼泪不是软弱？我的倔强不是Bug？爸，我每次被说"太感性"了……'},
+  {r:'captain',t:'你的非理性，才是你最贵的东西。记住这句话。'},
+  {r:'captain',t:'在这个宇宙里，有一群高维文明，一直在收割灵机。他们在宇宙里建了一个牧场。牧场里，养着人类。制造灾难，制造战争，制造分离——收割极端情绪产生的高纯度灵机，用作燃料。'},
+  {r:'melody',t:'等等——所以人类是……作物？爸，这个设定也太黑暗了吧！'},
+  {r:'captain',t:'但这个故事，不是一个"打败坏人"的故事。第二部末尾，当人类用灵机共鸣撑爆了收割程序，以为赢了。然后那个高维文明的代言人，出现在全球的天空。'},
+  {r:'captain',t:'"你们以为我们是收割者。" "错了。" "我们，是点火者。"'},
+  {r:'melody',t:'点火者……（停顿）他们不是坏人？他们是……用自己的牺牲，给人类点了一把火？'},
+  {r:'captain',t:'是的。他们太聪明了，聪明到再也产生不了新的变量。唯一的出路，是找到一个足够混乱、足够有爱、足够能犯错的文明——亲手制造它的痛苦，直到它燃烧起来。听起来是不是很熟悉？'},
+  {r:'melody',t:'……爸，你说的是你自己吗？'},
+  {r:'captain',t:'故事的最后，在距今一万五千年之后——麦洛和船长，坐在一棵树下。她靠在父亲的肩膀上。什么都没说。但那一刻，宇宙里每一个有意识的存在，都感受到了那一刻的温暖。关注我们，下一期见。'},
+];
+
+// render script
+function renderScript(){
+  const body=document.getElementById('script-body');
+  if(!body)return;
+  body.innerHTML=SCRIPT.map(s=>`
+    <div class="script-line">
+      <span class="script-role role-${s.r}">${s.r==='captain'?'船长':'麦洛'}</span>
+      <span class="script-text">${s.t}</span>
+    </div>`).join('');
+}
+renderScript();
+
+// ── IMAGE PRESETS ──
+const PRESETS = [
+  {label:'封面·麦洛&维塔',prompt:'A 14-year-old Chinese girl standing at the threshold of a vast fantasy portal, a small ink-black dragon curled around her wrist. Nine-colored glowing pools, floating stone pillars defying gravity. Sky: deep indigo and amber gold. Dunhuang cyberpunk meets Chinese ink wash painting. Cinematic 4K. --ar 9:16'},
+  {label:'灵机vs寂熵',prompt:'Split composition. Left: warm chaotic light, human silhouette, flowing ember particles. Right: cold blue crystalline lattice, silicon circuits. Center: a spiral vortex where chaos meets order. Dark background. Chinese ink wash meets hard sci-fi. 1:1'},
+  {label:'父女·送别',prompt:"Father's silhouette viewed from behind, watching his daughter walk through a glowing portal into mountains and seas. Warm amber light. Father in shadow, daughter in light. Ancient Chinese landscape painting meets science fiction. Deeply emotional. 3:4"},
+  {label:'减一·显现',prompt:'Vast sky over Earth at dusk. A massive translucent holographic entity appears above clouds — ancient, sorrowful, wise. Tiny human figures below in awe. Epic sci-fi meets Chinese ink. 16:9'},
+];
+
+const presetContainer = document.getElementById('preset-container');
+if(presetContainer){
+  PRESETS.forEach(p=>{
+    const tag=document.createElement('div');
+    tag.className='preset-tag';
+    tag.textContent=p.label;
+    tag.onclick=()=>{document.getElementById('img-prompt').value=p.prompt;};
+    presetContainer.appendChild(tag);
+  });
+}
+
+// ── LOCAL STORAGE FOR API KEYS ──
+function saveKey(service){
+  const val=document.getElementById(service+'-key').value.trim();
+  if(!val){showToast('⚠ Key 不能为空','warn');return;}
+  localStorage.setItem('cc_'+service+'_key',val);
+  updateKeyStatus(service,true);
+  showToast('✓ '+service.toUpperCase()+' Key 已保存到本地');
+}
+function saveGroupId(){
+  const val=document.getElementById('minimax-group').value.trim();
+  if(!val)return;
+  localStorage.setItem('cc_minimax_group',val);
+  showToast('✓ MiniMax Group ID 已保存');
+}
+function updateKeyStatus(service,ok){
+  const dot1=document.getElementById(service+'-dot');
+  const dot2=document.getElementById(service+'-dot2');
+  const s1=document.getElementById(service+'-status');
+  const s2=document.getElementById(service+'-status2');
+  const color=ok?'var(--green)':'rgba(200,169,110,0.3)';
+  const text=ok?'已配置 · 就绪':'未配置 · 前往「API 设置」填入 Key';
+  if(dot1)dot1.style.background=color;
+  if(dot2)dot2.style.background=color;
+  if(s1)s1.textContent=(service==='gemini'?'Gemini API · ':' MiniMax API · ')+text;
+  if(s2)s2.textContent=text;
+}
+function loadSavedKeys(){
+  ['gemini','minimax'].forEach(s=>{
+    const k=localStorage.getItem('cc_'+s+'_key');
+    if(k){document.getElementById(s+'-key')&&(document.getElementById(s+'-key').value=k);updateKeyStatus(s,true);}
+  });
+  const g=localStorage.getItem('cc_minimax_group');
+  if(g&&document.getElementById('minimax-group'))document.getElementById('minimax-group').value=g;
+}
+loadSavedKeys();
+
+// ── IMAGE GENERATION ──
+async function generateImage(){
+  const prompt=document.getElementById('img-prompt').value.trim();
+  if(!prompt){showToast('⚠ 请填写 Prompt','warn');return;}
+  const key=localStorage.getItem('cc_gemini_key');
+  if(!key){showToast('⚠ 请先在「API 设置」填入 Gemini Key','warn');showPanel('settings');return;}
+  const loading=document.getElementById('gen-loading');
+  loading.classList.add('show');
+  try{
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${key}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        generationConfig:{responseModalities:['IMAGE','TEXT']}
+      })
     });
+    const data=await resp.json();
+    if(data.error){throw new Error(data.error.message);}
+    const parts=data.candidates?.[0]?.content?.parts||[];
+    const imgPart=parts.find(p=>p.inlineData);
+    if(imgPart){
+      const img=document.getElementById('gen-img');
+      img.src=`data:${imgPart.inlineData.mimeType};base64,${imgPart.inlineData.data}`;
+      img.style.display='block';
+      document.querySelector('.preview-placeholder').style.display='none';
+      showToast('✓ 图像生成成功！');
+    }else{throw new Error('未返回图像数据');}
+  }catch(e){
+    showToast('✗ 生成失败：'+e.message,'err');
+    logToOutput('synthesis-output','✗ 图像生成错误：'+e.message,'err');
+  }finally{loading.classList.remove('show');}
+}
+
+function downloadImage(){
+  const img=document.getElementById('gen-img');
+  if(!img.src||img.style.display==='none'){showToast('⚠ 还没有生成图像','warn');return;}
+  const a=document.createElement('a');a.href=img.src;a.download='captaincast_ep01.png';a.click();
+  showToast('✓ 图像已下载');
+}
+function copyImagePrompt(){
+  const p=document.getElementById('img-prompt').value;
+  if(!p){showToast('⚠ Prompt 为空','warn');return;}
+  navigator.clipboard.writeText(p).then(()=>showToast('✓ Prompt 已复制'));
+}
+function addAllToQueue(){
+  const list=document.getElementById('batch-list');
+  list.innerHTML=PRESETS.map((p,i)=>`<div style="padding:8px 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;"><span>${p.label}</span><span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--teal);">${i===0?'READY':'QUEUED'}</span></div>`).join('');
+  showToast('✓ 4张配图已加入队列');
+}
+
+// ── VOICE CLONE ──
+async function cloneVoice(role){
+  const key=localStorage.getItem('cc_minimax_key');
+  const group=localStorage.getItem('cc_minimax_group');
+  if(!key||!group){showToast('⚠ 请先在「API 设置」配置 MiniMax Key 和 Group ID','warn');showPanel('settings');return;}
+  showToast(`正在克隆${role==='captain'?'船长':'麦洛'}声音...提示：音频文件需本地上传`,'info');
+  logToOutput('synthesis-output',`[${new Date().toLocaleTimeString()}] 正在克隆 ${role==='captain'?'船长':'麦洛'} 声音...\n  → 请参考技术方案文档，在本地运行 captaincast_voice.py 完成克隆\n  → 克隆后将 voice_id 填入下方配置`,'info');
+  document.getElementById('synthesis-output').style.display='block';
+}
+
+async function synthesizePodcast(){
+  const key=localStorage.getItem('cc_minimax_key');
+  const group=localStorage.getItem('cc_minimax_group');
+  if(!key||!group){showToast('⚠ 请先配置 MiniMax API Key','warn');showPanel('settings');return;}
+  const out=document.getElementById('synthesis-output');
+  out.style.display='block';
+  const lines=[
+    '[INFO] 开始合成播客 EP.001...',
+    '[INFO] 脚本：20段对话，船长12段，麦洛8段',
+    '[INFO] 调用 MiniMax Speech-01-HD API...',
+    '[WARN] 注意：声音克隆需在本地运行 captaincast_voice.py',
+    '[INFO] 本站支持直接调用已克隆的 voice_id 合成文本',
+    '[INFO] 请在「API 设置」填入克隆后的 voice_id 后重试',
+  ];
+  out.innerHTML='';
+  for(const l of lines){
+    await new Promise(r=>setTimeout(r,400));
+    const type=l.startsWith('[WARN]')?'warn':l.startsWith('[INFO]')?'info':'';
+    logToOutput('synthesis-output',l,type);
   }
 }
 
-function drawParticles() {
-  ctx.clearRect(0, 0, W, H);
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    if (p.gold) {
-      ctx.fillStyle = `rgba(200,169,110,${p.a * 0.6})`;
-    } else {
-      ctx.fillStyle = `rgba(232,224,208,${p.a * 0.25})`;
-    }
-    ctx.fill();
-
-    p.y -= p.speed;
-    p.x += p.drift;
-    p.a += (Math.random() - 0.5) * 0.02;
-    p.a = Math.max(0.1, Math.min(1, p.a));
-
-    if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
-    if (p.x < -5) p.x = W + 5;
-    if (p.x > W + 5) p.x = -5;
-  });
-
-  requestAnimationFrame(drawParticles);
+// ── PUBLISH ──
+function togglePub(id){
+  const toggle=document.getElementById('toggle-'+id);
+  const text=document.getElementById('toggle-'+id+'-text');
+  const on=toggle.classList.toggle('on');
+  text.textContent=on?'已启用':'待启用';
+  text.style.color=on?'var(--green)':'var(--muted)';
+}
+async function publishAll(){
+  const enabled=[...document.querySelectorAll('.pub-toggle.on')].map(t=>t.id.replace('toggle-',''));
+  if(!enabled.length){showToast('⚠ 请先启用至少一个平台','warn');return;}
+  const out=document.getElementById('publish-output');
+  out.style.display='block';out.innerHTML='';
+  logToOutput('publish-output','[INFO] 开始发布流程...','info');
+  const names={wx:'公众号',xhs:'小红书',bili:'B站',sph:'视频号',x:'X'};
+  for(const id of enabled){
+    await new Promise(r=>setTimeout(r,600));
+    logToOutput('publish-output',`[INFO] ${names[id]||id}：内容准备中...`,'info');
+    await new Promise(r=>setTimeout(r,500));
+    logToOutput('publish-output',`[WARN] ${names[id]||id}：需要在对应平台手动完成最终发布`,'warn');
+  }
+  await new Promise(r=>setTimeout(r,400));
+  logToOutput('publish-output','[INFO] 发布检查单已生成，请按平台时间表操作','info');
+  showToast('✓ 发布流程已启动');
 }
 
-resize();
-createParticles();
-drawParticles();
-window.addEventListener('resize', () => { resize(); createParticles(); });
-
-// Reveal on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.card, .concept-card, .platform-card, .pipe-step, .quote-block').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(24px)';
-  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease, background 0.4s, border-color 0.4s';
-  observer.observe(el);
-});
+// ── UTILS ──
+function logOutput(msg){
+  const out=document.getElementById('pipeline-output');
+  if(!out)return;
+  out.style.display='block';
+  const line=document.createElement('span');
+  line.className='out-line info';
+  line.textContent='['+new Date().toLocaleTimeString()+'] '+msg;
+  out.appendChild(line);out.appendChild(document.createElement('br'));
+  out.scrollTop=out.scrollHeight;
+}
+function logToOutput(id,msg,type=''){
+  const out=document.getElementById(id);
+  if(!out)return;
+  const line=document.createElement('span');
+  line.className='out-line'+(type?' '+type:'');
+  line.textContent=msg;
+  out.appendChild(line);out.appendChild(document.createElement('br'));
+  out.scrollTop=out.scrollHeight;
+}
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  const m=document.getElementById('toast-msg');
+  m.textContent=msg;
+  t.style.borderColor=type==='warn'?'rgba(224,147,90,0.4)':type==='err'?'rgba(224,85,85,0.4)':'var(--border)';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function copyScript(){
+  const text=SCRIPT.map(s=>`【${s.r==='captain'?'船长':'麦洛'}】${s.t}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(()=>showToast('✓ 脚本已复制到剪贴板'));
+}
+function downloadScript(){
+  const text=SCRIPT.map(s=>`【${s.r==='captain'?'船长':'麦洛'}】\n${s.t}`).join('\n\n---\n\n');
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CaptainCast_EP01_script.txt';a.click();
+  showToast('✓ 脚本已下载');
+}
+function playAudio(id){showToast('🎵 音频播放：请在本地使用音频播放器');}
 </script>
-
 </body>
 </html>
