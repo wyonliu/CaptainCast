@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP.001 如果你能给女儿造一个宇宙 · CaptainCast 超时空电台</title>
+<meta name="description" content="凌晨两点，借钱发完工资的爸爸，开始给12岁女儿造一个宇宙。灵机理论：人类的非理性，是宇宙唯一的进化发动机。">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #0d0d1a;
+    color: #e8e0cc;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .card {
+    max-width: 420px;
+    width: 100%;
+    background: linear-gradient(145deg, #1a1528, #12101e);
+    border-radius: 20px;
+    border: 1px solid #2e2845;
+    padding: 32px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #c8a96e;
+    border: 1px solid #c8a96e44;
+    border-radius: 20px;
+    padding: 3px 12px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 20px;
+    line-height: 1.4;
+    color: #f0e8d0;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  /* Audio Player */
+  .player {
+    background: #0a0917;
+    border-radius: 14px;
+    padding: 20px 20px 16px;
+    border: 1px solid #1e1c30;
+    margin-bottom: 24px;
+  }
+  .ep-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .ep-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #c8a96e, #a07840);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .ep-meta { flex: 1; }
+  .ep-title { font-size: 14px; color: #e8dfc0; font-weight: 600; }
+  .ep-duration { font-size: 12px; color: #666; margin-top: 3px; }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 3px;
+    background: #2a2640;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c8a96e, #e8c890);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #555;
+    margin-top: 6px;
+  }
+  /* Controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .speed-btn {
+    background: #1e1c30;
+    border: none;
+    border-radius: 6px;
+    color: #888;
+    font-size: 12px;
+    padding: 5px 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .speed-btn:hover { color: #c8a96e; }
+  .play-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c8a96e, #a07840);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 16px rgba(200,169,110,0.35);
+    transition: transform 0.15s;
+  }
+  .play-btn:active { transform: scale(0.95); }
+  .vol-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  .vol-btn:hover { color: #c8a96e; }
+
+  audio { display: none; }
+
+  /* Tags */
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .tag {
+    font-size: 11px;
+    color: #666;
+    background: #1a1830;
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  /* Waveform decorative */
+  .wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 20px;
+  }
+  .wave span {
+    display: inline-block;
+    width: 2px;
+    background: #c8a96e44;
+    border-radius: 1px;
+    animation: wave-anim 1.2s ease-in-out infinite;
+  }
+  .wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .wave span:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+  .wave span:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+  .wave span:nth-child(4) { height: 20px; animation-delay: 0.3s; }
+  .wave span:nth-child(5) { height: 14px; animation-delay: 0.4s; }
+  .wave span:nth-child(6) { height: 10px; animation-delay: 0.5s; }
+  .wave.paused span { animation-play-state: paused; }
+  @keyframes wave-anim {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #444;
+    text-decoration: none;
+    margin-top: 16px;
+  }
+  .back-link:hover { color: #888; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">🚀 CaptainCast · EP.001</div>
+  <h1>如果你能给女儿造一个宇宙</h1>
+  <p class="subtitle">凌晨两点，借钱发完工资的爸爸，开始给12岁女儿造一个宇宙。这是《神临山海》的起点，也是灵机理论的诞生地。</p>
+
+  <div class="player">
+    <div class="ep-info">
+      <div class="ep-icon">🎙</div>
+      <div class="ep-meta">
+        <div class="ep-title">EP.001 · 父女对谈</div>
+        <div class="ep-duration" id="duration">加载中…</div>
+      </div>
+      <div class="wave paused" id="waveform">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">--:--</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()">1×</button>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      <button class="vol-btn" onclick="toggleMute()">🔊</button>
+    </div>
+
+    <audio id="audio" src="media/ep001.mp3" preload="metadata"></audio>
+  </div>
+
+  <div class="tags">
+    <span class="tag">#灵机理论</span>
+    <span class="tag">#科幻</span>
+    <span class="tag">#神临山海</span>
+    <span class="tag">#父女对谈</span>
+  </div>
+
+  <a href="." class="back-link">← CaptainCast 超时空电台</a>
+</div>
+
+<script>
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const progressFill = document.getElementById('progressFill');
+const currentTimeEl = document.getElementById('currentTime');
+const totalTimeEl = document.getElementById('totalTime');
+const durationEl = document.getElementById('duration');
+const waveform = document.getElementById('waveform');
+const speedBtn = document.getElementById('speedBtn');
+const speeds = [1, 1.25, 1.5, 2];
+let speedIdx = 0;
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + String(sec).padStart(2, '0');
+}
+
+audio.addEventListener('loadedmetadata', () => {
+  const d = audio.duration;
+  totalTimeEl.textContent = fmt(d);
+  durationEl.textContent = '时长 ' + fmt(d);
+});
+
+audio.addEventListener('timeupdate', () => {
+  const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+  progressFill.style.width = pct + '%';
+  currentTimeEl.textContent = fmt(audio.currentTime);
+});
+
+audio.addEventListener('ended', () => {
+  playBtn.textContent = '▶';
+  waveform.classList.add('paused');
+});
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = '⏸';
+    waveform.classList.remove('paused');
+  } else {
+    audio.pause();
+    playBtn.textContent = '▶';
+    waveform.classList.add('paused');
+  }
+}
+
+document.getElementById('progressWrap').addEventListener('click', e => {
+  const rect = e.currentTarget.querySelector('.progress-bar').getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+});
+
+function cycleSpeed() {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  audio.playbackRate = speeds[speedIdx];
+  speedBtn.textContent = speeds[speedIdx] + '×';
+}
+
+function toggleMute() {
+  audio.muted = !audio.muted;
+  document.querySelector('.vol-btn').textContent = audio.muted ? '🔇' : '🔊';
+}
+</script>
+</body>
+</html>
