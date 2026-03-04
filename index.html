@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CaptainCast · 超时空电台</title>
+<title>CaptainCast · 超时空电台 v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700;900&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -641,30 +641,44 @@ footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
             <label class="form-label">Prompt（英文效果最佳）</label>
             <textarea class="form-textarea" id="img-prompt" placeholder="输入图像描述，或点击上方预设快速填入..."></textarea>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
             <div class="form-group">
-              <label class="form-label">比例</label>
-              <select class="form-select" id="img-ratio">
-                <option value="9:16">9:16 竖版（小红书/封面）</option>
-                <option value="1:1">1:1 方形（微信/头像）</option>
-                <option value="16:9">16:9 横版（B站封面）</option>
-                <option value="3:4">3:4 竖版（公众号）</option>
+              <label class="form-label">模型</label>
+              <select class="form-select" id="img-model">
+                <option value="openrouter:google/gemini-3.1-flash-lite-preview">OR · Flash Lite（快）</option>
+                <option value="openrouter:google/gemini-3.1-flash-preview" selected>OR · Flash（推荐）</option>
+                <option value="openrouter:google/gemini-3.1-pro-preview">OR · Pro（最佳）</option>
+                <option value="gemini:gemini-3.1-flash-image-preview">Gemini直连</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">质量</label>
-              <select class="form-select" id="img-quality">
-                <option value="high">高质量（慢）</option>
-                <option value="medium">标准（快）</option>
+              <label class="form-label">比例</label>
+              <select class="form-select" id="img-ratio">
+                <option value="9:16">9:16 竖（小红书）</option>
+                <option value="1:1">1:1 方形</option>
+                <option value="16:9">16:9 横（B站）</option>
+                <option value="3:4">3:4 竖（公众号）</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">数量</label>
+              <select class="form-select" id="img-count">
+                <option value="1">生成 1 张</option>
+                <option value="2">生成 2 张</option>
+                <option value="4">生成 4 张</option>
               </select>
             </div>
           </div>
           <button class="act-btn primary" style="width:100%;padding:16px;font-size:12px;letter-spacing:3px;" onclick="generateImage()">✦ 生成图像</button>
           <div style="margin-top:16px;padding:14px;background:rgba(200,169,110,0.04);border:1px solid var(--border2);">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">API KEY 状态</div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">API 状态</div>
+            <div class="api-indicator" style="margin-bottom:6px;">
+              <div class="api-dot" id="openrouter-dot" style="background:rgba(200,169,110,0.3);"></div>
+              <span class="api-status-text" id="openrouter-status">OpenRouter · 未配置</span>
+            </div>
             <div class="api-indicator">
               <div class="api-dot" id="gemini-dot" style="background:rgba(200,169,110,0.3);"></div>
-              <span class="api-status-text" id="gemini-status">未配置 · 前往「API 设置」填入 Key</span>
+              <span class="api-status-text" id="gemini-status">Gemini直连 · 未配置</span>
             </div>
           </div>
         </div>
@@ -856,18 +870,27 @@ footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
       </div>
       <div class="api-grid">
         <div class="api-card">
-          <div class="api-name">Gemini API</div>
-          <div class="api-desc">Nano Banana 2 · AI 生图 · 每张约 $0.04</div>
+          <div class="api-name">OpenRouter API</div>
+          <div class="api-desc">统一接入 Gemini 图像模型 · 生图首选</div>
           <div class="api-key-row">
-            <input class="api-input" id="gemini-key" type="password" placeholder="AIza...">
-            <button class="api-save" onclick="saveKey('gemini')">保存</button>
+            <input class="api-input" id="openrouter-key" type="password" placeholder="sk-or-v1-...">
+            <button class="api-save" onclick="saveKey('openrouter')">保存</button>
           </div>
-          <div class="api-indicator">
-            <div class="api-dot" id="gemini-dot2" style="background:rgba(200,169,110,0.3);"></div>
-            <span class="api-status-text" id="gemini-status2">未配置</span>
+          <div class="api-indicator" style="margin-top:8px;">
+            <div class="api-dot" id="openrouter-dot2" style="background:rgba(200,169,110,0.3);"></div>
+            <span class="api-status-text" id="openrouter-status2">未配置</span>
+          </div>
+          <div style="margin-top:16px;">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">可用图像模型</div>
+            <select class="form-select" id="or-model-select" style="font-size:11px;">
+              <option value="google/gemini-3.1-flash-lite-preview">Gemini 3.1 Flash Lite（快速）</option>
+              <option value="google/gemini-3.1-flash-preview">Gemini 3.1 Flash（推荐）</option>
+              <option value="google/gemini-3.1-pro-preview">Gemini 3.1 Pro（最高质量）</option>
+            </select>
           </div>
           <div style="margin-top:12px;font-size:11px;color:rgba(200,169,110,0.4);">
-            获取：aistudio.google.com → Get API key
+            获取：openrouter.ai → Keys<br>
+            Key 仅存本地浏览器，不经过任何服务器
           </div>
         </div>
         <div class="api-card">
@@ -888,6 +911,21 @@ footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
           <div style="margin-top:12px;font-size:11px;color:rgba(200,169,110,0.4);">
             获取：platform.minimax.io → API Keys<br>
             ⚠️ Key 保存在本地浏览器，不上传任何服务器
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-name">Gemini API（直连）</div>
+          <div class="api-desc">Google AI Studio 直接 Key · 备用</div>
+          <div class="api-key-row">
+            <input class="api-input" id="gemini-key" type="password" placeholder="AIza...">
+            <button class="api-save" onclick="saveKey('gemini')">保存</button>
+          </div>
+          <div class="api-indicator" style="margin-top:8px;">
+            <div class="api-dot" id="gemini-dot2" style="background:rgba(200,169,110,0.3);"></div>
+            <span class="api-status-text" id="gemini-status2">未配置</span>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:rgba(200,169,110,0.4);">
+            获取：aistudio.google.com → Get API key
           </div>
         </div>
       </div>
@@ -1005,75 +1043,168 @@ function saveKey(service){
   if(!val){showToast('⚠ Key 不能为空','warn');return;}
   localStorage.setItem('cc_'+service+'_key',val);
   updateKeyStatus(service,true);
-  showToast('✓ '+service.toUpperCase()+' Key 已保存到本地');
+  // 同步模型选择器
+  if(service==='openrouter'){
+    const sel=document.getElementById('or-model-select');
+    if(sel)sel.value=localStorage.getItem('cc_or_model')||'google/gemini-3.1-flash-preview';
+  }
+  showToast('✓ Key 已保存到本地浏览器');
 }
 function saveGroupId(){
   const val=document.getElementById('minimax-group').value.trim();
   if(!val)return;
   localStorage.setItem('cc_minimax_group',val);
-  showToast('✓ MiniMax Group ID 已保存');
+  showToast('✓ Group ID 已保存');
 }
 function updateKeyStatus(service,ok){
+  const labels={openrouter:'OpenRouter',gemini:'Gemini直连',minimax:'MiniMax'};
   const dot1=document.getElementById(service+'-dot');
   const dot2=document.getElementById(service+'-dot2');
   const s1=document.getElementById(service+'-status');
   const s2=document.getElementById(service+'-status2');
   const color=ok?'var(--green)':'rgba(200,169,110,0.3)';
-  const text=ok?'已配置 · 就绪':'未配置 · 前往「API 设置」填入 Key';
-  if(dot1)dot1.style.background=color;
-  if(dot2)dot2.style.background=color;
-  if(s1)s1.textContent=(service==='gemini'?'Gemini API · ':' MiniMax API · ')+text;
-  if(s2)s2.textContent=text;
+  const txt=ok?'已配置 · 就绪':'未配置';
+  [dot1,dot2].forEach(d=>{if(d)d.style.background=color;});
+  if(s1)s1.textContent=(labels[service]||service)+' · '+txt;
+  if(s2)s2.textContent=txt;
 }
 function loadSavedKeys(){
-  ['gemini','minimax'].forEach(s=>{
+  ['openrouter','gemini','minimax'].forEach(s=>{
     const k=localStorage.getItem('cc_'+s+'_key');
-    if(k){document.getElementById(s+'-key')&&(document.getElementById(s+'-key').value=k);updateKeyStatus(s,true);}
+    const el=document.getElementById(s+'-key');
+    if(k&&el){el.value=k;updateKeyStatus(s,true);}
   });
   const g=localStorage.getItem('cc_minimax_group');
-  if(g&&document.getElementById('minimax-group'))document.getElementById('minimax-group').value=g;
+  if(g){const el=document.getElementById('minimax-group');if(el)el.value=g;}
+  const m=localStorage.getItem('cc_or_model');
+  if(m){const el=document.getElementById('or-model-select');if(el)el.value=m;}
 }
 loadSavedKeys();
 
 // ── IMAGE GENERATION ──
+// 生成结果存储（支持多张）
+let generatedImages = [];
+
 async function generateImage(){
-  const prompt=document.getElementById('img-prompt').value.trim();
+  const prompt = document.getElementById('img-prompt').value.trim();
   if(!prompt){showToast('⚠ 请填写 Prompt','warn');return;}
-  const key=localStorage.getItem('cc_gemini_key');
-  if(!key){showToast('⚠ 请先在「API 设置」填入 Gemini Key','warn');showPanel('settings');return;}
-  const loading=document.getElementById('gen-loading');
+
+  const modelVal = document.getElementById('img-model').value;
+  const count = parseInt(document.getElementById('img-count').value)||1;
+  const [provider, modelId] = modelVal.includes(':') ? modelVal.split(':') : ['openrouter', modelVal];
+
+  // 选择 Key
+  const orKey = localStorage.getItem('cc_openrouter_key');
+  const gemKey = localStorage.getItem('cc_gemini_key');
+  let key, useProvider;
+  if(provider==='openrouter' && orKey){ key=orKey; useProvider='openrouter'; }
+  else if(provider==='gemini' && gemKey){ key=gemKey; useProvider='gemini'; }
+  else if(orKey){ key=orKey; useProvider='openrouter'; }
+  else if(gemKey){ key=gemKey; useProvider='gemini'; }
+  else{ showToast('⚠ 请先在「API 设置」填入 Key','warn'); showPanel('settings'); return; }
+
+  const loading = document.getElementById('gen-loading');
+  loading.querySelector('.loading-text').textContent = 'GENERATING...';
   loading.classList.add('show');
+  generatedImages = [];
+
   try{
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${key}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        contents:[{parts:[{text:prompt}]}],
-        generationConfig:{responseModalities:['IMAGE','TEXT']}
-      })
-    });
-    const data=await resp.json();
-    if(data.error){throw new Error(data.error.message);}
-    const parts=data.candidates?.[0]?.content?.parts||[];
-    const imgPart=parts.find(p=>p.inlineData);
-    if(imgPart){
-      const img=document.getElementById('gen-img');
-      img.src=`data:${imgPart.inlineData.mimeType};base64,${imgPart.inlineData.data}`;
-      img.style.display='block';
-      document.querySelector('.preview-placeholder').style.display='none';
-      showToast('✓ 图像生成成功！');
-    }else{throw new Error('未返回图像数据');}
+    for(let i=0; i<count; i++){
+      if(count>1) loading.querySelector('.loading-text').textContent = `GENERATING ${i+1}/${count}...`;
+      let imgData, mimeType;
+
+      if(useProvider==='openrouter'){
+        // OpenRouter 调用
+        const resp = await fetch('https://openrouter.ai/api/v1/chat/completions',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+key,
+            'HTTP-Referer':'https://wyonliu.github.io/CaptainCast/',
+            'X-Title':'CaptainCast'
+          },
+          body: JSON.stringify({
+            model: modelId,
+            messages:[{role:'user',content:[{type:'text',text:prompt}]}],
+          })
+        });
+        const data = await resp.json();
+        if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
+        // 从响应中提取图片
+        const content = data.choices?.[0]?.message?.content;
+        if(Array.isArray(content)){
+          const imgPart = content.find(p=>p.type==='image_url'||p.image_url);
+          if(imgPart){
+            const url = imgPart.image_url?.url || imgPart.url;
+            if(url && url.startsWith('data:')){
+              const [meta, b64] = url.split(',');
+              mimeType = meta.split(':')[1].split(';')[0];
+              imgData = b64;
+            } else if(url){
+              // 外部URL
+              generatedImages.push({url, mime:'image/png'});
+              showImageResult(url, false, i);
+              continue;
+            }
+          }
+        } else if(typeof content==='string' && content.includes('data:')){
+          const match = content.match(/data:(image\/\w+);base64,([A-Za-z0-9+/=]+)/);
+          if(match){ mimeType=match[1]; imgData=match[2]; }
+        }
+        if(!imgData) throw new Error('OpenRouter未返回图像数据，该模型可能不支持图像生成，请切换模型');
+
+      } else {
+        // Gemini 直连
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${key}`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            contents:[{parts:[{text:prompt}]}],
+            generationConfig:{responseModalities:['IMAGE','TEXT']}
+          })
+        });
+        const data = await resp.json();
+        if(data.error) throw new Error(data.error.message);
+        const parts = data.candidates?.[0]?.content?.parts||[];
+        const imgPart = parts.find(p=>p.inlineData);
+        if(!imgPart) throw new Error('Gemini未返回图像，请确认模型支持图像生成');
+        imgData = imgPart.inlineData.data;
+        mimeType = imgPart.inlineData.mimeType;
+      }
+
+      if(imgData){
+        const dataUrl = `data:${mimeType||'image/png'};base64,${imgData}`;
+        generatedImages.push({url:dataUrl, mime:mimeType||'image/png'});
+        showImageResult(dataUrl, true, i);
+      }
+    }
+    showToast(`✓ 生成完成！共 ${generatedImages.length} 张`);
   }catch(e){
+    console.error(e);
     showToast('✗ 生成失败：'+e.message,'err');
-    logToOutput('synthesis-output','✗ 图像生成错误：'+e.message,'err');
-  }finally{loading.classList.remove('show');}
+    loading.querySelector('.loading-text').textContent = '✗ '+e.message.substring(0,30);
+    setTimeout(()=>loading.classList.remove('show'),2500);
+    return;
+  }
+  loading.classList.remove('show');
+}
+
+function showImageResult(src, isBase64, idx){
+  const img = document.getElementById('gen-img');
+  img.src = src;
+  img.style.display = 'block';
+  document.querySelector('.preview-placeholder').style.display = 'none';
 }
 
 function downloadImage(){
-  const img=document.getElementById('gen-img');
-  if(!img.src||img.style.display==='none'){showToast('⚠ 还没有生成图像','warn');return;}
-  const a=document.createElement('a');a.href=img.src;a.download='captaincast_ep01.png';a.click();
-  showToast('✓ 图像已下载');
+  if(!generatedImages.length){showToast('⚠ 还没有生成图像','warn');return;}
+  generatedImages.forEach((img,i)=>{
+    const a=document.createElement('a');
+    a.href=img.url;
+    a.download=`captaincast_ep01_${i+1}.png`;
+    a.click();
+  });
+  showToast(`✓ ${generatedImages.length} 张图像已下载`);
 }
 function copyImagePrompt(){
   const p=document.getElementById('img-prompt').value;
@@ -1082,8 +1213,17 @@ function copyImagePrompt(){
 }
 function addAllToQueue(){
   const list=document.getElementById('batch-list');
-  list.innerHTML=PRESETS.map((p,i)=>`<div style="padding:8px 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;"><span>${p.label}</span><span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--teal);">${i===0?'READY':'QUEUED'}</span></div>`).join('');
-  showToast('✓ 4张配图已加入队列');
+  list.innerHTML=PRESETS.map((p,i)=>`
+    <div style="padding:10px 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <span style="font-size:12px;color:var(--text);">${p.label}</span>
+      <button class="act-btn ghost" style="font-size:9px;padding:5px 10px;" onclick="runPreset(${i})">生成</button>
+    </div>`).join('');
+  showToast('✓ 4张配图队列已就绪，点击逐张生成');
+}
+async function runPreset(idx){
+  const p=PRESETS[idx];
+  document.getElementById('img-prompt').value=p.prompt;
+  await generateImage();
 }
 
 // ── VOICE CLONE ──
