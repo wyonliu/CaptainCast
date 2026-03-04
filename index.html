@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CaptainCast · 超时空电台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a12;
+    --deep: #080814;
+    --gold: #c8a96e;
+    --amber: #e8935a;
+    --crimson: #c23b2e;
+    --teal: #2dd4bf;
+    --void: #0d1117;
+    --mist: rgba(200,169,110,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: #e8e0d0;
+    font-family: 'Noto Serif SC', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* Particle canvas */
+  #cosmos {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,169,110,0.12) 0%, transparent 70%);
+  }
+
+  .signal-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .signal-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.6); }
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 10vw, 120px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -2px;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.5s forwards;
+  }
+
+  .hero-title .line1 { color: var(--gold); display: block; }
+  .hero-title .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,169,110,0.5);
+    display: block;
+    margin-top: 8px;
+  }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 16px;
+    color: rgba(232,224,208,0.6);
+    letter-spacing: 6px;
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+  }
+
+  .hero-tagline {
+    margin-top: 48px;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 300;
+    color: rgba(232,224,208,0.9);
+    max-width: 700px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 1s 1.1s forwards;
+  }
+
+  .hero-tagline em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeUp 1s 1.8s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(200,169,110,0.5);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  @keyframes scrollPulse {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 40px;
+    margin: 60px 0 40px;
+  }
+
+  .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.2); }
+  .divider-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* ── EP SECTION ── */
+  .ep-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  .ep-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .ep-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--teal);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .ep-title {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .ep-desc {
+    font-size: 17px;
+    color: rgba(232,224,208,0.65);
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ── CONTENT CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .card {
+    background: rgba(200,169,110,0.04);
+    border: 1px solid rgba(200,169,110,0.1);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s, border-color 0.4s;
+  }
+
+  .card:hover {
+    background: rgba(200,169,110,0.08);
+    border-color: rgba(200,169,110,0.3);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height 0.4s;
+  }
+
+  .card:hover::before { height: 100%; }
+
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--teal);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .card-body {
+    font-size: 14px;
+    color: rgba(232,224,208,0.6);
+    line-height: 1.9;
+  }
+
+  .card-body strong {
+    color: rgba(232,224,208,0.9);
+    font-weight: 400;
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .quote-block {
+    border-left: 3px solid var(--gold);
+    padding: 32px 40px;
+    margin: 60px 0;
+    background: rgba(200,169,110,0.04);
+    position: relative;
+  }
+
+  .quote-text {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(232,224,208,0.9);
+    font-style: italic;
+  }
+
+  .quote-attr {
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  /* ── PLATFORM GRID ── */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin: 40px 0;
+  }
+
+  .platform-card {
+    background: rgba(200,169,110,0.03);
+    border: 1px solid rgba(200,169,110,0.08);
+    padding: 28px 20px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .platform-card:hover {
+    background: rgba(200,169,110,0.08);
+    border-color: rgba(200,169,110,0.25);
+    transform: translateY(-4px);
+  }
+
+  .platform-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .platform-form {
+    font-size: 12px;
+    color: rgba(232,224,208,0.5);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .platform-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    letter-spacing: 1px;
+  }
+
+  /* ── PIPELINE ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 48px 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .pipe-step {
+    flex-shrink: 0;
+    background: rgba(200,169,110,0.06);
+    border: 1px solid rgba(200,169,110,0.15);
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 120px;
+    transition: all 0.3s;
+  }
+
+  .pipe-step:hover {
+    background: rgba(200,169,110,0.12);
+    border-color: var(--gold);
+  }
+
+  .pipe-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+
+  .pipe-label {
+    font-size: 13px;
+    color: rgba(232,224,208,0.8);
+    font-weight: 700;
+  }
+
+  .pipe-arrow {
+    color: var(--gold);
+    font-size: 20px;
+    flex-shrink: 0;
+    padding: 0 4px;
+    opacity: 0.5;
+  }
+
+  /* ── CONCEPT BLOCKS ── */
+  .concept-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 40px 0;
+  }
+
+  .concept-card {
+    padding: 48px 40px;
+    border: 1px solid rgba(200,169,110,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-card.light { background: rgba(200,169,110,0.04); }
+  .concept-card.dark { background: rgba(8,8,20,0.6); }
+
+  .concept-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 80px;
+    font-weight: 700;
+    color: rgba(200,169,110,0.06);
+    position: absolute;
+    top: 16px; right: 24px;
+    line-height: 1;
+  }
+
+  .concept-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--amber);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .concept-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #f0e8d8;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .concept-body {
+    font-size: 14px;
+    color: rgba(232,224,208,0.6);
+    line-height: 1.9;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid rgba(200,169,110,0.15);
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .footer-sub {
+    font-size: 13px;
+    color: rgba(232,224,208,0.4);
+    letter-spacing: 4px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+  @media (max-width: 768px) {
+    .card-grid, .card-grid-3, .concept-row { grid-template-columns: 1fr; }
+    .platform-grid { grid-template-columns: repeat(3, 1fr); }
+    .ep-section { padding: 0 20px 60px; }
+    .divider { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="cosmos"></canvas>
+
+<div class="content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="signal-badge">
+      <div class="signal-dot"></div>
+      CAPTAINCAST · TRANSMISSION INITIATED · EP.001
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line1">船长电台</span>
+      <span class="line2">CAPTAINCAST</span>
+    </h1>
+
+    <p class="hero-sub">超时空电台 · 神临山海宇宙</p>
+
+    <p class="hero-tagline">
+      一个父亲，在人生最低谷，<br>
+      给12岁的女儿造了一个<em>宇宙</em>。<br>
+      这是第一期。
+    </p>
+
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- EP01 SECTION -->
+  <div class="content">
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">EP.001 · 内容策略全景</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <section class="ep-section">
+
+      <div class="ep-header">
+        <span class="ep-number">EPISODE 001</span>
+        <h2 class="ep-title">如果你能给女儿造一个宇宙</h2>
+        <p class="ep-desc">
+          不从宏大世界观入手，只问一个问题——
+          这个问题，会让20-30岁的女生沉默三秒，然后不自觉地点击关注。
+        </p>
+      </div>
+
+      <!-- 三个核心钩子 -->
+      <div class="card-grid-3" style="margin-bottom:2px">
+        <div class="card">
+          <span class="card-icon">🎣</span>
+          <span class="card-label">HOOK 01 · 情感钩</span>
+          <h3 class="card-title">父女情感<br>是最不可复制的护城河</h3>
+          <p class="card-body">
+            船长就是作者本人，麦洛就是米莱。<br><br>
+            这种<strong>真实性</strong>无法被其他科幻IP模仿。<br>
+            第一期用"凌晨两点借钱发工资的父亲在给女儿写宇宙"的真实故事开场——这是任何世界观介绍都比不上的入口。
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚡</span>
+          <span class="card-label">HOOK 02 · 知识钩</span>
+          <h3 class="card-title">灵机理论<br>硬核物理包装情感哲学</h3>
+          <p class="card-body">
+            "AI的随机是假的，人类的非理性才是宇宙进化的发动机"——<br><br>
+            这句话<strong>同时打中</strong>科幻爱好者、哲学党、对AI焦虑的普通人，以及每一个曾经被说"太感性"的女生。
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔄</span>
+          <span class="card-label">HOOK 03 · 反转钩</span>
+          <h3 class="card-title">减一不是收割者<br>是点火者</h3>
+          <p class="card-body">
+            这个反转，是第一期最强的留存钩子。<br><br>
+            读者以为是"打败坏人"的科幻，结果发现是<strong>"父母用沉默为孩子点火"</strong>的人性命题——情感升维，让人不得不追。
+          </p>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <p class="quote-text">
+          "伟大的科幻，不是因为设定宏大，<br>
+          而是因为触及了人类最深的恐惧和最高的希望。"
+        </p>
+        <p class="quote-attr">—— 《神临山海》创作者愿景</p>
+      </div>
+
+      <!-- 内容形式 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">第一期 · 三平台内容形式</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-label">PLATFORM 01 · 公众号</span>
+          <h3 class="card-title">长图文 · 2800字</h3>
+          <p class="card-body">
+            <strong>标题A</strong>：一个爸爸，给12岁的女儿造了一个宇宙<br>
+            <strong>标题B</strong>：圆周率第10^100位，藏着人类最后的秘密<br><br>
+            五章结构：引子→山海→灵机→麦洛→减一真相→平凡结局<br>
+            配AI生成插图×4，周五晚21:00发布。
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-label">PLATFORM 02 · 小红书</span>
+          <h3 class="card-title">图文三连 · 分三天</h3>
+          <p class="card-body">
+            <strong>图1</strong>（周一）：封面故事——父亲造宇宙<br>
+            <strong>图2</strong>（周三）：知识卡——为什么AI永远无法打败人类？<br>
+            <strong>图3</strong>（周五）：情感向——把你推进危险里，是最深的爱<br><br>
+            视觉主轴：敦煌赛博朋克美学，墨龙维塔为IP形象。
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:2px">
+        <span class="card-label">PLATFORM 03 · B站</span>
+        <h3 class="card-title">视频播客 · 15分钟完整脚本已就绪</h3>
+        <p class="card-body" style="max-width:700px">
+          六段结构：开场真实故事→山海世界观→灵机硬核科普→宇宙牧场揭示→减一真相反转→父女平凡结局<br><br>
+          <strong>每段都有独立的BGM切换节奏，情绪弧完整。</strong>全脚本已在内容包中，可直接录音。<br>
+          配套：封面图、章节字幕、弹幕引导词（"灵机是什么"、"减一是点火者"）。
+        </p>
+      </div>
+
+      <!-- 多平台矩阵 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">五平台发布矩阵</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="platform-grid">
+        <div class="platform-card">
+          <div class="platform-name">公众号</div>
+          <div class="platform-form">2800字长文<br>AI配图×4</div>
+          <div class="platform-time">周五 21:00</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">小红书</div>
+          <div class="platform-form">图文三连<br>赛博墨画风格</div>
+          <div class="platform-time">周一/三/五</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">B站</div>
+          <div class="platform-form">15min播客<br>+专栏文字版</div>
+          <div class="platform-time">周六 15:00</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">视频号</div>
+          <div class="platform-form">3min切片<br>微信生态裂变</div>
+          <div class="platform-time">周四 20:00</div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name">X</div>
+          <div class="platform-form">英文Thread<br>国际科幻受众</div>
+          <div class="platform-time">周日</div>
+        </div>
+      </div>
+
+      <!-- 世界观核心 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">神临山海 · 两个核心概念</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="concept-row">
+        <div class="concept-card light">
+          <span class="concept-num">灵</span>
+          <span class="concept-tag">CONCEPT 01 · 灵机理论</span>
+          <h3 class="concept-title">人类的非理性<br>是宇宙的负熵之源</h3>
+          <p class="concept-body">
+            AI的随机是伪随机——给定输入，输出可预测。<br>
+            人类大脑存在量子相干态，能产生真随机性。<br><br>
+            当你"明知放弃是最优解，仍然死磕"——<br>
+            这一刻，宇宙里多了一个从未出现过的变量。<br><br>
+            <strong style="color:var(--gold)">这就是灵机：你的非理性，是你最贵的东西。</strong>
+          </p>
+        </div>
+        <div class="concept-card dark">
+          <span class="concept-num">道</span>
+          <span class="concept-tag">CONCEPT 02 · 宇宙牧场</span>
+          <h3 class="concept-title">高维文明造了牧场<br>而牧场里住着你</h3>
+          <p class="concept-body">
+            高维文明太聪明——聪明到再也产生不了新变量。<br>
+            他们在宇宙里建了牧场，养育人类。<br><br>
+            制造灾难、战争、分离——极端情绪产生最高纯度灵机。<br>
+            收割，用作燃料，延缓自身热寂。<br><br>
+            <strong style="color:var(--amber)">但真相是：他们不是收割者，是点火者。</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- 自动化流水线 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">CaptainCast · 内容自动化流水线</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-num">01</div>
+          <div class="pipe-label">选题</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">02</div>
+          <div class="pipe-label">出稿件</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">03</div>
+          <div class="pipe-label">审稿优化</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">04</div>
+          <div class="pipe-label">出脚本</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">05</div>
+          <div class="pipe-label">AI图序列</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">06</div>
+          <div class="pipe-label">发文排版</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">07</div>
+          <div class="pipe-label">音频播客</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-num">08</div>
+          <div class="pipe-label">视频播客</div>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-label">你的角色</span>
+          <h3 class="card-title">船长：决策 + 触发</h3>
+          <p class="card-body">
+            给方向或拍板选题<br>
+            确认风格基调<br>
+            最终审稿<br>
+            账号API提供
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-label">小安的角色</span>
+          <h3 class="card-title">小安：生产 + 优化</h3>
+          <p class="card-body">
+            选题池生成与分析<br>
+            全文稿件生成<br>
+            双版本脚本（播客/视频）<br>
+            AI图提示词序列<br>
+            各平台排版适配
+          </p>
+        </div>
+      </div>
+
+      <!-- 下期预告 -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">EP.002 · 预告</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="card" style="border-color:rgba(200,169,110,0.3)">
+        <span class="card-label">NEXT EPISODE</span>
+        <h3 class="card-title">她在九色瑶池，第一次觉醒<br>——麦洛的诞生</h3>
+        <p class="card-body" style="max-width:700px">
+          为什么12岁的麦洛感觉"记忆有出入"？<br>
+          那条叫维塔的墨龙，为什么能感受她的情绪？<br>
+          千里江山第一关，她要面对的到底是什么？<br><br>
+          <strong>这一期，我们进入山海，开始《神临山海》第一部第一篇的世界。</strong>
+        </p>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">CaptainCast</div>
+    <div class="footer-sub">船长与麦洛的超时空电台 · 神临山海宇宙 · 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// Cosmos particle system
+const canvas = document.getElementById('cosmos');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  particles = [];
+  const count = Math.floor((W * H) / 8000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.2,
+      a: Math.random(),
+      speed: Math.random() * 0.3 + 0.05,
+      drift: (Math.random() - 0.5) * 0.15,
+      gold: Math.random() > 0.85
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    if (p.gold) {
+      ctx.fillStyle = `rgba(200,169,110,${p.a * 0.6})`;
+    } else {
+      ctx.fillStyle = `rgba(232,224,208,${p.a * 0.25})`;
+    }
+    ctx.fill();
+
+    p.y -= p.speed;
+    p.x += p.drift;
+    p.a += (Math.random() - 0.5) * 0.02;
+    p.a = Math.max(0.1, Math.min(1, p.a));
+
+    if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+    if (p.x < -5) p.x = W + 5;
+    if (p.x > W + 5) p.x = -5;
+  });
+
+  requestAnimationFrame(drawParticles);
+}
+
+resize();
+createParticles();
+drawParticles();
+window.addEventListener('resize', () => { resize(); createParticles(); });
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.card, .concept-card, .platform-card, .pipe-step, .quote-block').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease, background 0.4s, border-color 0.4s';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
