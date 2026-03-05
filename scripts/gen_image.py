@@ -1,40 +1,27 @@
 """
-CaptainCast · EP.001 AI 生图
-运行：python3 scripts/gen_image.py
+CaptainCast · AI 生图（通用，支持任意集数）
+运行：python3 scripts/gen_image.py --ep 001
+     python3 scripts/gen_image.py --ep 002
 依赖：pip3 install requests python-dotenv
 """
-import requests, os, base64, re, json
+import requests, os, base64, re, json, sys
 from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
 
 load_dotenv()
-OR_KEY  = os.getenv('OPENROUTER_API_KEY')
-OUT_DIR = Path("episodes/ep001/images")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
+OR_KEY = os.getenv('OPENROUTER_API_KEY')
 
-PROMPTS = [
-    {
-        "name": "01_cover",
-        "label": "封面·麦洛&小墨",
-        "prompt": "A 14-year-old Chinese girl standing at the threshold of a vast fantasy portal, a small ink-black dragon curled around her wrist. Nine-colored glowing pools, floating stone pillars defying gravity. Sky deep indigo and amber gold. Dunhuang cyberpunk meets Chinese ink wash painting. Cinematic 4K vertical composition.",
-    },
-    {
-        "name": "02_lingji_vs_jicheng",
-        "label": "灵机vs寂熵",
-        "prompt": "Split composition. Left half: warm chaotic human light, ember particles, organic flowing curves, fire and tears. Right half: cold blue crystalline AI lattice, geometric rigid order. Center: a spiral vortex where chaos meets order, gold and blue swirling. Dark cosmic background. Chinese ink wash meets hard sci-fi. Square composition.",
-    },
-    {
-        "name": "03_father_daughter",
-        "label": "父女·送别",
-        "prompt": "A father silhouette standing in darkness watching his young daughter walk through a glowing portal into fantastical mountains and seas. Warm amber light from the portal. Father in shadow, daughter bathed in golden light. Ancient Chinese ink landscape meets science fiction. Deeply emotional cinematic scene. Vertical composition.",
-    },
-    {
-        "name": "04_jianyi_reveal",
-        "label": "减一·显现",
-        "prompt": "Vast sky over Earth at dusk. A massive translucent holographic ancient entity hovers above clouds, sorrowful and wise. Tiny humans below in awe looking up. Gold and purple cosmic light. Epic science fiction meets Chinese ink painting. Widescreen landscape composition.",
-    },
-]
+
+def get_ep() -> str:
+    for i, arg in enumerate(sys.argv):
+        if arg == '--ep' and i + 1 < len(sys.argv):
+            return sys.argv[i + 1].zfill(3)
+    # 默认用最新的有 prompts.json 的集数
+    eps = sorted(Path("episodes").glob("ep*/prompts.json"))
+    if eps:
+        return eps[-1].parent.name.replace("ep", "")
+    return "001"
 
 
 def generate(prompt: str) -> Optional[bytes]:
@@ -58,8 +45,9 @@ def generate(prompt: str) -> Optional[bytes]:
         return None
     msg = data["choices"][0]["message"]
 
-    # Gemini via OpenRouter returns images in message["images"]
-    for images_field in [msg.get("images", []), msg.get("content") if isinstance(msg.get("content"), list) else []]:
+    # Gemini via OpenRouter: images in message["images"]
+    for images_field in [msg.get("images", []),
+                         msg.get("content") if isinstance(msg.get("content"), list) else []]:
         if not images_field:
             continue
         for part in images_field:
@@ -84,18 +72,32 @@ def main():
     if not OR_KEY or OR_KEY.startswith("sk-or-v1-你"):
         print("❌ 请先在 .env 填入 OPENROUTER_API_KEY")
         return
-    print(f"🎨 EP.001 生图开始，共 {len(PROMPTS)} 张\n")
-    for i, p in enumerate(PROMPTS):
-        print(f"[{i+1}/{len(PROMPTS)}] {p['label']}")
+
+    ep = get_ep()
+    ep_dir = Path(f"episodes/ep{ep}")
+    prompts_file = ep_dir / "prompts.json"
+
+    if not prompts_file.exists():
+        print(f"❌ 未找到 {prompts_file}，请先创建 prompts.json")
+        return
+
+    prompts = json.loads(prompts_file.read_text(encoding="utf-8"))
+    out_dir = ep_dir / "images"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"🎨 EP.{ep} 生图开始，共 {len(prompts)} 张\n")
+    for i, p in enumerate(prompts):
+        print(f"[{i+1}/{len(prompts)}] {p['label']}")
         data = generate(p["prompt"])
         if data:
-            path = OUT_DIR / f"{p['name']}.png"
+            path = out_dir / f"{p['name']}.png"
             path.write_bytes(data)
             print(f"  ✅ {path}  ({len(data)//1024} KB)\n")
         else:
             print(f"  ⚠️  跳过\n")
-    success = len(list(OUT_DIR.glob("*.png")))
-    print(f"✨ 完成！{success} 张图片在 episodes/ep001/images/")
+
+    success = len(list(out_dir.glob("*.png")))
+    print(f"✨ 完成！{success} 张图片在 {out_dir}")
 
 
 if __name__ == "__main__":
