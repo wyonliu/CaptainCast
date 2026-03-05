@@ -124,14 +124,49 @@ def _inline(text):
 
 
 def build_html(cfg, img_urls):
-    GOLD = "#c8a96e"; DARK = "#1a1a1a"
-    BG = "#faf8f3"; LINE = "#e8dfc8"
+    GOLD    = "#c8a96e"
+    GOLD_L  = "#e0c88a"       # 亮金
+    GOLD_D  = "#8a6830"       # 暗金
+    DARK    = "#1a1a1a"
+    DARK_BG = "#0d0d1a"       # 深夜色，用于头部卡片
+    MID_BG  = "#111120"       # 代码块背景
+    BG      = "#faf8f3"       # 暖米色，引用块背景
+    LINE    = "#e8dfc8"
+    TEXT    = "#333333"
+    MUTED   = "#888888"
+
     fileid = cfg.get("voice_encode_fileid", "")
     insert_after = {int(k): v for k, v in cfg.get("insert_img_after_section", {}).items()}
     ep = cfg["ep"]
+    title_full = cfg.get("title", "")
+    subtitle = title_full.split("：", 1)[1] if "：" in title_full else title_full
+    digest = cfg.get("digest", "")
+    next_ep = cfg.get("next_ep_hint", "下期精彩，敬请期待")
 
     parts = []
 
+    # ── ① 头部品牌卡片（深色，参考 ep001.html 风格）──
+    parts.append(
+        f'<section style="background:{DARK_BG};border-radius:16px;'
+        f'padding:24px 20px 22px;margin:0 0 20px;">'
+        # 节目标签
+        f'<p style="font-size:11px;letter-spacing:3px;color:{GOLD};'
+        f'margin:0 0 14px;font-weight:500;">✦ CAPTAINCAST · 超时空电台 ✦</p>'
+        # EP 徽章
+        f'<section style="display:inline-block;background:transparent;'
+        f'border:1px solid {GOLD_D};border-radius:20px;'
+        f'padding:3px 14px;margin:0 0 14px;">'
+        f'<span style="font-size:12px;color:{GOLD};letter-spacing:1px;">EP.{ep}</span>'
+        f'</section>'
+        # 副标题
+        f'<p style="font-size:20px;font-weight:bold;color:#f0e8d0;'
+        f'line-height:1.45;margin:0 0 12px;">{subtitle}</p>'
+        # 摘要一句话
+        f'<p style="font-size:13px;color:{MUTED};line-height:1.7;margin:0;">{digest}</p>'
+        f'</section>'
+    )
+
+    # ── ② 音频播放器 ──
     if fileid:
         parts.append(
             '<section nodeleaf="">'
@@ -139,16 +174,26 @@ def build_html(cfg, img_urls):
                         cfg["audio_high_kb"], cfg["audio_low_kb"], cfg["audio_src_kb"])
             + '</section>'
         )
+        parts.append(
+            f'<p style="font-size:12px;color:{MUTED};text-align:center;'
+            f'margin:8px 0 28px;">↑ 点击收听完整播客版本</p>'
+        )
 
     md_text = Path(f"episodes/ep{ep}/article.md").read_text(encoding="utf-8")
     lines = md_text.split("\n")
     section_count = 0
     used_img_idxs = set()
+    section_heading_count = 0
+
+    def _esc(s):
+        return (s.replace("&", "&amp;").replace("<", "&lt;")
+                 .replace(">", "&gt;").replace('"', "&quot;"))
 
     i = 0
     while i < len(lines):
         line = lines[i]
 
+        # ── 分隔线 `---` ──
         if re.match(r'^---+$', line.strip()):
             section_count += 1
             if section_count in insert_after:
@@ -156,90 +201,121 @@ def build_html(cfg, img_urls):
                 if idx < len(img_urls) and img_urls[idx]:
                     used_img_idxs.add(idx)
                     parts.append(
-                        f'<img src="{img_urls[idx]}" style="max-width:100%;display:block;'
-                        f'margin:24px auto 8px;border-radius:8px;" />'
+                        f'<img src="{img_urls[idx]}" style="max-width:100%;'
+                        f'width:100%;display:block;margin:20px auto;'
+                        f'border-radius:10px;" />'
                     )
+            # 精致分隔符
             parts.append(
-                f'<p><span style="color:{GOLD};font-size:14px;letter-spacing:6px;">· · ·</span></p>'
+                f'<section style="text-align:center;margin:28px 0;">'
+                f'<span style="color:{GOLD_D};font-size:12px;letter-spacing:8px;">✦ · ✦</span>'
+                f'</section>'
             )
             i += 1; continue
 
+        # ── H1（文章大标题，通常第一行）──
         if re.match(r'^# [^#]', line):
+            # 头部卡片已经有标题，H1 只作为内容区开场，用较小字号
             parts.append(
-                f'<h1 style="font-size:22px;font-weight:bold;color:{DARK};'
-                f'margin:0 0 6px;line-height:1.3;">{_inline(line[2:])}</h1>'
+                f'<p style="font-size:18px;font-weight:bold;color:{DARK};'
+                f'line-height:1.45;margin:0 0 6px;">{_inline(line[2:])}</p>'
             )
+
+        # ── H2（章节标题，金色左竖线+底划线强调）──
         elif line.startswith("## "):
+            section_heading_count += 1
             parts.append(
-                f'<h2 style="font-size:18px;font-weight:bold;color:{DARK};'
-                f'margin:32px 0 12px;padding:12px 16px;background:{BG};'
-                f'border-left:4px solid {GOLD};border-radius:0 6px 6px 0;">'
-                f'<span style="font-size:16px;color:{GOLD};font-weight:bold;">'
-                f'{_inline(line[3:])}</span></h2>'
+                f'<section style="margin:36px 0 14px;">'
+                # 小号章节号
+                f'<p style="font-size:11px;color:{GOLD_D};letter-spacing:3px;'
+                f'margin:0 0 6px;">第 {section_heading_count} 节</p>'
+                # 主标题文字
+                f'<p style="font-size:18px;font-weight:bold;color:{DARK};'
+                f'line-height:1.4;margin:0 0 8px;">{_inline(line[3:])}</p>'
+                # 金色短横线
+                f'<section style="width:32px;height:3px;background:{GOLD};'
+                f'border-radius:2px;"></section>'
+                f'</section>'
             )
+
+        # ── 引用块（> text）──
         elif line.startswith("> "):
             parts.append(
-                f'<blockquote style="border-left:none;margin:20px 0;padding:20px 24px;'
-                f'background:{BG};border-radius:8px;border:1px solid {LINE};'
-                f'font-size:16px;line-height:1.8;color:{DARK};font-weight:500;">'
-                f'<section>{_inline(line[2:])}</section></blockquote>'
+                f'<section style="margin:22px 0;padding:18px 20px;'
+                f'background:{BG};border-radius:10px;'
+                f'border-left:3px solid {GOLD};">'
+                f'<p style="font-size:15px;line-height:1.85;color:{DARK};'
+                f'font-weight:500;margin:0;">{_inline(line[2:])}</p>'
+                f'</section>'
             )
+
+        # ── 代码块 ──
         elif line.strip().startswith("```"):
             code_lines = []
             i += 1
             while i < len(lines) and not lines[i].strip().startswith("```"):
                 code_lines.append(lines[i])
                 i += 1
-            # WeChat不支持 <pre>/<code>，用 <section>+<p> 模拟代码块
-            # 必须对内容做 HTML 转义，否则代码里的 < > 会被微信解析为标签
-            def _esc(s):
-                return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
             code_html = "".join(
-                f'<p style="margin:2px 0;font-size:13px;line-height:1.7;'
-                f'font-family:Menlo,Consolas,monospace;color:#c8a96e;">'
+                f'<p style="margin:1px 0;font-size:13px;line-height:1.75;'
+                f'font-family:Menlo,Consolas,monospace;color:{GOLD};">'
                 f'{_esc(ln) if ln.strip() else "&nbsp;"}</p>'
                 for ln in code_lines
             )
             parts.append(
-                f'<section style="background:#0d0d1a;padding:14px 18px;'
-                f'border-radius:8px;margin:16px 0;overflow:hidden;">'
+                f'<section style="background:{MID_BG};padding:14px 16px;'
+                f'border-radius:8px;margin:16px 0;">'
                 f'{code_html}</section>'
             )
+
+        # ── 空行 ──
         elif line.strip() == "":
             pass
+
+        # ── 独立加粗行（拉拉拉 pull-quote）──
         elif re.match(r'^\*\*.+\*\*$', line.strip()):
+            inner = line.strip()[2:-2]
             parts.append(
+                f'<section style="margin:24px 0;padding:18px 20px 18px 22px;'
+                f'border-left:3px solid {GOLD};background:{BG};border-radius:0 10px 10px 0;">'
                 f'<p style="font-size:15px;font-weight:bold;color:{DARK};'
-                f'margin:16px 0;line-height:1.7;text-align:center;padding:12px 0;">'
-                f'{line.strip()[2:-2]}</p>'
+                f'line-height:1.75;margin:0;">{inner}</p>'
+                f'</section>'
             )
+
+        # ── 普通正文 ──
         else:
             parts.append(
-                f'<p style="font-size:14px;line-height:1.9;color:#333;margin:14px 0;">'
+                f'<p style="font-size:15px;line-height:1.95;color:{TEXT};margin:14px 0;">'
                 f'{_inline(line)}</p>'
             )
         i += 1
 
-    # 末尾插入未使用的图片
+    # ── 末尾插入未使用的图片 ──
     for idx in range(len(img_urls)):
         if idx not in used_img_idxs and img_urls[idx]:
             parts.append(
-                f'<img src="{img_urls[idx]}" style="max-width:100%;display:block;'
-                f'margin:24px auto 8px;border-radius:8px;" />'
+                f'<img src="{img_urls[idx]}" style="max-width:100%;width:100%;'
+                f'display:block;margin:24px auto;border-radius:10px;" />'
             )
 
+    # ── 尾部卡片 ──
     parts.append(
-        f'<section style="background:{BG};border-radius:12px;padding:20px 24px;'
-        f'margin:32px 0 0;border:1px solid {LINE};text-align:center;">'
-        f'<p style="font-size:14px;color:#666;margin:0 0 6px;">🚀 CaptainCast 超时空电台</p>'
-        f'<p style="font-size:13px;color:{GOLD};margin:0;">'
-        f'下期：灵机共鸣——当100万人同时非理性，宇宙会发生什么？</p>'
+        f'<section style="background:{DARK_BG};border-radius:14px;'
+        f'padding:22px 20px;margin:36px 0 0;text-align:center;">'
+        f'<p style="font-size:12px;color:{GOLD};letter-spacing:2px;margin:0 0 10px;">'
+        f'✦ CAPTAINCAST · 超时空电台 ✦</p>'
+        f'<p style="font-size:13px;color:#aaa;line-height:1.7;margin:0 0 14px;">'
+        f'每期一个让你停下来想一想的问题<br/>'
+        f'关注我们，下期见</p>'
+        f'<p style="font-size:12px;color:{GOLD_D};margin:0;">'
+        f'▶ {next_ep}</p>'
         f'</section>'
     )
 
     return (
-        '<section style="font-family:-apple-system,PingFang SC,Helvetica Neue,sans-serif;'
-        'max-width:680px;margin:0 auto;padding:0 4px;">\n'
+        '<section style="font-family:-apple-system,\'PingFang SC\',\'Helvetica Neue\',sans-serif;'
+        'max-width:680px;margin:0 auto;padding:0 2px;">\n'
         + "\n".join(parts) + "\n</section>"
     )
 
