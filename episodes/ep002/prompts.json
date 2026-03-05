@@ -1,0 +1,22 @@
+[
+  {
+    "name": "01_terminal_dawn",
+    "label": "报错·破晓",
+    "prompt": "Dark coding terminal screen filling the frame, cascading red error text glowing in darkness. At the bottom, a single line turns gold: 'errcode: 0, ok'. Hands on keyboard visible below. Atmospheric, cinematic. Dunhuang cyberpunk color palette, deep indigo and amber gold. 4K vertical composition."
+  },
+  {
+    "name": "02_hidden_tag",
+    "label": "隐藏标签·顿悟",
+    "prompt": "Close-up of HTML source code on dark screen. One line glows brilliant gold: 'mp-common-mpaudio voice_encode_fileid'. A single beam of light breaks through darkness onto this line. Around it, other code is dim gray. The feeling of discovery, of a hidden key found. Hard sci-fi meets Chinese ink aesthetic. Square composition."
+  },
+  {
+    "name": "03_voice_clone",
+    "label": "声音克隆·父女",
+    "prompt": "Two sound waveforms - one large warm amber (father's voice), one smaller delicate gold (daughter's voice) - flowing together into a glowing AI processor orb at center, then emerging as a single unified golden sound wave. Abstract beautiful visualization. Emotional warmth. Dark background with starfield. Vertical 3:4 composition."
+  },
+  {
+    "name": "04_errors_as_fuel",
+    "label": "报错即燃料",
+    "prompt": "Thirteen red error message fragments floating in dark cosmic space, each one cracking apart and transforming into a golden spark. The sparks converge toward a central glowing star being born. The star's light illuminates everything. Epic scale, cosmic drama. Chinese ink wash meets science fiction. Widescreen landscape composition."
+  }
+]

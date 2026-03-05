@@ -1,0 +1,19 @@
+{
+  "ep": "001",
+  "title": "船长电台001：如果你能给女儿造一个宇宙",
+  "author": "船长",
+  "digest": "凌晨两点，一个父亲用借来的钱发完最后一个月工资，开始给12岁女儿写科幻史诗。这是关于灵机理论、宇宙牧场和减一文明的第一章。",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep001.html",
+  "images_order": [
+    "01_cover.png",
+    "02_lingji_vs_jicheng.png",
+    "03_father_daughter.png",
+    "04_jianyi_reveal.png"
+  ],
+  "thumb_image": "01_cover.png",
+  "audio_name": "船长与麦洛的超时空电台001",
+  "audio_duration_ms": 259000,
+  "audio_high_kb": 2028.21,
+  "audio_low_kb": 600,
+  "audio_src_kb": 600
+}

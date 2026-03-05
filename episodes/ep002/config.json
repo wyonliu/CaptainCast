@@ -1,0 +1,27 @@
+{
+  "ep": "002",
+  "title": "船长电台002：造宇宙的第一天，每一个报错都是新变量",
+  "author": "船长",
+  "digest": "我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep002.html",
+  "images_order": [
+    "01_terminal_dawn.png",
+    "02_hidden_tag.png",
+    "03_voice_clone.png",
+    "04_errors_as_fuel.png"
+  ],
+  "thumb_image": "01_terminal_dawn.png",
+  "insert_img_after_section": {
+    "1": 0,
+    "4": 1
+  },
+  "voice_encode_fileid": "MzcwMTE1NzQ5Ml8xMDAwMDAwMjE=",
+  "audio_name": "船长与麦洛的超时空电台002",
+  "audio_duration_ms": 329000,
+  "audio_high_kb": 2571.68,
+  "audio_low_kb": 605.24,
+  "audio_src_kb": 605.2,
+  "thumb_media_id": "vQFRLcJziHg7XjNmmKE9lKBEx2h9liRFpBM0DVivoxP5wHSb77LNL_6JLWQLTSTy",
+  "voice_media_id": "vQFRLcJziHg7XjNmmKE9lNa1gb6tyzFCS7LjZp-ggSjNZrPs3UXZvNtubMXO6e6b",
+  "draft_media_id": "vQFRLcJziHg7XjNmmKE9lFFO8X5AKGaZ-x2S3akf85BERSWHlvCLzwJswdKVFPB_"
+}

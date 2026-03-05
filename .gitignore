@@ -1,0 +1,7 @@
+.env
+audio/
+__pycache__/
+*.pyc
+.DS_Store
+episodes/*/videos/*.mp4
+media/ep001.mp3
