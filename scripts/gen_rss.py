@@ -79,6 +79,14 @@ def escape_xml(s):
               .replace(">", "&gt;")
               .replace('"', "&quot;"))
 
+def sanitize_title(s):
+    """RSS 标题安全化：替换各平台可能拒绝的特殊字符"""
+    return (s.replace("：", ": ")   # 全角冒号 → 半角冒号
+              .replace("【", "[")
+              .replace("】", "]")
+              .replace("·", " ")
+              .replace("•", " "))
+
 def generate_rss():
     load_episodes()
     m = PODCAST_META
@@ -87,8 +95,8 @@ def generate_rss():
     for ep in EPISODES:
         items.append(f"""
     <item>
-      <title>{escape_xml(ep['title'])}</title>
-      <itunes:title>{escape_xml(ep['title'])}</itunes:title>
+      <title>{escape_xml(sanitize_title(ep['title']))}</title>
+      <itunes:title>{escape_xml(sanitize_title(ep['title']))}</itunes:title>
       <itunes:subtitle>{escape_xml(ep['subtitle'])}</itunes:subtitle>
       <description><![CDATA[{ep['description']}]]></description>
       <itunes:summary><![CDATA[{ep['description']}]]></itunes:summary>
