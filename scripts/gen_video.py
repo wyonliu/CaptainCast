@@ -290,9 +290,9 @@ def make_frame_bilibili(cover_path, cfg, ep_num):
     ty = max(PAD + 30, (CONTENT_H - block_h) // 2)
 
     # 品牌名
-    draw.text((text_x, ty), "CaptainCast 超时空电台", font=fn_brand, fill=GOLD)
+    draw.text((text_x, ty), "船长与麦洛的超时空电台", font=fn_brand, fill=GOLD)
     ty += fn_brand.size + 14
-    bw = int(draw.textlength("CaptainCast 超时空电台", font=fn_brand))
+    bw = int(draw.textlength("船长与麦洛的超时空电台", font=fn_brand))
     draw.rectangle([text_x, ty, text_x + bw, ty + 2], fill=(*GOLD_DIM, 200))
     ty += 18
 
@@ -332,7 +332,7 @@ def make_frame_bilibili(cover_path, cfg, ep_num):
 
     fn_wave_label = fnt(20)
     draw.text((30, CONTENT_H + (WAVE_H // 2) - 12),
-              "◉  CaptainCast · 超时空电台 · 正在播放", font=fn_wave_label, fill=(*GOLD_DIM, 200))
+              "◉  船长与麦洛的超时空电台 · 正在播放", font=fn_wave_label, fill=(*GOLD_DIM, 200))
 
     return bg.convert("RGB")
 
@@ -359,7 +359,7 @@ def make_frame_shipinhao(cover_path, cfg, ep_num):
     bg.paste(bar.convert("RGB"), (0, 0), bar.split()[3])
     draw = ImageDraw.Draw(bg)
     fn_brand = fnt(28, bold=True)
-    brand_txt = "✦  CaptainCast  超时空电台  ✦"
+    brand_txt = "✦  船长与麦洛的超时空电台  ✦"
     blen = int(draw.textlength(brand_txt, font=fn_brand))
     draw.text(((W - blen) // 2, (BRAND_H - fn_brand.size) // 2),
               brand_txt, font=fn_brand, fill=GOLD)

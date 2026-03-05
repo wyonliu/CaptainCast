@@ -14,9 +14,9 @@ from datetime import datetime, timezone
 
 # ─── 播客元信息 ───────────────────────────────────────────
 PODCAST_META = {
-    "title":       "CaptainCast 超时空电台",
-    "subtitle":    "船长与麦洛的超时空电台  灵机  山海  宇宙",
-    "description": "一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。CaptainCast 超时空电台，每期探索一个让你停下来想一想的问题。",
+    "title":       "船长与麦洛的超时空电台",
+    "subtitle":    "灵机  山海  宇宙",
+    "description": "一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。船长与麦洛的超时空电台，每期探索一个让你停下来想一想的问题。",
     "author":      "船长",
     "email":       "captaincast@wyonliu.com",     # 可改成真实邮箱
     "website":     "https://wyonliu.github.io/CaptainCast/",

@@ -151,7 +151,7 @@ def build_html(cfg, img_urls):
         f'padding:24px 20px 22px;margin:0 0 20px;">'
         # 节目标签
         f'<p style="font-size:11px;letter-spacing:3px;color:{GOLD};'
-        f'margin:0 0 14px;font-weight:500;">✦ CAPTAINCAST · 超时空电台 ✦</p>'
+        f'margin:0 0 14px;font-weight:500;">✦ 船长与麦洛的超时空电台 ✦</p>'
         # EP 徽章
         f'<section style="display:inline-block;background:transparent;'
         f'border:1px solid {GOLD_D};border-radius:20px;'
@@ -304,7 +304,7 @@ def build_html(cfg, img_urls):
         f'<section style="background:{DARK_BG};border-radius:14px;'
         f'padding:22px 20px;margin:36px 0 0;text-align:center;">'
         f'<p style="font-size:12px;color:{GOLD};letter-spacing:2px;margin:0 0 10px;">'
-        f'✦ CAPTAINCAST · 超时空电台 ✦</p>'
+        f'✦ 船长与麦洛的超时空电台 ✦</p>'
         f'<p style="font-size:13px;color:#aaa;line-height:1.7;margin:0 0 14px;">'
         f'每期一个让你停下来想一想的问题<br/>'
         f'关注我们，下期见</p>'
