@@ -6,9 +6,9 @@
   xmlns:atom="http://www.w3.org/2005/Atom">
 
   <channel>
-    <title>船长与麦洛的超时空电台</title>
+    <title>船长时空站</title>
     <link>https://wyonliu.github.io/CaptainCast/</link>
-    <description><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></description>
+    <description><![CDATA[船长与麦洛的超时空电台：一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></description>
     <language>zh-cn</language>
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>captaincast@wyonliu.com</managingEditor>
@@ -17,8 +17,8 @@
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
-    <itunes:title>船长与麦洛的超时空电台</itunes:title>
-    <itunes:subtitle>灵机 山海 宇宙</itunes:subtitle>
+    <itunes:title>船长时空站</itunes:title>
+    <itunes:subtitle>船长与麦洛的超时空电台：灵机 山海 宇宙</itunes:subtitle>
     <itunes:summary><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></itunes:summary>
     <itunes:author>船长</itunes:author>
     <itunes:owner>
