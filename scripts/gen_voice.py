@@ -1,9 +1,13 @@
 """
-CaptainCast · EP.001 声音合成
-运行：python scripts/gen_voice.py
+CaptainCast · 声音合成（通用，支持任意集数）
+运行：python3 scripts/gen_voice.py --ep 001
+     python3 scripts/gen_voice.py --ep 002
+脚本格式（episodes/ep00X/script.md）：
+  [船长 speed=0.95] 文本内容
+  [麦洛 speed=1.05] 文本内容
 依赖：pip install requests python-dotenv pydub
 """
-import requests, os, time
+import requests, os, re, time, sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -13,32 +17,35 @@ MM_GROUP = os.getenv('MINIMAX_GROUP_ID')
 CAP_ID   = os.getenv('CAPTAIN_VOICE_ID', 'captain_captaincast')
 MEL_ID   = os.getenv('MELODY_VOICE_ID',  'melody_captaincast')
 
-SEG_DIR = Path("audio/output/ep001_segments")
-SEG_DIR.mkdir(parents=True, exist_ok=True)
-FINAL   = Path("audio/output/ep001_podcast.mp3")
+# 全局语速倍乘（.env 可覆盖）
+# 船长原语速 0.82-0.95 偏慢，x1.15 → 实际 0.94-1.09，明快不失沉稳
+# 麦洛待重新克隆后视效果调整，默认不变
+CAPTAIN_SPEED_MULT = float(os.getenv('CAPTAIN_SPEED_MULT', '1.15'))
+MELODY_SPEED_MULT  = float(os.getenv('MELODY_SPEED_MULT',  '1.0'))
 
-SCRIPT = [
-    ("captain", 0.95, "欢迎来到CaptainCast，我是船长。这是我们的第一期节目。我不打算用一个很酷的开头跟你说宇宙有多大。我想先跟你说一个人的故事。一个爸爸的故事。"),
-    ("captain", 0.90, "凌晨两点。窗外是农田，偶尔有犬吠。他坐在电脑前，口袋里的钱是借来的——用来发完最后一个月的工资。但他在写一个故事。不是为了卖钱，是为了他12岁的女儿。"),
-    ("captain", 0.90, "她叫米莱。喜欢打击乐，养了两只大乌龟，梦想是做未来世界设计师。他想：如果什么都没有了，但我能给她留下一个世界——那个世界，该长什么样？"),
-    ("melody", 1.05, "爸爸，你说的那个世界，我也想去。山海是什么？是游戏吗？"),
-    ("captain", 0.90, "不是游戏。是一个和现实等重的存在。你在里面的眼泪是真的，你建立的友情是真的，你做出的选择，会有真正的后果。"),
-    ("melody", 1.05, "麦洛是我吗？那她知道自己是谁吗？"),
-    ("captain", 0.88, "不知道。她进去的时候，不知道这里是哪里，只知道——这里美得像梦，又疼得像真实。那正是我设计它时的心情。"),
-    ("captain", 0.95, "好，现在我要跟你说一个概念，叫做——灵机。听起来像玄学，其实是硬核物理。你知道AI的随机数是假的吗？它叫伪随机——给定同样的输入，输出是可以被预测的。但人类大脑，存在量子相干态，能产生真正的随机性。"),
-    ("melody", 1.10, "等一下爸，我听懂了一半。意思是……人类会做一些AI永远算不出来的事情？"),
-    ("captain", 0.92, "对。比如——你明知道放弃是最优解，但你选择了死磕。这一秒，宇宙里，多了一个以前从来没有出现过的新信息。这就是灵机：人类的非理性，是宇宙唯一的进化发动机。"),
-    ("melody", 1.00, "所以……我的眼泪不是软弱？我的倔强不是Bug？爸，我每次被说太感性了……"),
-    ("captain", 0.90, "你的非理性，才是你最贵的东西。记住这句话。"),
-    ("captain", 0.85, "在这个宇宙里，有一群高维文明，一直在收割灵机。他们在宇宙里建了一个牧场。牧场里，养着人类。制造灾难，制造战争，制造分离——收割极端情绪产生的高纯度灵机，用作燃料。"),
-    ("melody", 1.10, "等等——所以人类是……作物？爸，这个设定也太黑暗了吧！"),
-    ("captain", 0.85, "但这个故事，不是一个打败坏人的故事。第二部末尾，当人类用灵机共鸣撑爆了收割程序，以为赢了。然后那个高维文明的代言人，出现在全球的天空。"),
-    ("captain", 0.82, "你们以为我们是收割者。错了。我们，是点火者。"),
-    ("melody", 0.95, "点火者……他们不是坏人？他们是……用自己的牺牲，给人类点了一把火？"),
-    ("captain", 0.85, "是的。他们太聪明了，聪明到再也产生不了新的变量。唯一的出路，是找到一个足够混乱、足够有爱、足够能犯错的文明——亲手制造它的痛苦，直到它燃烧起来。听起来是不是很熟悉？"),
-    ("melody", 0.90, "……爸，你说的是你自己吗？"),
-    ("captain", 0.85, "故事的最后，在距今一万五千年之后——麦洛和船长，坐在一棵树下。她靠在父亲的肩膀上。什么都没说。但那一刻，宇宙里每一个有意识的存在，都感受到了那一刻的温暖。欢迎来到CaptainCast，关注我们，下一期见。"),
-]
+
+def get_ep() -> str:
+    for i, arg in enumerate(sys.argv):
+        if arg == '--ep' and i + 1 < len(sys.argv):
+            return sys.argv[i + 1].zfill(3)
+    eps = sorted(Path("episodes").glob("ep*/script.md"))
+    if eps:
+        return eps[-1].parent.name.replace("ep", "")
+    return "001"
+
+
+def parse_script(script_path: Path):
+    """解析 script.md，返回 [(role, speed, text), ...]"""
+    pattern = re.compile(r'^\[(船长|麦洛)\s+speed=([\d.]+)\]\s*(.+)$')
+    lines = []
+    for line in script_path.read_text(encoding="utf-8").splitlines():
+        m = pattern.match(line.strip())
+        if m:
+            role_cn, speed, text = m.groups()
+            role = "captain" if role_cn == "船长" else "melody"
+            lines.append((role, float(speed), text.strip()))
+    return lines
+
 
 def tts(text, voice_id, speed, out_path):
     resp = requests.post(
@@ -64,30 +71,67 @@ def tts(text, voice_id, speed, out_path):
     Path(out_path).write_bytes(bytes.fromhex(audio_hex))
     return True
 
+
 def main():
     if not MM_KEY or MM_KEY.startswith("sk-api-你"):
         print("❌ 请先在 .env 填入 MINIMAX_API_KEY 和 MINIMAX_GROUP_ID")
         return
-    print(f"🎙  EP.001 声音合成，共 {len(SCRIPT)} 段\n")
+
+    ep = get_ep()
+    script_path = Path(f"episodes/ep{ep}/script.md")
+    if not script_path.exists():
+        print(f"❌ 未找到 {script_path}")
+        return
+
+    script = parse_script(script_path)
+    if not script:
+        print(f"❌ script.md 中未找到对话行（格式：[船长 speed=0.95] 文本）")
+        return
+
+    seg_dir = Path(f"audio/output/ep{ep}_segments")
+    seg_dir.mkdir(parents=True, exist_ok=True)
+    final = Path(f"audio/output/ep{ep}_podcast.mp3")
+
+    print(f"🎙  EP.{ep} 声音合成，共 {len(script)} 段\n")
     seg_files = []
-    for i, (role, speed, text) in enumerate(SCRIPT):
+    for i, (role, speed, text) in enumerate(script):
         voice_id = CAP_ID if role == "captain" else MEL_ID
         label = "船长" if role == "captain" else "麦洛"
-        out = SEG_DIR / f"seg_{i:02d}_{role}.mp3"
-        print(f"[{i+1:02d}/{len(SCRIPT)}] {label}  {text[:35]}...")
-        if tts(text, voice_id, speed, out):
+        # 应用全局速度倍乘器（上限 2.0）
+        mult = CAPTAIN_SPEED_MULT if role == "captain" else MELODY_SPEED_MULT
+        actual_speed = round(min(2.0, speed * mult), 3)
+        out = seg_dir / f"seg_{i:02d}_{role}.mp3"
+        print(f"[{i+1:02d}/{len(script)}] {label}  x{mult}={actual_speed}  {text[:40]}...")
+        if tts(text, voice_id, actual_speed, out):
             seg_files.append(out)
             print(f"  ✅ {out.stat().st_size//1024} KB")
         time.sleep(0.5)
+
+    if not seg_files:
+        print("❌ 没有成功的音频段")
+        return
+
     print(f"\n🔗 合并 {len(seg_files)} 段...")
     try:
         from pydub import AudioSegment
         silence = AudioSegment.silent(duration=700)
-        combined = sum([AudioSegment.from_mp3(str(f)) + silence for f in seg_files], AudioSegment.empty())
-        combined.export(str(FINAL), format="mp3", bitrate="128k")
-        print(f"✅ {FINAL}  {len(combined)/1000/60:.1f}分钟 / {FINAL.stat().st_size//1024//1024}MB")
+        combined = sum(
+            [AudioSegment.from_mp3(str(f)) + silence for f in seg_files],
+            AudioSegment.empty()
+        )
+        combined.export(str(final), format="mp3", bitrate="128k")
+        mins = len(combined) / 1000 / 60
+        mb = final.stat().st_size // 1024 // 1024
+        print(f"✅ {final}  {mins:.1f}分钟 / {mb}MB")
+
+        # 生成 64k 压缩版（用于微信上传）
+        final_64k = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
+        combined.export(str(final_64k), format="mp3", bitrate="64k")
+        kb = final_64k.stat().st_size // 1024
+        print(f"✅ {final_64k}  {kb} KB（微信上传用）")
     except ImportError:
-        print("⚠️  pip install pydub 后再合并，各段已在:", SEG_DIR)
+        print("⚠️  pip install pydub 后再合并，各段已在:", seg_dir)
+
 
 if __name__ == "__main__":
     main()
