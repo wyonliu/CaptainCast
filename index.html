@@ -329,9 +329,9 @@ footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
       <span class="t2">CAPTAINCAST</span>
     </h1>
     <p class="hero-sub">船长与麦洛的超时空电台 · 神临山海宇宙 · 2026</p>
-    <p class="hero-desc">一个父亲，在人生最低谷，给12岁的女儿造了一个<em>宇宙</em>。<br>这里有科幻、有哲学、有历史，也有那个平凡的夏日午后。</p>
+    <p class="hero-desc">一个父亲，在人生最低谷，给女儿造了一个<em>宇宙</em>。<br>这里有科幻、有哲学、有历史，也有那个平凡的夏日午后。</p>
     <div class="hero-cta">
-      <button class="btn-primary" onclick="showPage('episodes')">▶ 开始收听</button>
+      <button class="btn-primary" onclick="document.getElementById('ep-section').scrollIntoView({behavior:'smooth'})">▶ 开始收听</button>
       <button class="btn-outline" onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'})">了解神临山海</button>
     </div>
     <div class="scroll-cue"><span>SCROLL</span><div class="scroll-line"></div></div>
@@ -410,19 +410,19 @@ footer{border-top:1px solid var(--border2);padding:60px 48px;text-align:center;}
   <!-- EPISODES -->
   <section class="section" id="ep-section">
     <span class="section-label">EPISODES · 节目</span>
-    <h2 class="section-title">超时空电台</h2>
+    <h2 class="section-title">节目列表</h2>
     <div class="ep-list">
-      <div class="ep-card reveal" onclick="showPage('episodes')">
+      <div class="ep-card reveal" onclick="location.href='ep001.html'" style="cursor:pointer;">
         <span class="ep-no">EP.001</span>
         <h3 class="ep-title">如果你能给女儿造一个宇宙</h3>
-        <p class="ep-desc">一个父亲在人生最低谷，用借来的钱发完最后一个月工资，然后开始给12岁的女儿写一部科幻史诗。</p>
-        <span class="ep-badge">已发布</span>
+        <p class="ep-desc">一个父亲在人生最低谷，用借来的钱发完最后一个月工资，开始给女儿写一部科幻史诗。灵机理论：人类的非理性，才是宇宙唯一的进化发动机。</p>
+        <span class="ep-badge">已发布 ▶</span>
       </div>
-      <div class="ep-card reveal">
+      <div class="ep-card reveal" onclick="location.href='ep002.html'" style="cursor:pointer;">
         <span class="ep-no">EP.002</span>
-        <h3 class="ep-title">她在九色瑶池，第一次觉醒</h3>
-        <p class="ep-desc">麦洛进入山海，遇见维塔，踏上千里江山篇的第一段旅程。为什么身体是12岁却感觉记忆有出入？</p>
-        <span class="ep-badge coming">即将发布</span>
+        <h3 class="ep-title">造宇宙的第一天，每一个报错都是新变量</h3>
+        <p class="ep-desc">我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。</p>
+        <span class="ep-badge">已发布 ▶</span>
       </div>
       <div class="ep-card reveal">
         <span class="ep-no">EP.003</span>

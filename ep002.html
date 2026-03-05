@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EP.001 如果你能给女儿造一个宇宙 · 船长与麦洛的超时空电台</title>
-<meta name="description" content="凌晨两点，借钱发完工资的爸爸，开始给女儿造一个宇宙。灵机理论：人类的非理性，是宇宙唯一的进化发动机。">
+<title>EP.002 造宇宙的第一天，每一个报错都是新变量 · 船长与麦洛的超时空电台</title>
+<meta name="description" content="我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -49,7 +49,6 @@
     line-height: 1.7;
     margin-bottom: 28px;
   }
-  /* Audio Player */
   .player {
     background: #0a0917;
     border-radius: 14px;
@@ -77,8 +76,6 @@
   .ep-meta { flex: 1; }
   .ep-title { font-size: 14px; color: #e8dfc0; font-weight: 600; }
   .ep-duration { font-size: 12px; color: #666; margin-top: 3px; }
-
-  /* Progress */
   .progress-wrap {
     margin-bottom: 12px;
     cursor: pointer;
@@ -105,7 +102,6 @@
     color: #555;
     margin-top: 6px;
   }
-  /* Controls */
   .controls {
     display: flex;
     align-items: center;
@@ -147,10 +143,7 @@
     transition: color 0.2s;
   }
   .vol-btn:hover { color: #c8a96e; }
-
   audio { display: none; }
-
-  /* Tags */
   .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
   .tag {
     font-size: 11px;
@@ -159,8 +152,6 @@
     border-radius: 4px;
     padding: 3px 8px;
   }
-
-  /* Waveform decorative */
   .wave {
     display: flex;
     align-items: center;
@@ -174,7 +165,7 @@
     border-radius: 1px;
     animation: wave-anim 1.2s ease-in-out infinite;
   }
-  .wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .wave span:nth-child(1) { height: 8px;  animation-delay: 0s; }
   .wave span:nth-child(2) { height: 16px; animation-delay: 0.1s; }
   .wave span:nth-child(3) { height: 12px; animation-delay: 0.2s; }
   .wave span:nth-child(4) { height: 20px; animation-delay: 0.3s; }
@@ -183,9 +174,8 @@
   .wave.paused span { animation-play-state: paused; }
   @keyframes wave-anim {
     0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
-    50% { transform: scaleY(1); opacity: 1; }
+    50%       { transform: scaleY(1);   opacity: 1; }
   }
-
   .back-link {
     display: block;
     text-align: center;
@@ -199,15 +189,15 @@
 </head>
 <body>
 <div class="card">
-  <div class="badge">🚀 船长电台 · EP.001</div>
-  <h1>如果你能给女儿造一个宇宙</h1>
-  <p class="subtitle">凌晨两点，借钱发完工资的爸爸，开始给女儿造一个宇宙。这是《神临山海》的起点，也是灵机理论的诞生地。</p>
+  <div class="badge">🛸 船长电台 · EP.002</div>
+  <h1>造宇宙的第一天，每一个报错都是新变量</h1>
+  <p class="subtitle">我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。</p>
 
   <div class="player">
     <div class="ep-info">
-      <div class="ep-icon">🎙</div>
+      <div class="ep-icon">🛸</div>
       <div class="ep-meta">
-        <div class="ep-title">EP.001 · 父女对谈</div>
+        <div class="ep-title">EP.002 · 造宇宙幕后</div>
         <div class="ep-duration" id="duration">加载中…</div>
       </div>
       <div class="wave paused" id="waveform">
@@ -232,14 +222,14 @@
       <button class="vol-btn" onclick="toggleMute()">🔊</button>
     </div>
 
-    <audio id="audio" src="media/ep001.mp3" preload="metadata"></audio>
+    <audio id="audio" src="media/ep002_podcast_64k.mp3" preload="metadata"></audio>
   </div>
 
   <div class="tags">
-    <span class="tag">#灵机理论</span>
-    <span class="tag">#科幻</span>
+    <span class="tag">#AI协同创作</span>
+    <span class="tag">#播客自动化</span>
     <span class="tag">#神临山海</span>
-    <span class="tag">#父女对谈</span>
+    <span class="tag">#幕后故事</span>
   </div>
 
   <a href="." class="back-link">← 船长与麦洛的超时空电台</a>
