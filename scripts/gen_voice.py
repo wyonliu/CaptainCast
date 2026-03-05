@@ -47,29 +47,41 @@ def parse_script(script_path: Path):
     return lines
 
 
-def tts(text, voice_id, speed, out_path):
-    resp = requests.post(
-        f"https://api.minimax.chat/v1/t2a_v2?GroupId={MM_GROUP}",
-        headers={"Authorization": f"Bearer {MM_KEY}", "Content-Type": "application/json"},
-        json={
-            "model": "speech-01-hd",
-            "text": text,
-            "stream": False,
-            "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": 1.0, "pitch": 0},
-            "audio_setting": {"format": "mp3", "sample_rate": 44100}
-        },
-        timeout=60
-    )
-    data = resp.json()
-    if data.get("base_resp", {}).get("status_code") != 0:
-        print(f"  ✗ {data.get('base_resp',{}).get('status_msg', data)}")
-        return False
-    audio_hex = data.get("data", {}).get("audio", "")
-    if not audio_hex:
-        print(f"  ✗ 未返回音频")
-        return False
-    Path(out_path).write_bytes(bytes.fromhex(audio_hex))
-    return True
+def tts(text, voice_id, speed, out_path, retries=3):
+    """调用 MiniMax TTS，带重试（3次）和更长超时（120s）"""
+    import json as _json
+    for attempt in range(1, retries + 1):
+        try:
+            resp = requests.post(
+                f"https://api.minimax.chat/v1/t2a_v2?GroupId={MM_GROUP}",
+                headers={"Authorization": f"Bearer {MM_KEY}", "Content-Type": "application/json"},
+                json={
+                    "model": "speech-01-hd",
+                    "text": text,
+                    "stream": False,
+                    "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": 1.0, "pitch": 0},
+                    "audio_setting": {"format": "mp3", "sample_rate": 44100}
+                },
+                timeout=120
+            )
+            data = _json.loads(resp.content.decode("utf-8"))
+            if data.get("base_resp", {}).get("status_code") != 0:
+                print(f"  ✗ {data.get('base_resp',{}).get('status_msg', data)}")
+                return False
+            audio_hex = data.get("data", {}).get("audio", "")
+            if not audio_hex:
+                print(f"  ✗ 未返回音频")
+                return False
+            Path(out_path).write_bytes(bytes.fromhex(audio_hex))
+            return True
+        except Exception as e:
+            if attempt < retries:
+                print(f"  ⚠️  第{attempt}次失败({type(e).__name__})，3秒后重试...")
+                time.sleep(3)
+            else:
+                print(f"  ✗ 连续{retries}次失败: {e}")
+                return False
+    return False
 
 
 def main():
@@ -101,6 +113,11 @@ def main():
         mult = CAPTAIN_SPEED_MULT if role == "captain" else MELODY_SPEED_MULT
         actual_speed = round(min(2.0, speed * mult), 3)
         out = seg_dir / f"seg_{i:02d}_{role}.mp3"
+        # 断点续传：跳过已存在的有效段
+        if out.exists() and out.stat().st_size > 1024:
+            seg_files.append(out)
+            print(f"[{i+1:02d}/{len(script)}] ⏭️  已存在，跳过: {out.name} ({out.stat().st_size//1024} KB)")
+            continue
         print(f"[{i+1:02d}/{len(script)}] {label}  x{mult}={actual_speed}  {text[:40]}...")
         if tts(text, voice_id, actual_speed, out):
             seg_files.append(out)
