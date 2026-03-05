@@ -8,18 +8,18 @@
   <channel>
     <title>船长与麦洛的超时空电台</title>
     <link>https://wyonliu.github.io/CaptainCast/</link>
-    <description><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。船长与麦洛的超时空电台，每期探索一个让你停下来想一想的问题。]]></description>
+    <description><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></description>
     <language>zh-cn</language>
-    <copyright>© 2026 船长时空站</copyright>
+    <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>captaincast@wyonliu.com</managingEditor>
     <webMaster>captaincast@wyonliu.com</webMaster>
-    <lastBuildDate>Thu, 05 Mar 2026 08:00:11 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Mar 2026 08:11:11 +0000</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
     <itunes:title>船长与麦洛的超时空电台</itunes:title>
-    <itunes:subtitle>灵机  山海  宇宙</itunes:subtitle>
-    <itunes:summary><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。船长与麦洛的超时空电台，每期探索一个让你停下来想一想的问题。]]></itunes:summary>
+    <itunes:subtitle>灵机 山海 宇宙</itunes:subtitle>
+    <itunes:summary><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></itunes:summary>
     <itunes:author>船长</itunes:author>
     <itunes:owner>
       <itunes:name>船长</itunes:name>
@@ -32,14 +32,14 @@
     <itunes:type>episodic</itunes:type>
 
     <item>
-      <title>船长电台002: 造宇宙的第一天，每一个报错都是新变量</title>
-      <itunes:title>船长电台002: 造宇宙的第一天，每一个报错都是新变量</itunes:title>
-      <itunes:subtitle>我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。</itunes:subtitle>
+      <title>船长电台002: 造宇宙的第一天, 每一个报错都是新变量</title>
+      <itunes:title>船长电台002: 造宇宙的第一天, 每一个报错都是新变量</itunes:title>
+      <itunes:subtitle>我们用14个小时, 13个报错, 做出了一套播客自动化系统. 这期节目, 就是用那套系统, 讲那套系统的故事.</itunes:subtitle>
       <description><![CDATA[我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。]]></description>
       <itunes:summary><![CDATA[我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。]]></itunes:summary>
       <link>https://wyonliu.github.io/CaptainCast/ep002.html</link>
       <guid isPermaLink="false">captaincast-ep002</guid>
-      <pubDate>Thu, 05 Mar 2026 08:00:11 +0000</pubDate>
+      <pubDate>Thu, 05 Mar 2026 08:11:11 +0000</pubDate>
       <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep002_podcast_64k.mp3"
                  length="2633603"
                  type="audio/mpeg" />
@@ -52,12 +52,12 @@
     <item>
       <title>船长电台001: 如果你能给女儿造一个宇宙</title>
       <itunes:title>船长电台001: 如果你能给女儿造一个宇宙</itunes:title>
-      <itunes:subtitle>凌晨两点，一个父亲用借来的钱发完最后一个月工资，开始给女儿写科幻史诗。这是关于灵机理论、宇宙牧场和减一文明的第一章。</itunes:subtitle>
+      <itunes:subtitle>凌晨两点, 一个父亲用借来的钱发完最后一个月工资, 开始给女儿写科幻史诗. 这是关于灵机理论, 宇宙牧场和减一文明的第一章.</itunes:subtitle>
       <description><![CDATA[凌晨两点，一个父亲用借来的钱发完最后一个月工资，开始给女儿写科幻史诗。这是关于灵机理论、宇宙牧场和减一文明的第一章。]]></description>
       <itunes:summary><![CDATA[凌晨两点，一个父亲用借来的钱发完最后一个月工资，开始给女儿写科幻史诗。这是关于灵机理论、宇宙牧场和减一文明的第一章。]]></itunes:summary>
       <link>https://wyonliu.github.io/CaptainCast/ep001.html</link>
       <guid isPermaLink="false">captaincast-ep001</guid>
-      <pubDate>Thu, 05 Mar 2026 08:00:11 +0000</pubDate>
+      <pubDate>Thu, 05 Mar 2026 08:11:11 +0000</pubDate>
       <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep001_podcast_64k.mp3"
                  length="2077091"
                  type="audio/mpeg" />

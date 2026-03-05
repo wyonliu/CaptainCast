@@ -15,8 +15,8 @@ from datetime import datetime, timezone
 # ─── 播客元信息 ───────────────────────────────────────────
 PODCAST_META = {
     "title":       "船长与麦洛的超时空电台",
-    "subtitle":    "灵机  山海  宇宙",
-    "description": "一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。船长与麦洛的超时空电台，每期探索一个让你停下来想一想的问题。",
+    "subtitle":    "灵机 山海 宇宙",
+    "description": "一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。",
     "author":      "船长",
     "email":       "captaincast@wyonliu.com",     # 可改成真实邮箱
     "website":     "https://wyonliu.github.io/CaptainCast/",
@@ -25,7 +25,7 @@ PODCAST_META = {
     "category":    "Science Fiction",             # Apple Podcasts 分类
     "category2":   "Technology",
     "explicit":    "no",
-    "copyright":   f"© {datetime.now().year} 船长时空站",
+    "copyright":   f"Copyright {datetime.now().year} 船长时空站",
     "feed_url":    "https://wyonliu.github.io/CaptainCast/podcast.xml",
     "base_audio":  "https://wyonliu.github.io/CaptainCast/media/",
 }
@@ -82,10 +82,13 @@ def escape_xml(s):
 def sanitize_title(s):
     """RSS 标题安全化：替换各平台可能拒绝的特殊字符"""
     return (s.replace("：", ": ")   # 全角冒号 → 半角冒号
-              .replace("【", "[")
-              .replace("】", "]")
-              .replace("·", " ")
-              .replace("•", " "))
+              .replace("，", ", ")  # 全角逗号 → 半角逗号
+              .replace("、", ", ")  # 顿号 → 半角逗号
+              .replace("。", ". ")  # 句号 → 半角句号
+              .replace("【", "[").replace("】", "]")
+              .replace("·", " ").replace("•", " ")
+              .replace("©", "").replace("  ", " ")  # © 和双空格
+              .strip())
 
 def generate_rss():
     load_episodes()
@@ -97,7 +100,7 @@ def generate_rss():
     <item>
       <title>{escape_xml(sanitize_title(ep['title']))}</title>
       <itunes:title>{escape_xml(sanitize_title(ep['title']))}</itunes:title>
-      <itunes:subtitle>{escape_xml(ep['subtitle'])}</itunes:subtitle>
+      <itunes:subtitle>{escape_xml(sanitize_title(ep['subtitle']))}</itunes:subtitle>
       <description><![CDATA[{ep['description']}]]></description>
       <itunes:summary><![CDATA[{ep['description']}]]></itunes:summary>
       <link>{ep['link']}</link>
@@ -133,7 +136,7 @@ def generate_rss():
 
     <!-- iTunes / Apple Podcasts -->
     <itunes:title>{escape_xml(m['title'])}</itunes:title>
-    <itunes:subtitle>{escape_xml(m['subtitle'])}</itunes:subtitle>
+    <itunes:subtitle>{escape_xml(sanitize_title(m['subtitle']))}</itunes:subtitle>
     <itunes:summary><![CDATA[{m['description']}]]></itunes:summary>
     <itunes:author>{m['author']}</itunes:author>
     <itunes:owner>
