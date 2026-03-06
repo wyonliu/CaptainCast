@@ -1,10 +1,29 @@
 {
   "ep": "003",
-  "title": "EP.003：小龙虾来了，世界还在吗？",
+  "title": "船长电台003：小龙虾来了，世界还在吗？",
+  "author": "船长",
   "digest": "GPT-5.4发布、2028末日预言、以及船长的反骨——关于好奇心、灵机与碳硅共居的深夜对话",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep003.html",
+  "images_order": [
+    "01_cover.png",
+    "02_ghost_gdp.png",
+    "03_physical_pipeline.png",
+    "04_curiosity_lingji.png"
+  ],
   "thumb_image": "01_cover.png",
-  "audio_file": "ep003_podcast.mp3",
-  "audio_duration_ms": 780000,
-  "pub_date": "2026-03-13T21:00:00+08:00",
-  "voice_encode_fileid": ""
+  "insert_img_after_section": {
+    "2": 0,
+    "4": 1,
+    "6": 2,
+    "8": 3
+  },
+  "voice_encode_fileid": "",
+  "audio_name": "船长与麦洛的超时空电台003",
+  "audio_duration_ms": 780091,
+  "audio_high_kb": 12189.83,
+  "audio_low_kb": 6095.92,
+  "audio_src_kb": 6095.92,
+  "next_ep_hint": "EP.004 · 金字塔真的只是古代的坟墓吗？一个让我着迷的硬核物理猜想",
+  "thumb_media_id": "vQFRLcJziHg7XjNmmKE9lGx1rJ-ZkswFxgXzW1kwkDRP0-FrVMTW8LFLIG8qO6BZ",
+  "draft_media_id": "vQFRLcJziHg7XjNmmKE9lJCAlqlnnA8OMGyMZ0pnwom8O5usyewgTD8BM7mt-7G-"
 }

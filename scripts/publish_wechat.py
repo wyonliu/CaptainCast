@@ -416,12 +416,18 @@ def main():
             img_urls.append("")
 
     # 3. 音频（首次上传，等待手动插入获取 fileid）
+    # 微信 add_material voice 接口限制约 2MB，长节目可能超出，失败时跳过继续建图文草稿
     if not cfg.get("voice_encode_fileid"):
         audio_path = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
         if audio_path.exists() and not cfg.get("voice_media_id"):
-            print(f"\n🎙  上传音频素材（用于后台插入）...")
-            voice_media_id = upload_voice(token, audio_path)
-            cfg["voice_media_id"] = voice_media_id
+            fsize_mb = audio_path.stat().st_size / 1024 / 1024
+            print(f"\n🎙  上传音频素材... ({fsize_mb:.1f} MB)")
+            try:
+                voice_media_id = upload_voice(token, audio_path)
+                cfg["voice_media_id"] = voice_media_id
+            except Exception as e:
+                print(f"  ⚠️  音频 API 上传失败（{fsize_mb:.1f}MB）：{e}")
+                print(f"  → 跳过，先建图文草稿。音频请在公众号后台编辑器手动插入")
 
     # 4. HTML
     print(f"\n📝 生成 HTML...")

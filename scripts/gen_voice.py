@@ -18,10 +18,14 @@ CAP_ID   = os.getenv('CAPTAIN_VOICE_ID', 'captain_captaincast')
 MEL_ID   = os.getenv('MELODY_VOICE_ID',  'melody_captaincast')
 
 # 全局语速倍乘（.env 可覆盖）
-# 船长原语速 0.82-0.95 偏慢，x1.15 → 实际 0.94-1.09，明快不失沉稳
-# 麦洛待重新克隆后视效果调整，默认不变
-CAPTAIN_SPEED_MULT = float(os.getenv('CAPTAIN_SPEED_MULT', '1.15'))
+# 船长原语速 0.82-0.95，x1.05 → 实际 0.86-1.0，自然不急促
+# 麦洛 x1.0 保持原速
+CAPTAIN_SPEED_MULT = float(os.getenv('CAPTAIN_SPEED_MULT', '1.05'))
 MELODY_SPEED_MULT  = float(os.getenv('MELODY_SPEED_MULT',  '1.0'))
+
+# 麦洛音量补偿（dB，合并阶段应用，不需重新TTS）
+# 麦洛声音克隆音源偏小，+4dB 与船长平衡
+MELODY_VOL_DB = float(os.getenv('MELODY_VOL_DB', '4.0'))
 
 
 def get_ep() -> str:
@@ -128,14 +132,17 @@ def main():
         print("❌ 没有成功的音频段")
         return
 
-    print(f"\n🔗 合并 {len(seg_files)} 段...")
+    print(f"\n🔗 合并 {len(seg_files)} 段（麦洛音量 +{MELODY_VOL_DB}dB）...")
     try:
         from pydub import AudioSegment
         silence = AudioSegment.silent(duration=700)
-        combined = sum(
-            [AudioSegment.from_mp3(str(f)) + silence for f in seg_files],
-            AudioSegment.empty()
-        )
+        combined = AudioSegment.empty()
+        for f in seg_files:
+            seg = AudioSegment.from_mp3(str(f))
+            # 麦洛段根据文件名识别，应用音量补偿
+            if "_melody.mp3" in f.name and MELODY_VOL_DB != 0:
+                seg = seg + MELODY_VOL_DB
+            combined += seg + silence
         combined.export(str(final), format="mp3", bitrate="128k")
         mins = len(combined) / 1000 / 60
         mb = final.stat().st_size // 1024 // 1024
