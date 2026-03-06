@@ -11,3 +11,9 @@ episodes/*/output/audio_segments/
 episodes/*/videos/*.mp4
 episodes/*/output/videos/*.mp4
 media/ep001.mp3
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
