@@ -1,8 +1,10 @@
 """
 CaptainCast · X (Twitter) 英文 Thread 发布脚本
-用法：python3 scripts/publish_x.py --ep 001 [--dry-run]
-需要系统代理：http_proxy=http://127.0.0.1:1087 https_proxy=http://127.0.0.1:1087
-或直接：env http_proxy=http://127.0.0.1:1087 https_proxy=http://127.0.0.1:1087 python3 scripts/publish_x.py --ep 001
+内容从 episodes/ep{N}/input/x_thread.json 加载（内容与工具分离）
+
+用法：
+  env http_proxy=http://127.0.0.1:1087 https_proxy=http://127.0.0.1:1087 \
+  python3 scripts/publish_x.py --ep 001 [--dry-run]
 """
 import tweepy, os, sys, json, time
 from pathlib import Path
@@ -33,101 +35,19 @@ def get_client():
     return client
 
 
-def load_episode(ep: str):
-    config_path = Path(f"episodes/ep{ep}/config.json")
-    if config_path.exists():
-        return json.loads(config_path.read_text(encoding="utf-8"))
-    return {}
-
-
-# ─── EP 英文 Thread 模板 ────────────────────────────────────────────────
-THREADS = {
-    "001": [
-        """🚀 EP.001 DROP: "What if you could build a universe for your daughter?"
-
-At 2AM, a father used borrowed money to pay his employees' last salaries.
-Then he started writing a sci-fi epic — not to sell, but for his 11-year-old girl.
-
-This is CaptainCast. A father-daughter space opera begins. 🧵""",
-
-        """🧠 The Big Idea: LINGJI THEORY
-
-AI random numbers are FAKE — they're pseudorandom, predictable.
-
-Human brains have quantum coherence states that generate TRUE randomness.
-
-Human irrationality = the universe's ONLY evolutionary engine.
-
-"When you choose to persist against all logic — the universe just got a new variable." ✨""",
-
-        """🌌 The World: SHANHAI (山海)
-
-Not a game. An existence with equal weight to reality.
-
-Your tears inside are real.
-Your friendships inside are real.
-Your choices have real consequences.
-
-Aesthetic: Dunhuang Cyberpunk × Chinese ink wash × Hard sci-fi logic 🎨""",
-
-        """🔥 The Twist: THE IGNITERS
-
-Humans thought the high-dimensional civilization was harvesting them.
-
-Then their representative appeared in the sky above every city:
-
-"You think we are harvesters."
-
-Wrong.
-
-"We are IGNITERS."
-
-They manufactured humanity's pain — until we burned bright enough to matter. 💫""",
-
-        """🎙️ Listen now:
-🍎 Apple: https://podcasts.apple.com/us/podcast/船长时空站/id1882655595
-🎵 Spotify: https://open.spotify.com/show/0rkHdRZTYg7ksxN0zhtzNu
-🌐 Web: https://wyonliu.github.io/CaptainCast/ep001.html
-
-📻 小宇宙 (CN): https://www.xiaoyuzhoufm.com/podcast/69a942fad7ec33e774506f7c
-
-#SciFi #Podcast #ChineseSciFi #ShanHai #CaptainCast""",
-    ],
-
-    "002": [
-        """🚀 EP.002 DROP: "Day One of Universe Creation — Every Bug Is a New Variable"
-
-I built an AI-powered podcast from scratch this week.
-
-Voice cloning → Image generation → Automated publishing.
-
-But the most interesting part? The moments it broke. 🧵""",
-
-        """🤖 What we built (in one week):
-
-• 🎙️ Cloned 2 voices (Captain + Melody) from real recordings
-• 🖼️ Generated 8 cover images via Gemini
-• 📹 Automated B站 & 视频号 video production
-• 📡 Published to 5 podcast platforms via RSS
-
-The whole pipeline: idea → publish in ~4 hours.""",
-
-        """💡 The Lingji Insight of the week:
-
-An AI agent that never makes mistakes is just following instructions.
-
-An AI agent that makes mistakes AND learns — that's a new variable.
-
-Every "Connection Reset" error was the universe demanding a better solution. 🌊""",
-
-        """🎙️ Listen now:
-🍎 Apple: https://podcasts.apple.com/us/podcast/船长时空站/id1882655595
-🎵 Spotify: https://open.spotify.com/show/0rkHdRZTYg7ksxN0zhtzNu
-🌐 Web: https://wyonliu.github.io/CaptainCast/ep002.html
-
-#AITools #PodcastAutomation #ChineseSciFi #CaptainCast""",
-    ],
-}
+def load_thread(ep: str):
+    """从 episodes/ep{N}/input/x_thread.json 加载 Thread 内容"""
+    path = Path(f"episodes/ep{ep}/input/x_thread.json")
+    if not path.exists():
+        print(f"❌ 找不到 {path}")
+        print(f"   请创建该文件，格式：{{\"tweets\": [\"推文1\", \"推文2\", ...]}}")
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    tweets = data.get("tweets", [])
+    if not tweets:
+        print(f"❌ {path} 中没有 tweets 内容")
+        return None
+    return tweets
 
 
 def post_thread(client, tweets: list):
@@ -159,10 +79,8 @@ def post_thread(client, tweets: list):
 
 def main():
     ep = get_ep()
-    tweets = THREADS.get(ep)
+    tweets = load_thread(ep)
     if not tweets:
-        print(f"❌ 没有 EP.{ep} 的 Thread 模板")
-        print(f"   当前可用: {list(THREADS.keys())}")
         return
 
     print(f"🐦 X Thread 发布 · EP.{ep}")
@@ -188,7 +106,7 @@ def main():
     if result and not DRY_RUN:
         print(f"\n🎉 EP.{ep} Thread 发布成功！")
     elif DRY_RUN:
-        print(f"\n✅ Dry run 完成，内容无误后去掉 --dry-run 正式发布")
+        print(f"\n✅ Dry run 完成，确认内容无误后去掉 --dry-run 正式发布")
 
 
 if __name__ == "__main__":

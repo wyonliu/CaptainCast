@@ -28,7 +28,7 @@ def get_ep() -> str:
     for i, arg in enumerate(sys.argv):
         if arg == '--ep' and i + 1 < len(sys.argv):
             return sys.argv[i + 1].zfill(3)
-    eps = sorted(Path("episodes").glob("ep*/script.md"))
+    eps = sorted(Path("episodes").glob("ep*/input/script.md"))
     if eps:
         return eps[-1].parent.name.replace("ep", "")
     return "001"
@@ -90,7 +90,7 @@ def main():
         return
 
     ep = get_ep()
-    script_path = Path(f"episodes/ep{ep}/script.md")
+    script_path = Path(f"episodes/ep{ep}/input/script.md")
     if not script_path.exists():
         print(f"❌ 未找到 {script_path}")
         return

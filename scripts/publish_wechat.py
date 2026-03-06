@@ -179,7 +179,7 @@ def build_html(cfg, img_urls):
             f'margin:8px 0 28px;">↑ 点击收听完整播客版本</p>'
         )
 
-    md_text = Path(f"episodes/ep{ep}/article.md").read_text(encoding="utf-8")
+    md_text = Path(f"episodes/ep{ep}/output/article.md").read_text(encoding="utf-8")
     lines = md_text.split("\n")
     section_count = 0
     used_img_idxs = set()
@@ -384,7 +384,7 @@ def main():
         print(f"❌ 未找到 {cfg_path}")
         return
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    img_dir = Path(f"episodes/ep{ep}/images")
+    img_dir = Path(f"episodes/ep{ep}/output/images")
 
     print("=" * 54)
     print(f"CaptainCast EP.{ep} · {'提取音频fileid' if discover_mode else '发布微信草稿'}")

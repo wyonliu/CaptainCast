@@ -438,21 +438,28 @@ def make_frame_shipinhao(cover_path, cfg, ep_num):
     return bg.convert("RGB")
 
 
-# ─── ffmpeg 合成（宇宙琴弦波形 v3）─────────────────────
+# ─── ffmpeg 合成（宇宙琴弦波形 v4）─────────────────────
 def build_video(frame_path, audio_path, out_path, W, H, wave_h, fps=30):
     """
-    宇宙琴弦 v3：三色双声道
-      左声道 → 暖金 #ffd080
-      右声道 → 琥珀 #e88040
-      p2p 模式（细如琴弦）+ cbrt 压缩动态，在深色背景下发光
-      不使用 screen 混合（避免 yuv420p 偏色），直接单层叠加
+    宇宙琴弦 v4：双层发光 + 频谱混合
+      底层：频谱条（金色，透明度低，做氛围感）
+      中层：showwaves cline 模式（从中心向峰值延伸，比p2p更流畅饱满）
+      左声道 → 暖金 #c8a96e，右声道 → 琥珀 #e88040
+      scale=sqrt（比cbrt更线性，峰值更清晰）
     """
     wave_y = H - wave_h
     fc = (
-        # p2p 模式：两声道双色
-        f"[1:a]showwaves=s={W}x{wave_h}:mode=p2p:scale=cbrt"
+        # 底层：频谱条（衬托氛围，ascale=cbrt让低频也可见）
+        f"[1:a]showfreqs=s={W}x{wave_h}:mode=bar"
+        f":colors=0xc8a96e:win_size=2048:win_func=hann:ascale=cbrt:fscale=log:averaging=1[freqs];"
+        # 中层：平滑波形（cline比p2p流畅，线条更饱满有质感）
+        f"[1:a]showwaves=s={W}x{wave_h}:mode=cline:scale=sqrt"
         f":colors=0xffd080|0xe88040:draw=full[waves];"
-        f"[0:v][waves]overlay=0:{wave_y}[vout]"
+        # 组合：频谱+波形叠加到底色
+        f"color=0x060610:{W}x{wave_h}[wbg];"
+        f"[wbg][freqs]overlay[wf];"
+        f"[wf][waves]overlay[wfinal];"
+        f"[0:v][wfinal]overlay=0:{wave_y}[vout]"
     )
     cmd = [
         "ffmpeg", "-y",
@@ -485,12 +492,12 @@ def main():
         print(f"❌ 找不到 {cfg_path}"); return
 
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    img_dir = Path(f"episodes/ep{ep}/images")
+    img_dir = Path(f"episodes/ep{ep}/output/images")
     cover_path = img_dir / cfg["thumb_image"]
     audio_path = Path(f"audio/output/ep{ep}_podcast.mp3")
     if not audio_path.exists():
         audio_path = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
-    out_dir = Path(f"episodes/ep{ep}/videos")
+    out_dir = Path(f"episodes/ep{ep}/output/videos")
     out_dir.mkdir(exist_ok=True)
 
     preview_only = "--preview" in sys.argv
