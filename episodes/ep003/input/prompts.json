@@ -1,0 +1,28 @@
+{
+  "images": [
+    {
+      "filename": "01_cover.png",
+      "aspect": "16:9",
+      "description": "封面：AI Agent 时代来临，父女面对新世界",
+      "prompt": "A cyberpunk Chinese father and teenage daughter silhouette standing before a massive holographic lobster claw icon glowing neon crimson, surrounded by cascading AI interface panels showing GPT neural networks and robotic arms typing on keyboards. Background: deep indigo cosmos with golden Dunhuang motifs and floating circuit-lattice pillars. Father in shadow, daughter lit by the digital glow, both looking up with awe and curiosity. Ink wash texture meets hard sci-fi. Cinematic widescreen 16:9 landscape, ultra HD, gold and cyan color palette."
+    },
+    {
+      "filename": "02_ghost_gdp.png",
+      "aspect": "16:9",
+      "description": "幽灵GDP：数字在增长，但钱绕过了人",
+      "prompt": "Split composition depicting Ghost GDP. Left side: cold blue translucent humans dissolving into rising bar charts and stock tickers — people fading into data while profit numbers soar upward, ghostly and hollow. Right side: warm amber light showing human hands reaching toward each other, organic texture, real connection. Center: a glowing spiral vortex where the cold data world meets the warm human world. Dunhuang ink wash meets hard sci-fi. Chinese artistic motifs. Dark cosmic background. Cinematic widescreen 16:9 landscape."
+    },
+    {
+      "filename": "03_physical_pipeline.png",
+      "aspect": "16:9",
+      "description": "物理世界管道：AI的眼睛进入真实空间",
+      "prompt": "Futuristic AR spatial computing scene: an AI perspective overlaying a warm Chinese living room — ancient carved wooden furniture glowing with holographic scan lines, afternoon sunlight at 4pm angle captured as golden data streams, a grandmother's old cracked chair surrounded by sacred measurement grids. Floating sensor arrays and spatial anchors like luminous Dunhuang flying apsaras. The room is being 'understood' by AI for the first time — cold blue digital lattice gently embracing warm physical reality. Cinematic widescreen 16:9 landscape, gold and deep indigo."
+    },
+    {
+      "filename": "04_curiosity_lingji.png",
+      "aspect": "16:9",
+      "description": "好奇心·灵机：人类非理性是宇宙的燃料",
+      "prompt": "A young Chinese girl (14-16) sitting cross-legged on a floating luminous platform in the cosmos, surrounded by swirling golden particles that form constellations and equations — each particle represents a human question, a childlike wonder, a creative impulse. The particles rise from her heart and spiral outward into deep space, igniting distant nebulae. A small ink-black dragon curls warmly around her wrist. Above: faint text in ancient Chinese seal script reads 'lingji'. Dark cosmic background with Dunhuang gold motifs. Cinematic widescreen 16:9 landscape, deeply emotional."
+    }
+  ]
+}

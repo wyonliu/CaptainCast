@@ -6,24 +6,24 @@
   xmlns:atom="http://www.w3.org/2005/Atom">
 
   <channel>
-    <title>船长时空站</title>
+    <title>船长与麦洛的超时空电台</title>
     <link>https://wyonliu.github.io/CaptainCast/</link>
-    <description><![CDATA[船长与麦洛的超时空电台：一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></description>
+    <description><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></description>
     <language>zh-cn</language>
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>captaincast@wyonliu.com</managingEditor>
     <webMaster>captaincast@wyonliu.com</webMaster>
-    <lastBuildDate>Thu, 05 Mar 2026 08:11:11 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Mar 2026 03:49:14 +0000</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
-    <itunes:title>船长时空站</itunes:title>
-    <itunes:subtitle>船长与麦洛的超时空电台：灵机 山海 宇宙</itunes:subtitle>
+    <itunes:title>船长与麦洛的超时空电台</itunes:title>
+    <itunes:subtitle>灵机 山海 宇宙</itunes:subtitle>
     <itunes:summary><![CDATA[一个父亲和女儿的科幻故事，一套AI协同内容创作系统，一场关于人类非理性的宇宙哲学。每期探索一个让你停下来想一想的问题。]]></itunes:summary>
     <itunes:author>船长</itunes:author>
     <itunes:owner>
       <itunes:name>船长</itunes:name>
-      <itunes:email>wyonliu@gmail.com</itunes:email>
+      <itunes:email>captaincast@wyonliu.com</itunes:email>
     </itunes:owner>
     <itunes:image href="https://wyonliu.github.io/CaptainCast/media/podcast_cover_1400.png" />
     <itunes:category text="Technology"/>
@@ -32,6 +32,24 @@
     <itunes:type>episodic</itunes:type>
 
     <item>
+      <title>EP.003: 小龙虾来了, 世界还在吗？</title>
+      <itunes:title>EP.003: 小龙虾来了, 世界还在吗？</itunes:title>
+      <itunes:subtitle>GPT-5.4发布, 2028末日预言, 以及船长的反骨——关于好奇心, 灵机与碳硅共居的深夜对话</itunes:subtitle>
+      <description><![CDATA[GPT-5.4发布、2028末日预言、以及船长的反骨——关于好奇心、灵机与碳硅共居的深夜对话]]></description>
+      <itunes:summary><![CDATA[GPT-5.4发布、2028末日预言、以及船长的反骨——关于好奇心、灵机与碳硅共居的深夜对话]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/ep003.html</link>
+      <guid isPermaLink="false">captaincast-ep003</guid>
+      <pubDate>Fri, 06 Mar 2026 03:49:14 +0000</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep003_podcast_64k.mp3"
+                 length="6241218"
+                 type="audio/mpeg" />
+      <itunes:duration>0:13:00</itunes:duration>
+      <itunes:episode>3</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/ep003_cover.png" />
+    </item>
+    <item>
       <title>船长电台002: 造宇宙的第一天, 每一个报错都是新变量</title>
       <itunes:title>船长电台002: 造宇宙的第一天, 每一个报错都是新变量</itunes:title>
       <itunes:subtitle>我们用14个小时, 13个报错, 做出了一套播客自动化系统. 这期节目, 就是用那套系统, 讲那套系统的故事.</itunes:subtitle>
@@ -39,9 +57,9 @@
       <itunes:summary><![CDATA[我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。]]></itunes:summary>
       <link>https://wyonliu.github.io/CaptainCast/ep002.html</link>
       <guid isPermaLink="false">captaincast-ep002</guid>
-      <pubDate>Thu, 05 Mar 2026 08:11:11 +0000</pubDate>
+      <pubDate>Fri, 06 Mar 2026 03:49:14 +0000</pubDate>
       <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep002_podcast_64k.mp3"
-                 length="2633603"
+                 length="2613541"
                  type="audio/mpeg" />
       <itunes:duration>0:05:29</itunes:duration>
       <itunes:episode>2</itunes:episode>
@@ -57,9 +75,9 @@
       <itunes:summary><![CDATA[凌晨两点，一个父亲用借来的钱发完最后一个月工资，开始给女儿写科幻史诗。这是关于灵机理论、宇宙牧场和减一文明的第一章。]]></itunes:summary>
       <link>https://wyonliu.github.io/CaptainCast/ep001.html</link>
       <guid isPermaLink="false">captaincast-ep001</guid>
-      <pubDate>Thu, 05 Mar 2026 08:11:11 +0000</pubDate>
+      <pubDate>Fri, 06 Mar 2026 03:49:14 +0000</pubDate>
       <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep001_podcast_64k.mp3"
-                 length="2077091"
+                 length="1861633"
                  type="audio/mpeg" />
       <itunes:duration>0:04:19</itunes:duration>
       <itunes:episode>1</itunes:episode>

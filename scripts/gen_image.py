@@ -17,7 +17,10 @@ def get_ep() -> str:
     for i, arg in enumerate(sys.argv):
         if arg == '--ep' and i + 1 < len(sys.argv):
             return sys.argv[i + 1].zfill(3)
-    # 默认用最新的有 prompts.json 的集数
+    # 默认用最新的有 prompts.json 的集数（新目录 input/，旧目录兼容）
+    eps = sorted(Path("episodes").glob("ep*/input/prompts.json"))
+    if eps:
+        return eps[-1].parent.parent.name.replace("ep", "")
     eps = sorted(Path("episodes").glob("ep*/prompts.json"))
     if eps:
         return eps[-1].parent.name.replace("ep", "")
@@ -75,24 +78,51 @@ def main():
 
     ep = get_ep()
     ep_dir = Path(f"episodes/ep{ep}")
-    prompts_file = ep_dir / "prompts.json"
 
+    # 新目录结构：input/prompts.json → output/images/
+    # 旧目录结构（兼容）：prompts.json → images/
+    prompts_file = ep_dir / "input" / "prompts.json"
     if not prompts_file.exists():
-        print(f"❌ 未找到 {prompts_file}，请先创建 prompts.json")
+        prompts_file = ep_dir / "prompts.json"
+    if not prompts_file.exists():
+        print(f"❌ 未找到 prompts.json，请先创建 episodes/ep{ep}/input/prompts.json")
         return
 
-    prompts = json.loads(prompts_file.read_text(encoding="utf-8"))
-    out_dir = ep_dir / "images"
+    raw = json.loads(prompts_file.read_text(encoding="utf-8"))
+
+    # 支持两种格式：
+    # 新格式：{"images": [{"filename": "xx.png", "description": "...", "prompt": "..."}]}
+    # 旧格式：[{"name": "xx", "label": "...", "prompt": "..."}]
+    if isinstance(raw, dict) and "images" in raw:
+        prompts = [
+            {"name": Path(p["filename"]).stem,
+             "label": p.get("description", p["filename"]),
+             "filename": p["filename"],
+             "prompt": p["prompt"]}
+            for p in raw["images"]
+        ]
+        out_dir = ep_dir / "output" / "images"
+    else:
+        prompts = raw
+        for p in prompts:
+            if "filename" not in p:
+                p["filename"] = f"{p['name']}.png"
+        out_dir = ep_dir / "images"
+
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"🎨 EP.{ep} 生图开始，共 {len(prompts)} 张\n")
+    print(f"🎨 EP.{ep} 生图开始，共 {len(prompts)} 张")
+    print(f"   输出目录: {out_dir}\n")
     for i, p in enumerate(prompts):
+        out_path = out_dir / p["filename"]
+        if out_path.exists() and out_path.stat().st_size > 10240:
+            print(f"[{i+1}/{len(prompts)}] ⏭️  已存在，跳过: {p['filename']}")
+            continue
         print(f"[{i+1}/{len(prompts)}] {p['label']}")
         data = generate(p["prompt"])
         if data:
-            path = out_dir / f"{p['name']}.png"
-            path.write_bytes(data)
-            print(f"  ✅ {path}  ({len(data)//1024} KB)\n")
+            out_path.write_bytes(data)
+            print(f"  ✅ {out_path}  ({len(data)//1024} KB)\n")
         else:
             print(f"  ⚠️  跳过\n")
 
