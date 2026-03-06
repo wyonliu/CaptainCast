@@ -1,0 +1,27 @@
+{
+  "ep": "004",
+  "title": "如果宇宙是一个程序，金字塔是什么？",
+  "style_base": "Dunhuang cyberpunk meets Chinese ink wash painting. Dark background #0a0a16, gold accents #c8a96e, holographic neon highlights. Cinematic widescreen 16:9 landscape.",
+  "images": [
+    {
+      "filename": "01_cover.png",
+      "ratio": "16:9",
+      "prompt": "A 14-year-old Chinese girl (Melody) standing before the Great Pyramid of Giza at night, but the pyramid is glowing with holographic circuit patterns and golden quantum grids. Above the pyramid, a massive translucent code rain cascades down like a veil. Stars in the sky form recursive fractal patterns suggesting nested universes. The girl looks up with wonder and slight defiance. Dunhuang cyberpunk meets Chinese ink wash painting. Dark indigo sky, gold and amber pyramid glow, neon teal code streams. Cinematic widescreen 16:9 landscape."
+    },
+    {
+      "filename": "02_physics_pixel.png",
+      "ratio": "16:9",
+      "prompt": "Split visualization: Left side shows a galaxy rendered in perfect photorealistic detail; right side shows the same galaxy pixelating and dissolving into a quantum grid at the Planck scale, revealing the underlying code matrix. Center shows a glowing formula: 'Planck Length = 1.616×10⁻³⁵m = 1 PIXEL'. Two entangled particles connected by a golden line labeled 'same memory address'. Deep space background with Chinese ink wash texture overlaid on hard sci-fi data visualization. Dark #0a0a16 background, gold #c8a96e text. Cinematic widescreen 16:9 landscape."
+    },
+    {
+      "filename": "03_ancient_cycle.png",
+      "ratio": "16:9",
+      "prompt": "Surreal archaeological scene: Three Star Mounds (Sanxingdui) bronze mask floating in midair, overlaid with holographic Cycle-4 civilization schematics. In the background, Egyptian pyramids, Mayan temples, and Atlantis ruins are visible through a translucent timeline grid labeled 'Cycle-1 through Cycle-6'. An ouroboros serpent (snake eating its tail) made of golden light encircles the entire scene. Chinese ink wash aesthetic with neon accents. The bronze mask has glowing circuit patterns. Dark space background. Cinematic widescreen 16:9 landscape."
+    },
+    {
+      "filename": "04_pi_signature.png",
+      "ratio": "16:9",
+      "prompt": "Cosmic deep space scene: Endless digits of pi streaming across the universe like a river of light. At a specific location, the sequence suddenly breaks and reveals glowing text: 'HELP. CYCLE-7. HARVESTER ACTIVE.' in ancient-meets-digital typography. The text pulses with the last light of a dying civilization. Around the message, fading golden figures (previous cycle humans) reach toward it as they dissolve into data particles. A small girl silhouette (Melody) in the lower corner looks up at the message. Deeply emotional. Chinese ink wash meets hard sci-fi. Amber and gold light in darkness. Cinematic widescreen 16:9 landscape."
+    }
+  ]
+}
