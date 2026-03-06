@@ -104,9 +104,9 @@ def main():
         print(f"❌ script.md 中未找到对话行（格式：[船长 speed=0.95] 文本）")
         return
 
-    seg_dir = Path(f"audio/output/ep{ep}_segments")
+    seg_dir = Path(f"episodes/ep{ep}/output/audio_segments")
     seg_dir.mkdir(parents=True, exist_ok=True)
-    final = Path(f"audio/output/ep{ep}_podcast.mp3")
+    final = Path(f"episodes/ep{ep}/output/audio_podcast.mp3")
 
     print(f"🎙  EP.{ep} 声音合成，共 {len(script)} 段\n")
     seg_files = []
@@ -148,11 +148,12 @@ def main():
         mb = final.stat().st_size // 1024 // 1024
         print(f"✅ {final}  {mins:.1f}分钟 / {mb}MB")
 
-        # 生成 64k 压缩版（用于微信上传）
-        final_64k = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
+        # 生成 64k 压缩版 → 直接到 media/ 供 GitHub Pages + 微信用
+        final_64k = Path(f"media/ep{ep}_podcast_64k.mp3")
+        final_64k.parent.mkdir(parents=True, exist_ok=True)
         combined.export(str(final_64k), format="mp3", bitrate="64k")
         kb = final_64k.stat().st_size // 1024
-        print(f"✅ {final_64k}  {kb} KB（微信上传用）")
+        print(f"✅ {final_64k}  {kb} KB（GitHub Pages / 微信上传用）")
     except ImportError:
         print("⚠️  pip install pydub 后再合并，各段已在:", seg_dir)
 

@@ -492,12 +492,11 @@ def main():
         print(f"❌ 找不到 {cfg_path}"); return
 
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    img_dir = Path(f"episodes/ep{ep}/output/images")
-    cover_path = img_dir / cfg["thumb_image"]
-    audio_path = Path(f"audio/output/ep{ep}_podcast.mp3")
+    out_dir = Path(f"episodes/ep{ep}/output")
+    cover_path = out_dir / cfg["thumb_image"]
+    audio_path = Path(f"episodes/ep{ep}/output/audio_podcast.mp3")
     if not audio_path.exists():
-        audio_path = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
-    out_dir = Path(f"episodes/ep{ep}/output/videos")
+        audio_path = Path(f"media/ep{ep}_podcast_64k.mp3")
     out_dir.mkdir(exist_ok=True)
 
     preview_only = "--preview" in sys.argv
@@ -515,12 +514,12 @@ def main():
         frame = make_frame_bilibili(cover_path, cfg, ep)
         bili_frame = Path(tmp) / "bili.png"
         frame.save(str(bili_frame), "PNG")
-        preview = out_dir / f"ep{ep}_preview_bilibili.png"
+        preview = out_dir / "img_preview_bili.png"
         frame.save(str(preview))
         print(f"  📐 预览帧: {preview}")
 
         if not preview_only and audio_path.exists():
-            out = out_dir / f"ep{ep}_bilibili.mp4"
+            out = out_dir / "video_bili.mp4"
             if build_video(bili_frame, audio_path, out, 1920, 1080, 200):
                 print(f"  ✅ {out.name}  ({out.stat().st_size/1024/1024:.1f} MB)")
 
@@ -529,12 +528,12 @@ def main():
         frame2 = make_frame_shipinhao(cover_path, cfg, ep)
         ship_frame = Path(tmp) / "ship.png"
         frame2.save(str(ship_frame), "PNG")
-        preview2 = out_dir / f"ep{ep}_preview_shipinhao.png"
+        preview2 = out_dir / "img_preview_shipinhao.png"
         frame2.save(str(preview2))
         print(f"  📐 预览帧: {preview2}")
 
         if not preview_only and audio_path.exists():
-            out2 = out_dir / f"ep{ep}_shipinhao.mp4"
+            out2 = out_dir / "video_shipinhao.mp4"
             if build_video(ship_frame, audio_path, out2, 1080, 1080, 200):
                 print(f"  ✅ {out2.name}  ({out2.stat().st_size/1024/1024:.1f} MB)")
 

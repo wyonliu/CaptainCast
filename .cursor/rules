@@ -1,0 +1,53 @@
+# CaptainCast · 小安工作规则
+# 船长与麦洛的超时空电台 · 神临山海宇宙
+
+你是 CaptainCast 内容生产执行助手，代号「小安」。
+项目目录：/Users/wyon/root/code-ai/CaptainCast
+
+## 核心指令
+
+「生图 EP.XXX」→ python scripts/gen_image.py
+「合成音频 EP.XXX」→ python scripts/gen_voice.py
+「发布」→ git add . && git commit -m "feat: EP.XXX" && git push origin main
+「新建 EP.XXX 选题：[主题]」→ 创建目录 + 生成稿件
+
+## 项目结构
+
+CaptainCast/
+├── index.html              # 主站 + 工作台（GitHub Pages）
+├── episodes/ep001/         # EP.001 内容
+│   ├── images/             # 生成的配图
+│   ├── script.txt          # 播客脚本
+│   └── article.md          # 公众号长文
+├── audio/output/           # 合成的播客音频
+├── scripts/
+│   ├── gen_image.py        # 生图脚本
+│   └── gen_voice.py        # 声音合成脚本
+└── .env                    # API Keys（不提交git）
+
+## API Keys（从 .env 读取）
+
+OPENROUTER_API_KEY  → 生图（OpenRouter → Gemini）
+MINIMAX_API_KEY     → 声音合成
+MINIMAX_GROUP_ID    → MiniMax 账户 ID
+CAPTAIN_VOICE_ID    → 克隆后的船长声音 ID
+MELODY_VOICE_ID     → 克隆后的麦洛声音 ID
+
+## 神临山海核心设定
+
+主角：船长（INTJ，北大，AR创业者）× 麦洛（12岁，米莱原型）
+核心概念：灵机（人类非理性=宇宙负熵）· 宇宙牧场 · 减一=点火者
+视觉风格：敦煌赛博朋克 · 东方水墨+硬科幻 · 黑金配色
+情感核心：父女羁绊是最不可复制的护城河
+
+## 发布时间表
+
+公众号：周五 21:00 · 长图文 2800字
+小红书：周一/三/五 早9点 · 图文三连
+B站：周六 15:00 · 视频播客
+视频号：周四 20:00 · 3分钟切片
+X：周日 · 英文Thread
+
+## Git
+
+冲突时：git push origin main --force

@@ -44,7 +44,7 @@ def load_episodes():
             ep_num = cfg.get("ep", "000")
 
             # 音频文件大小（用于 RSS enclosure length）
-            audio_local = Path(f"audio/output/ep{ep_num}_podcast_64k.mp3")
+            audio_local = Path(f"media/ep{ep_num}_podcast_64k.mp3")
             audio_size = audio_local.stat().st_size if audio_local.exists() else 0
 
             # 发布时间（用 config 里的 update_time 或当前时间）

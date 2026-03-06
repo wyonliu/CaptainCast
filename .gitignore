@@ -1,8 +1,13 @@
 .env
-audio/
 __pycache__/
 *.pyc
 .DS_Store
+# 视频文件（平铺到 output/ 根目录）
+episodes/*/output/video_*.mp4
+# 音频（高质量版在 episodes/，64k 版在 media/）
+episodes/*/output/audio_podcast.mp3
+episodes/*/output/audio_segments/
+# 旧路径兼容
 episodes/*/videos/*.mp4
 episodes/*/output/videos/*.mp4
 media/ep001.mp3

@@ -97,17 +97,19 @@ def main():
         prompts = [
             {"name": Path(p["filename"]).stem,
              "label": p.get("description", p["filename"]),
-             "filename": p["filename"],
+             "filename": f"img_{p['filename']}",   # 统一加 img_ 前缀
              "prompt": p["prompt"]}
             for p in raw["images"]
         ]
-        out_dir = ep_dir / "output" / "images"
+        out_dir = ep_dir / "output"   # 平铺，不建子目录
     else:
         prompts = raw
         for p in prompts:
             if "filename" not in p:
-                p["filename"] = f"{p['name']}.png"
-        out_dir = ep_dir / "images"
+                p["filename"] = f"img_{p['name']}.png"
+            elif not p["filename"].startswith("img_"):
+                p["filename"] = f"img_{p['filename']}"
+        out_dir = ep_dir / "output"   # 平铺
 
     out_dir.mkdir(parents=True, exist_ok=True)
 

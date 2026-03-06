@@ -384,7 +384,7 @@ def main():
         print(f"❌ 未找到 {cfg_path}")
         return
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    img_dir = Path(f"episodes/ep{ep}/output/images")
+    img_dir = Path(f"episodes/ep{ep}/output")
 
     print("=" * 54)
     print(f"CaptainCast EP.{ep} · {'提取音频fileid' if discover_mode else '发布微信草稿'}")
@@ -418,7 +418,7 @@ def main():
     # 3. 音频（首次上传，等待手动插入获取 fileid）
     # 微信 add_material voice 接口限制约 2MB，长节目可能超出，失败时跳过继续建图文草稿
     if not cfg.get("voice_encode_fileid"):
-        audio_path = Path(f"audio/output/ep{ep}_podcast_64k.mp3")
+        audio_path = Path(f"media/ep{ep}_podcast_64k.mp3")
         if audio_path.exists() and not cfg.get("voice_media_id"):
             fsize_mb = audio_path.stat().st_size / 1024 / 1024
             print(f"\n🎙  上传音频素材... ({fsize_mb:.1f} MB)")

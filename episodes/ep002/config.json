@@ -5,12 +5,12 @@
   "digest": "我们用14个小时、13个报错，做出了一套播客自动化系统。这期节目，就是用那套系统，讲那套系统的故事。",
   "content_source_url": "https://wyonliu.github.io/CaptainCast/ep002.html",
   "images_order": [
-    "01_terminal_dawn.png",
-    "02_hidden_tag.png",
-    "03_voice_clone.png",
-    "04_errors_as_fuel.png"
+    "img_01_terminal_dawn.png",
+    "img_02_hidden_tag.png",
+    "img_03_voice_clone.png",
+    "img_04_errors_as_fuel.png"
   ],
-  "thumb_image": "01_terminal_dawn.png",
+  "thumb_image": "img_01_terminal_dawn.png",
   "insert_img_after_section": {
     "1": 0,
     "4": 1

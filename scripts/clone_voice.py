@@ -156,7 +156,7 @@ def test_tts(voice_id: str):
     base = data.get("base_resp", {})
     if base.get("status_code") == 0:
         audio_hex = data.get("data", {}).get("audio", "")
-        out = Path("audio/output/melody_test_new.mp3")
+        out = Path("memory/voice/melody_test_new.mp3")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(bytes.fromhex(audio_hex))
         print(f"✅ 测试音频已保存: {out} ({out.stat().st_size // 1024} KB)")

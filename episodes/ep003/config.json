@@ -5,12 +5,12 @@
   "digest": "GPT-5.4发布、2028末日预言、以及船长的反骨——关于好奇心、灵机与碳硅共居的深夜对话",
   "content_source_url": "https://wyonliu.github.io/CaptainCast/ep003.html",
   "images_order": [
-    "01_cover.png",
-    "02_ghost_gdp.png",
-    "03_physical_pipeline.png",
-    "04_curiosity_lingji.png"
+    "img_01_cover.png",
+    "img_02_ghost_gdp.png",
+    "img_03_physical_pipeline.png",
+    "img_04_curiosity_lingji.png"
   ],
-  "thumb_image": "01_cover.png",
+  "thumb_image": "img_01_cover.png",
   "insert_img_after_section": {
     "2": 0,
     "4": 1,
