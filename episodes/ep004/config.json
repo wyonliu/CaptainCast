@@ -5,7 +5,12 @@
   "digest": "金字塔不是外星人造的——那些「外星人」，是从上一个循环来的，他们曾经就是我们。衔尾蛇理论，物理三证据，以及π里藏着的那句话。",
   "content_source_url": "https://wyonliu.github.io/CaptainCast/ep004.html",
   "thumb_image": "img_01_cover.png",
-  "images_order": ["img_01_cover.png", "img_02_physics_pixel.png", "img_03_ancient_cycle.png", "img_04_pi_signature.png"],
+  "images_order": [
+    "img_01_cover.png",
+    "img_02_physics_pixel.png",
+    "img_03_ancient_cycle.png",
+    "img_04_pi_signature.png"
+  ],
   "insert_img_after_section": {
     "2": 0,
     "4": 1,
@@ -17,7 +22,18 @@
   "audio_high_kb": 7382,
   "audio_low_kb": 3691,
   "audio_src_kb": 3691,
-  "tags": ["模拟宇宙", "衔尾蛇", "金字塔", "三星堆", "灵机", "神临山海"],
+  "tags": [
+    "模拟宇宙",
+    "衔尾蛇",
+    "金字塔",
+    "三星堆",
+    "灵机",
+    "神临山海"
+  ],
   "publish_date": "2026-03-13",
-  "next_ep_hint": "EP.005 · 当AI能模拟几乎一切，人类最贵的东西是什么？"
+  "next_ep_hint": "EP.005 · 当AI能模拟几乎一切，人类最贵的东西是什么？",
+  "thumb_media_id": "vQFRLcJziHg7XjNmmKE9lAeNse9pbWDg7KVQjiY6NbAZNhrccO2v5h3_PM3lATIV",
+  "voice_media_id": "vQFRLcJziHg7XjNmmKE9lIGFKf-UI1rHg0kw1L1Y644ZO5Fzv-JREUFmJe94yFLD",
+  "draft_media_id": "vQFRLcJziHg7XjNmmKE9lCAI8WH9VTGcDXNWbkLyTiB_RnOCQG_Xt0_Xy678fGvR",
+  "voice_encode_fileid": "MzcwMTE1NzQ5Ml8xMDAwMDAwNDY="
 }

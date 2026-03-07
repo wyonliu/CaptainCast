@@ -11,7 +11,9 @@ from pathlib import Path
 from urllib.parse import unquote
 from dotenv import load_dotenv
 
-load_dotenv()
+# 显式指定 .env 路径，避免 find_dotenv 从 scripts/ 往上找错
+_ENV_PATH = Path(__file__).parent.parent / ".env"
+load_dotenv(_ENV_PATH, override=True)  # override=True 防止 shell 旧变量覆盖
 
 DRY_RUN = "--dry-run" in sys.argv
 
@@ -66,7 +68,7 @@ def post_thread(client, tweets: list):
             kwargs["in_reply_to_tweet_id"] = prev_id
 
         try:
-            resp = client.create_tweet(**kwargs)
+            resp = client.create_tweet(**kwargs, user_auth=True)
             prev_id = resp.data["id"]
             print(f"✅ Tweet {i+1}/{len(tweets)} posted: id={prev_id}")
             if i < len(tweets) - 1:
