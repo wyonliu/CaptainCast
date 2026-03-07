@@ -1,0 +1,28 @@
+{
+  "ep": "005",
+  "title": "船长电台005：当AI开始创作，人类的创造力还值什么？",
+  "author": "船长",
+  "digest": "三代AI的本质差异：统计学AI能到人类顶尖，因果学AI一路绝尘，而灵机AI需要人类的非理性才能运转。麦洛打了两小时鼓，她的鼓声里，有三十遍不服气——那是AI永远生成不了的东西。",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep005.html",
+  "thumb_image": "img_01_cover.png",
+  "images_order": [
+    "img_01_cover.png",
+    "img_02_three_ai.png",
+    "img_03_lingji_energy.png",
+    "img_04_two_universes.png"
+  ],
+  "insert_img_after_section": {
+    "2": 0,
+    "4": 1,
+    "6": 2,
+    "8": 3
+  },
+  "audio_name": "船长与麦洛的超时空电台005",
+  "audio_duration_ms": 960000,
+  "audio_high_kb": 15000,
+  "audio_low_kb": 7500,
+  "audio_src_kb": 7500,
+  "tags": ["三代AI", "灵机", "因果AI", "神临山海", "科幻", "创造力"],
+  "publish_date": "2026-03-20",
+  "next_ep_hint": "EP.006 · 如果人类是宇宙最稀缺的物种，我们欠自己什么？"
+}

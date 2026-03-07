@@ -24,8 +24,12 @@ CAPTAIN_SPEED_MULT = float(os.getenv('CAPTAIN_SPEED_MULT', '1.05'))
 MELODY_SPEED_MULT  = float(os.getenv('MELODY_SPEED_MULT',  '1.0'))
 
 # 麦洛音量补偿（dB，合并阶段应用，不需重新TTS）
-# 麦洛声音克隆音源偏小，+4dB 与船长平衡
-MELODY_VOL_DB = float(os.getenv('MELODY_VOL_DB', '4.0'))
+# 麦洛声音克隆音源偏小，+6dB 与船长平衡（原4dB仍偏小）
+# 麦洛音量补偿：1.3x幅度 = 20*log10(1.3) ≈ 2.28dB，让麦洛比船长响1.3倍
+MELODY_VOL_DB = float(os.getenv('MELODY_VOL_DB', '2.28'))
+
+# 麦洛 MiniMax API vol 参数（0-10，默认1.0，提高到1.5让API侧也更响）
+MELODY_API_VOL = float(os.getenv('MELODY_API_VOL', '1.5'))
 
 
 def get_ep() -> str:
@@ -41,17 +45,22 @@ def get_ep() -> str:
 def parse_script(script_path: Path):
     """解析 script.md，返回 [(role, speed, text), ...]"""
     pattern = re.compile(r'^\[(船长|麦洛)\s+speed=([\d.]+)\]\s*(.+)$')
+    # 剔除舞台提示：（停顿）（沉默）（笑）（轻声）等括号内内容
+    stage_dir = re.compile(r'[（(][^）)]{1,10}[）)]')
     lines = []
     for line in script_path.read_text(encoding="utf-8").splitlines():
         m = pattern.match(line.strip())
         if m:
             role_cn, speed, text = m.groups()
+            text = stage_dir.sub('', text).strip()
+            if not text:
+                continue
             role = "captain" if role_cn == "船长" else "melody"
             lines.append((role, float(speed), text.strip()))
     return lines
 
 
-def tts(text, voice_id, speed, out_path, retries=3):
+def tts(text, voice_id, speed, out_path, retries=3, vol=1.0):
     """调用 MiniMax TTS，带重试（3次）和更长超时（120s）"""
     import json as _json
     for attempt in range(1, retries + 1):
@@ -63,7 +72,7 @@ def tts(text, voice_id, speed, out_path, retries=3):
                     "model": "speech-01-hd",
                     "text": text,
                     "stream": False,
-                    "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": 1.0, "pitch": 0},
+                    "voice_setting": {"voice_id": voice_id, "speed": speed, "vol": vol, "pitch": 0},
                     "audio_setting": {"format": "mp3", "sample_rate": 44100}
                 },
                 timeout=120
@@ -123,7 +132,8 @@ def main():
             print(f"[{i+1:02d}/{len(script)}] ⏭️  已存在，跳过: {out.name} ({out.stat().st_size//1024} KB)")
             continue
         print(f"[{i+1:02d}/{len(script)}] {label}  x{mult}={actual_speed}  {text[:40]}...")
-        if tts(text, voice_id, actual_speed, out):
+        api_vol = MELODY_API_VOL if role == "melody" else 1.0
+        if tts(text, voice_id, actual_speed, out, vol=api_vol):
             seg_files.append(out)
             print(f"  ✅ {out.stat().st_size//1024} KB")
         time.sleep(0.5)

@@ -1,0 +1,28 @@
+{
+  "images": [
+    {
+      "filename": "01_cover.png",
+      "ratio": "16:9",
+      "description": "封面·麦洛与灵机鼓声",
+      "prompt": "A teenage Chinese girl, about 14 years old, sitting at a professional drum kit in dramatic cinematic lighting. She is mid-strike, eyes fierce and determined. From each drumbeat, golden-amber energy particles (Lingji energy) erupt and spiral upward into a vast cosmic space filled with nebulae and star clusters. Around her float three translucent holographic rings: cold blue crystalline lattice on the left (Statistical AI), silver geometric web in the center (Causal AI), warm golden organic spiral on the right (Lingji AI). She is the radiant center connecting all three. Dark indigo background with amber and gold accents. Dunhuang cyberpunk meets Chinese ink wash painting. Photorealistic cinematic quality. Widescreen 16:9 landscape orientation. No text."
+    },
+    {
+      "filename": "02_three_ai.png",
+      "ratio": "16:9",
+      "description": "三代AI对比图",
+      "prompt": "A dramatic triptych of three ascending AI generations against a deep space backdrop. Left pillar: cold ice-blue crystalline neural network — Statistical AI, beautiful geometric lattice, frozen at human peak intelligence. Center pillar: brilliant silver-white cascading data streams surging far beyond the left pillar — Causal AI, relentless and superhuman, already beyond comprehension. Right pillar: warm amber-gold living spiral of human Lingji energy, flames of irrationality woven through it — the rarest power in the universe. A tiny glowing human figure stands at the base, small but luminous. The three pillars tower into stars. Epic scale, hard sci-fi meets Chinese ink wash aesthetic. Cinematic widescreen 16:9 landscape. No text."
+    },
+    {
+      "filename": "03_lingji_energy.png",
+      "ratio": "16:9",
+      "description": "灵机能量·影视印证",
+      "prompt": "A cinematic split triptych showing Lingji energy across three iconic fictional universes. Left panel: a digital green code rain transforming into golden human brain neural connections — The Matrix reimagined in Chinese ink wash, human emotion as the ultimate fuel. Center panel: a teenage girl in dramatic darkness, her raw emotion radiating as brilliant crimson-gold energy waves that crack the void — Stranger Things meets cosmic art. Right panel: a warrior silhouette inside a luminous virtual world, his burning inner will brighter than any code — Sword Art Online's摇光 moment. All three panels converge into a central vortex of amber Lingji fire at the center. Deep indigo background, gold and crimson light. Epic cinematic composition. Widescreen 16:9 landscape. No text."
+    },
+    {
+      "filename": "04_two_universes.png",
+      "ratio": "16:9",
+      "description": "两个宇宙",
+      "prompt": "A breathtaking split-universe composition. Left half: outer space cosmos — a vast spiral galaxy, distant nebulae, stars beyond counting, cold infinite void, tiny blue Earth barely visible. Right half: an equally vast inner cosmos inside a luminous human silhouette — warm amber and violet nebulae of memory, golden constellations of imagination, as infinite as outer space, as real as stars. In the center where the two halves meet: a bridge of golden light, and on the bridge, two small silhouettes — a father and daughter — standing together, gazing both outward and inward. The two universes mirror each other perfectly, suggesting they are one. Dunhuang cyberpunk meets cosmic art. Deeply moving, epic scale. Cinematic widescreen 16:9 landscape. No text."
+    }
+  ]
+}

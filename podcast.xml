@@ -13,7 +13,7 @@
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>wyonliu@gmail.com</managingEditor>
     <webMaster>wyonliu@gmail.com</webMaster>
-    <lastBuildDate>Fri, 13 Mar 2026 13:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 13:00:00 +0000</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
@@ -31,6 +31,24 @@
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
 
+    <item>
+      <title>船长电台005: 当AI开始创作，人类的创造力还值什么？</title>
+      <itunes:title>船长电台005: 当AI开始创作，人类的创造力还值什么？</itunes:title>
+      <itunes:subtitle>三代AI的本质差异，以及麦洛两小时鼓声里藏着什么</itunes:subtitle>
+      <description><![CDATA[三代AI的本质差异：统计学AI能到人类顶尖，因果学AI一路绝尘，而灵机AI需要人类的非理性才能运转。麦洛打了两小时鼓，她的鼓声里，有三十遍不服气——那是AI永远生成不了的东西。]]></description>
+      <itunes:summary><![CDATA[三代AI的本质差异：统计学AI能到人类顶尖，因果学AI一路绝尘，而灵机AI需要人类的非理性才能运转。麦洛打了两小时鼓，她的鼓声里，有三十遍不服气——那是AI永远生成不了的东西。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/ep005.html</link>
+      <guid isPermaLink="false">captaincast-ep005</guid>
+      <pubDate>Fri, 20 Mar 2026 13:00:00 +0000</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep005_podcast_64k.mp3"
+                 length="6277163"
+                 type="audio/mpeg" />
+      <itunes:duration>0:13:06</itunes:duration>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/ep005_cover.png" />
+    </item>
     <item>
       <title>船长电台004: 如果宇宙是一个程序，金字塔是什么？</title>
       <itunes:title>船长电台004: 如果宇宙是一个程序，金字塔是什么？</itunes:title>

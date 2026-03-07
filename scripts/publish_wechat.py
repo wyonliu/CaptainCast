@@ -120,20 +120,25 @@ def _inline(text):
     text = re.sub(r'\*\*(.+?)\*\*',
         r'<strong style="color:#1a1a1a;font-weight:bold;">\1</strong>', text)
     text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+    # Markdown 链接 [text](url) → 可点击超链接（金色，微信内会跳转外部浏览器）
+    text = re.sub(
+        r'\[([^\]]+)\]\(([^)]+)\)',
+        r'<a href="\2" style="color:#c8a96e;text-decoration:none;">\1</a>',
+        text
+    )
     return text
 
 
 def build_html(cfg, img_urls):
     GOLD    = "#c8a96e"
-    GOLD_L  = "#e0c88a"       # 亮金
     GOLD_D  = "#8a6830"       # 暗金
-    DARK    = "#1a1a1a"
-    DARK_BG = "#0d0d1a"       # 深夜色，用于头部卡片
+    DARK    = "#1c1c1c"
+    DARK_BG = "#0d0d1a"       # 深夜色，用于头部/尾部卡片
     MID_BG  = "#111120"       # 代码块背景
-    BG      = "#faf8f3"       # 暖米色，引用块背景
-    LINE    = "#e8dfc8"
-    TEXT    = "#333333"
-    MUTED   = "#888888"
+    BG      = "#f8f6f1"       # 暖米色，引用块背景
+    TEXT    = "#3a3a3a"
+    MUTED   = "#999999"
+    SUBTLE  = "#666666"
 
     fileid = cfg.get("voice_encode_fileid", "")
     insert_after = {int(k): v for k, v in cfg.get("insert_img_after_section", {}).items()}
@@ -145,24 +150,15 @@ def build_html(cfg, img_urls):
 
     parts = []
 
-    # ── ① 头部品牌卡片（深色，参考 ep001.html 风格）──
+    # ── ① 头部品牌卡片 ──
     parts.append(
-        f'<section style="background:{DARK_BG};border-radius:16px;'
-        f'padding:24px 20px 22px;margin:0 0 20px;">'
-        # 节目标签
-        f'<p style="font-size:11px;letter-spacing:3px;color:{GOLD};'
-        f'margin:0 0 14px;font-weight:500;">✦ 船长与麦洛的超时空电台 ✦</p>'
-        # EP 徽章
-        f'<section style="display:inline-block;background:transparent;'
-        f'border:1px solid {GOLD_D};border-radius:20px;'
-        f'padding:3px 14px;margin:0 0 14px;">'
-        f'<span style="font-size:12px;color:{GOLD};letter-spacing:1px;">EP.{ep}</span>'
-        f'</section>'
-        # 副标题
-        f'<p style="font-size:20px;font-weight:bold;color:#f0e8d0;'
-        f'line-height:1.45;margin:0 0 12px;">{subtitle}</p>'
-        # 摘要一句话
-        f'<p style="font-size:13px;color:{MUTED};line-height:1.7;margin:0;">{digest}</p>'
+        f'<section style="background:{DARK_BG};border-radius:14px;'
+        f'padding:22px 18px 20px;margin:0 0 18px;">'
+        f'<p style="font-size:10px;letter-spacing:3.5px;color:{GOLD_D};'
+        f'margin:0 0 12px;font-weight:400;">船长与麦洛的超时空电台 · EP.{ep}</p>'
+        f'<p style="font-size:17px;font-weight:bold;color:#f0e8d0;'
+        f'line-height:1.5;margin:0 0 10px;">{subtitle}</p>'
+        f'<p style="font-size:12px;color:{MUTED};line-height:1.75;margin:0;">{digest}</p>'
         f'</section>'
     )
 
@@ -175,8 +171,8 @@ def build_html(cfg, img_urls):
             + '</section>'
         )
         parts.append(
-            f'<p style="font-size:12px;color:{MUTED};text-align:center;'
-            f'margin:8px 0 28px;">↑ 点击收听完整播客版本</p>'
+            f'<p style="font-size:11px;color:{MUTED};text-align:center;'
+            f'margin:6px 0 24px;letter-spacing:0.5px;">↑ 点击收听完整播客</p>'
         )
 
     md_text = Path(f"episodes/ep{ep}/output/article.md").read_text(encoding="utf-8")
@@ -202,50 +198,43 @@ def build_html(cfg, img_urls):
                     used_img_idxs.add(idx)
                     parts.append(
                         f'<img src="{img_urls[idx]}" style="max-width:100%;'
-                        f'width:100%;display:block;margin:20px auto;'
-                        f'border-radius:10px;" />'
+                        f'width:100%;display:block;margin:18px auto;'
+                        f'border-radius:8px;" />'
                     )
-            # 精致分隔符
             parts.append(
-                f'<section style="text-align:center;margin:28px 0;">'
-                f'<span style="color:{GOLD_D};font-size:12px;letter-spacing:8px;">✦ · ✦</span>'
+                f'<section style="text-align:center;margin:24px 0 22px;">'
+                f'<span style="color:#ccc;font-size:11px;letter-spacing:6px;">· · ·</span>'
                 f'</section>'
             )
             i += 1; continue
 
-        # ── H1（文章大标题，通常第一行）──
+        # ── H1（文章大标题，头部已有，H1 跳过不重复输出）──
         if re.match(r'^# [^#]', line):
-            # 头部卡片已经有标题，H1 只作为内容区开场，用较小字号
-            parts.append(
-                f'<p style="font-size:18px;font-weight:bold;color:{DARK};'
-                f'line-height:1.45;margin:0 0 6px;">{_inline(line[2:])}</p>'
-            )
+            i += 1; continue
 
-        # ── H2（章节标题，金色左竖线+底划线强调）──
+        # ── H2（章节标题）──
         elif line.startswith("## "):
             section_heading_count += 1
+            roman = ["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ"]
+            num = roman[section_heading_count - 1] if section_heading_count <= 10 else str(section_heading_count)
             parts.append(
-                f'<section style="margin:36px 0 14px;">'
-                # 小号章节号
-                f'<p style="font-size:11px;color:{GOLD_D};letter-spacing:3px;'
-                f'margin:0 0 6px;">第 {section_heading_count} 节</p>'
-                # 主标题文字
-                f'<p style="font-size:18px;font-weight:bold;color:{DARK};'
-                f'line-height:1.4;margin:0 0 8px;">{_inline(line[3:])}</p>'
-                # 金色短横线
-                f'<section style="width:32px;height:3px;background:{GOLD};'
-                f'border-radius:2px;"></section>'
+                f'<section style="margin:32px 0 12px;padding-left:12px;'
+                f'border-left:2px solid {GOLD};">'
+                f'<p style="font-size:10px;color:{GOLD_D};letter-spacing:2px;'
+                f'margin:0 0 4px;font-weight:400;">{num}</p>'
+                f'<p style="font-size:16px;font-weight:bold;color:{DARK};'
+                f'line-height:1.45;margin:0;">{_inline(line[3:])}</p>'
                 f'</section>'
             )
 
         # ── 引用块（> text）──
         elif line.startswith("> "):
             parts.append(
-                f'<section style="margin:22px 0;padding:18px 20px;'
-                f'background:{BG};border-radius:10px;'
-                f'border-left:3px solid {GOLD};">'
-                f'<p style="font-size:15px;line-height:1.85;color:{DARK};'
-                f'font-weight:500;margin:0;">{_inline(line[2:])}</p>'
+                f'<section style="margin:16px 0;padding:14px 16px;'
+                f'background:{BG};border-radius:8px;'
+                f'border-left:2px solid {GOLD};">'
+                f'<p style="font-size:13px;line-height:1.85;color:{SUBTLE};'
+                f'font-style:italic;margin:0;">{_inline(line[2:])}</p>'
                 f'</section>'
             )
 
@@ -257,36 +246,46 @@ def build_html(cfg, img_urls):
                 code_lines.append(lines[i])
                 i += 1
             code_html = "".join(
-                f'<p style="margin:1px 0;font-size:13px;line-height:1.75;'
+                f'<p style="margin:1px 0;font-size:12px;line-height:1.75;'
                 f'font-family:Menlo,Consolas,monospace;color:{GOLD};">'
                 f'{_esc(ln) if ln.strip() else "&nbsp;"}</p>'
                 for ln in code_lines
             )
             parts.append(
-                f'<section style="background:{MID_BG};padding:14px 16px;'
-                f'border-radius:8px;margin:16px 0;">'
+                f'<section style="background:{MID_BG};padding:12px 14px;'
+                f'border-radius:6px;margin:14px 0;">'
                 f'{code_html}</section>'
+            )
+
+        # ── 列表项（- xxx）──
+        elif re.match(r'^[-•]\s', line):
+            content = line[2:].strip()
+            parts.append(
+                f'<p style="font-size:13px;line-height:1.85;color:{SUBTLE};'
+                f'margin:3px 0 3px 10px;">'
+                f'<span style="color:{GOLD_D};margin-right:6px;">—</span>'
+                f'{_inline(content)}</p>'
             )
 
         # ── 空行 ──
         elif line.strip() == "":
             pass
 
-        # ── 独立加粗行（拉拉拉 pull-quote）──
+        # ── 独立加粗行（pull-quote）──
         elif re.match(r'^\*\*.+\*\*$', line.strip()):
             inner = line.strip()[2:-2]
             parts.append(
-                f'<section style="margin:24px 0;padding:18px 20px 18px 22px;'
-                f'border-left:3px solid {GOLD};background:{BG};border-radius:0 10px 10px 0;">'
-                f'<p style="font-size:15px;font-weight:bold;color:{DARK};'
-                f'line-height:1.75;margin:0;">{inner}</p>'
+                f'<section style="margin:20px 0;padding:14px 16px 14px 18px;'
+                f'border-left:2px solid {GOLD};background:{BG};border-radius:0 8px 8px 0;">'
+                f'<p style="font-size:14px;font-weight:bold;color:{DARK};'
+                f'line-height:1.8;margin:0;">{inner}</p>'
                 f'</section>'
             )
 
         # ── 普通正文 ──
         else:
             parts.append(
-                f'<p style="font-size:15px;line-height:1.95;color:{TEXT};margin:14px 0;">'
+                f'<p style="font-size:14px;line-height:1.95;color:{TEXT};margin:10px 0;">'
                 f'{_inline(line)}</p>'
             )
         i += 1
@@ -296,26 +295,26 @@ def build_html(cfg, img_urls):
         if idx not in used_img_idxs and img_urls[idx]:
             parts.append(
                 f'<img src="{img_urls[idx]}" style="max-width:100%;width:100%;'
-                f'display:block;margin:24px auto;border-radius:10px;" />'
+                f'display:block;margin:20px auto;border-radius:8px;" />'
             )
 
     # ── 尾部卡片 ──
     parts.append(
-        f'<section style="background:{DARK_BG};border-radius:14px;'
-        f'padding:22px 20px;margin:36px 0 0;text-align:center;">'
-        f'<p style="font-size:12px;color:{GOLD};letter-spacing:2px;margin:0 0 10px;">'
-        f'✦ 船长与麦洛的超时空电台 ✦</p>'
-        f'<p style="font-size:13px;color:#aaa;line-height:1.7;margin:0 0 14px;">'
+        f'<section style="background:{DARK_BG};border-radius:12px;'
+        f'padding:20px 18px;margin:32px 0 0;text-align:center;">'
+        f'<p style="font-size:10px;color:{GOLD_D};letter-spacing:3px;margin:0 0 10px;">'
+        f'船长与麦洛的超时空电台</p>'
+        f'<p style="font-size:12px;color:{MUTED};line-height:1.75;margin:0 0 12px;">'
         f'每期一个让你停下来想一想的问题<br/>'
         f'关注我们，下期见</p>'
-        f'<p style="font-size:12px;color:{GOLD_D};margin:0;">'
+        f'<p style="font-size:11px;color:{GOLD_D};margin:0;letter-spacing:0.3px;">'
         f'▶ {next_ep}</p>'
         f'</section>'
     )
 
     return (
         '<section style="font-family:-apple-system,\'PingFang SC\',\'Helvetica Neue\',sans-serif;'
-        'max-width:680px;margin:0 auto;padding:0 2px;">\n'
+        'max-width:677px;margin:0 auto;padding:0 2px;">\n'
         + "\n".join(parts) + "\n</section>"
     )
 
