@@ -1,0 +1,37 @@
+{
+  "ep": "006",
+  "title": "船长时空站006：你的迷茫，AI永远没有过",
+  "author": "船长",
+  "digest": "AI越来越强，人类还剩什么？答案比「创意与情感」要具体得多——AI从来没有迷茫过，没有在不知道答案的时候还是选择继续过。你的迷茫，你的非理性坚持，那个说不清楚但感觉「就是这个」的画面，才是你唯一真正属于自己的东西。",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep006.html",
+  "thumb_image": "img_01_cover_question.png",
+  "images_order": [
+    "img_01_cover_question.png",
+    "img_02_hidden_image.png",
+    "img_03_ai_cannot.png",
+    "img_04_tree_universe.png"
+  ],
+  "insert_img_after_section": {
+    "2": 0,
+    "4": 1,
+    "6": 2,
+    "8": 3
+  },
+  "audio_name": "船长与麦洛的超时空电台006",
+  "audio_duration_ms": 600000,
+  "audio_high_kb": 9000,
+  "audio_low_kb": 4667,
+  "audio_src_kb": 4667,
+  "tags": [
+    "AGI时代",
+    "人类价值",
+    "灵机",
+    "迷茫",
+    "意义",
+    "神临山海"
+  ],
+  "publish_date": "2026-03-10",
+  "next_ep_hint": "EP.007 · 下期预告待定",
+  "thumb_media_id": "",
+  "draft_media_id": ""
+}

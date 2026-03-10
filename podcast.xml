@@ -32,6 +32,25 @@
     <itunes:type>episodic</itunes:type>
 
     <item>
+      <title>船长时空站006: 你的迷茫，AI永远没有过</title>
+      <itunes:title>船长时空站006: 你的迷茫，AI永远没有过</itunes:title>
+      <itunes:subtitle>AGI时代，人类意义反危机</itunes:subtitle>
+      <description><![CDATA[AI越来越强，人类还剩什么？答案比「创意与情感」要具体得多——AI从来没有迷茫过，没有在不知道答案的时候还是选择继续过。你的迷茫，你的非理性坚持，那个说不清楚但感觉「就是这个」的画面，才是你唯一真正属于自己的东西。]]></description>
+      <itunes:summary><![CDATA[AI越来越强，人类还剩什么？答案比「创意与情感」要具体得多——AI从来没有迷茫过，没有在不知道答案的时候还是选择继续过。你的迷茫，你的非理性坚持，那个说不清楚但感觉「就是这个」的画面，才是你唯一真正属于自己的东西。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/ep006.html</link>
+      <guid isPermaLink="false">captaincast-ep006</guid>
+      <pubDate>Mon, 10 Mar 2026 04:30:00 +0000</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep006_podcast_64k.mp3"
+                 length="4779406"
+                 type="audio/mpeg" />
+      <itunes:duration>0:10:00</itunes:duration>
+      <itunes:episode>6</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/ep006_cover.png" />
+    </item>
+
+    <item>
       <title>船长电台005: 若AI能做一切，人类还有什么？</title>
       <itunes:title>船长电台005: 若AI能做一切，人类还有什么？</itunes:title>
       <itunes:subtitle>三代AI的本质差异，以及麦洛两小时鼓声里藏着什么</itunes:subtitle>
