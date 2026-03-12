@@ -13,7 +13,7 @@
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>wyonliu@gmail.com</managingEditor>
     <webMaster>wyonliu@gmail.com</webMaster>
-    <lastBuildDate>Sat, 07 Mar 2026 12:08:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Mar 2026 21:00:00 +0800</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
@@ -39,7 +39,7 @@
       <itunes:summary><![CDATA[重庆春季房交会，爷爷奶奶戴上MR头显，沉默三秒，说了一个字：哇。这不是科技发布会，是普通市民第一次走进一套还没建好的期房——1:1还原，阳光真实，空间真实。3DGS技术99%图像还原度背后的死磕故事，AI与真实世界之间缺的那座桥，以及虚实共生的时代为什么比你想象中要近。]]></itunes:summary>
       <link>https://wyonliu.github.io/CaptainCast/ep007.html</link>
       <guid isPermaLink="false">captaincast-ep007</guid>
-      <pubDate>Thu, 12 Mar 2026 13:00:00 +0000</pubDate>
+      <pubDate>Thu, 12 Mar 2026 21:00:00 +0800</pubDate>
       <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep007_podcast_64k.mp3"
                  length="4117985"
                  type="audio/mpeg" />
