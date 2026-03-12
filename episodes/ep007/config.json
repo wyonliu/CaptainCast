@@ -1,0 +1,32 @@
+{
+  "ep": "007",
+  "title": "船长电台007：爷爷奶奶都说哇了，MR赢了！",
+  "author": "船长",
+  "digest": "重庆春季房交会，爷爷奶奶戴上MR头显，沉默三秒，说了一个字：哇。这不是科技发布会，是普通市民第一次走进一套还没建好的期房——1:1还原，阳光真实，空间真实。空间智能，第一次真正服务到了普通人。",
+  "content_source_url": "https://wyonliu.github.io/CaptainCast/ep007.html",
+  "thumb_image": "img_01_cover_wow.png",
+  "images_order": [
+    "img_01_cover_wow.png",
+    "img_02_expo_demo1.jpg",
+    "img_03_expo_demo2.jpg",
+    "img_04_expo_demo3.jpg",
+    "img_05_expo_leader.jpg",
+    "img_06_newspaper.jpg"
+  ],
+  "insert_img_after_section": {
+    "1": 0,
+    "3": 1,
+    "4": 2,
+    "5": 3,
+    "6": 4,
+    "8": 5
+  },
+  "audio_name": "船长与麦洛的超时空电台007",
+  "audio_duration_ms": 515000,
+  "audio_high_kb": 8042,
+  "audio_low_kb": 4021,
+  "audio_src_kb": 4021,
+  "tags": ["空间智能", "MR", "贝壳", "房交会", "沉浸体验", "3DGS"],
+  "publish_date": "2026-03-12",
+  "next_ep_hint": "EP.008 · 我的运动天赋和AI时代的活法"
+}

@@ -11,3 +11,8 @@ episodes/*/output/audio_segments/
 episodes/*/videos/*.mp4
 episodes/*/output/videos/*.mp4
 media/ep001.mp3
+# 大文件参考资料（本地保留，不入库）
+episodes/ep007/input/*.docx
+episodes/ep008/input/*.docx
+episodes/ep009/input/*.docx
+episodes/ep010/input/*.docx

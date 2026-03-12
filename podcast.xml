@@ -32,6 +32,25 @@
     <itunes:type>episodic</itunes:type>
 
     <item>
+      <title>船长时空站007: 爷爷奶奶都说哇了，MR赢了！</title>
+      <itunes:title>船长时空站007: 爷爷奶奶都说哇了，MR赢了！</itunes:title>
+      <itunes:subtitle>空间智能，第一次真正服务到了普通人</itunes:subtitle>
+      <description><![CDATA[重庆春季房交会，爷爷奶奶戴上MR头显，沉默三秒，说了一个字：哇。这不是科技发布会，是普通市民第一次走进一套还没建好的期房——1:1还原，阳光真实，空间真实。3DGS技术99%图像还原度背后的死磕故事，AI与真实世界之间缺的那座桥，以及虚实共生的时代为什么比你想象中要近。]]></description>
+      <itunes:summary><![CDATA[重庆春季房交会，爷爷奶奶戴上MR头显，沉默三秒，说了一个字：哇。这不是科技发布会，是普通市民第一次走进一套还没建好的期房——1:1还原，阳光真实，空间真实。3DGS技术99%图像还原度背后的死磕故事，AI与真实世界之间缺的那座桥，以及虚实共生的时代为什么比你想象中要近。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/ep007.html</link>
+      <guid isPermaLink="false">captaincast-ep007</guid>
+      <pubDate>Thu, 12 Mar 2026 13:00:00 +0000</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/ep007_podcast_64k.mp3"
+                 length="4117985"
+                 type="audio/mpeg" />
+      <itunes:duration>0:08:35</itunes:duration>
+      <itunes:episode>7</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/ep007_cover.png" />
+    </item>
+
+    <item>
       <title>船长时空站006: 你的迷茫，AI永远没有过</title>
       <itunes:title>船长时空站006: 你的迷茫，AI永远没有过</itunes:title>
       <itunes:subtitle>AGI时代，人类意义反危机</itunes:subtitle>

@@ -1,0 +1,22 @@
+{
+  "images": [
+    {
+      "filename": "01_cover_wow.png",
+      "ratio": "16:9",
+      "description": "封面：爷爷奶奶体验MR（Quest3风格头显）",
+      "prompt": "An elderly Chinese couple in their 70s wearing Meta Quest 3 style MR headsets — slim, modern, white and grey, with front-facing cameras visible. They stand inside a beautiful holographic Chinese apartment that floats above a busy Chongqing street. Their faces show pure wonder and joy. Warm golden sunlight fills the virtual living room. Realistic, cinematic, emotionally warm. Cyberpunk city background with neon signs below. Cinematic widescreen 16:9 landscape. No text."
+    },
+    {
+      "filename": "07_cover_douyin_43.png",
+      "ratio": "4:3",
+      "description": "抖音封面4:3",
+      "prompt": "An elderly Chinese man in his 70s wearing a Meta Quest 3 style MR headset — slim, modern design. He stands amazed inside a glowing holographic apartment. His face shows pure wonder, mouth slightly open. Behind him a crowd gathers curiously on a Chinese city street. Warm amber lighting. Cinematic 4:3 landscape. No text."
+    },
+    {
+      "filename": "08_cover_douyin_34.png",
+      "ratio": "3:4",
+      "description": "抖音封面3:4：竖版",
+      "prompt": "An elderly Chinese couple wearing Meta Quest 3 style MR headsets, standing inside a glowing 1:1 scale holographic apartment. Their expressions show pure joy and amazement. Below, the real Chongqing street. Above, the beautiful virtual home with warm sunlight. Deeply emotional, cinematic. Vertical 3:4 portrait. No text."
+    }
+  ]
+}
