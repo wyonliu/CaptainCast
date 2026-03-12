@@ -16,3 +16,4 @@ episodes/ep007/input/*.docx
 episodes/ep008/input/*.docx
 episodes/ep009/input/*.docx
 episodes/ep010/input/*.docx
+.claude/
