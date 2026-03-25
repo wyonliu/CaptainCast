@@ -13,7 +13,7 @@
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>wyonliu@gmail.com</managingEditor>
     <webMaster>wyonliu@gmail.com</webMaster>
-    <lastBuildDate>Thu, 12 Mar 2026 21:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 21:41:00 +0800</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
@@ -30,6 +30,25 @@
     <itunes:category text="Science Fiction"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
+
+    <item>
+      <title>10天一人AI特战实验Day1 | 船长电台</title>
+      <itunes:title>10天一人AI特战实验Day1 | 船长电台</itunes:title>
+      <itunes:subtitle>一个人+AI，第一天干了七万行代码</itunes:subtitle>
+      <description><![CDATA[告别贝壳XYZ团队的当晚，六个AI Agent同时启动。二十四小时——76,719行代码，820万Token，312轮对话，6个项目全部推进。Omnity空间智能从Demo到产品级，Yipin邑品心选全自动投流26测试全绿，JoyBoy游戏砍了重建碎星连珠三万行，Godrise神临山海AI通宵写了十三万字。AI改变了创业等式。]]></description>
+      <itunes:summary><![CDATA[告别贝壳XYZ团队的当晚，六个AI Agent同时启动。二十四小时——76,719行代码，820万Token，312轮对话，6个项目全部推进。AI改变了创业等式。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/</link>
+      <guid isPermaLink="false">captaincast-blitz10-day01</guid>
+      <pubDate>Wed, 25 Mar 2026 21:41:00 +0800</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/blitz10_day01_podcast_64k.mp3"
+                 length="3816010"
+                 type="audio/mpeg" />
+      <itunes:duration>0:07:57</itunes:duration>
+      <itunes:episode>8</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/blitz10_day01_cover.png" />
+    </item>
 
     <item>
       <title>船长时空站007: 爷爷奶奶都说哇了，MR赢了！</title>
