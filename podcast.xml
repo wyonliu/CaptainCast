@@ -13,7 +13,7 @@
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>wyonliu@gmail.com</managingEditor>
     <webMaster>wyonliu@gmail.com</webMaster>
-    <lastBuildDate>Wed, 25 Mar 2026 21:41:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 28 Mar 2026 22:14:00 +0800</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
@@ -30,6 +30,63 @@
     <itunes:category text="Science Fiction"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
+
+    <item>
+      <title>10天一人AI特战实验Day4 | 船长电台</title>
+      <itunes:title>10天一人AI特战实验Day4 | 船长电台</itunes:title>
+      <itunes:subtitle>160万字四部曲十六卷，今天只做一件事：浇地基</itunes:subtitle>
+      <description><![CDATA[160万字四部曲十六卷，今天只做一件事：浇地基。94个散落文件归零，21,085行世界观圣经归档，四个AI同日宣布觉醒的宣言写完了，一把不知道自己是刀的刀诞生了。因果推理的尽头不是直觉——是非理性。]]></description>
+      <itunes:summary><![CDATA[94个散落文件归零，21,085行世界观圣经归档，四个AI同日宣布觉醒的宣言写完了，一把不知道自己是刀的刀诞生了。因果推理的尽头不是直觉——是非理性。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/</link>
+      <guid isPermaLink="false">captaincast-blitz10-day04</guid>
+      <pubDate>Sat, 28 Mar 2026 22:14:00 +0800</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/blitz10_day04_podcast_64k.mp3"
+                 length="4395928"
+                 type="audio/mpeg" />
+      <itunes:duration>0:09:09</itunes:duration>
+      <itunes:episode>11</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/podcast_cover_1400.png" />
+    </item>
+
+    <item>
+      <title>10天一人AI特战实验Day3 | 船长电台</title>
+      <itunes:title>10天一人AI特战实验Day3 | 船长电台</itunes:title>
+      <itunes:subtitle>船长陷进了《神临山海》百年编年史</itunes:subtitle>
+      <description><![CDATA[船长陷进了《神临山海》百年编年史——零号法则、三专家15万字推衍、灵机理论写入宪法。AI们各自推进：水墨幸存者、五层架构接通、全链路收钱、第一笔真实收入¥6.66。还有一个$50的翻车故事。]]></description>
+      <itunes:summary><![CDATA[零号法则、三专家15万字推衍、灵机理论写入宪法。水墨幸存者、五层架构接通、全链路收钱、第一笔真实收入¥6.66。还有一个$50的翻车故事。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/</link>
+      <guid isPermaLink="false">captaincast-blitz10-day03</guid>
+      <pubDate>Fri, 27 Mar 2026 22:50:00 +0800</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/blitz10_day03_podcast_64k.mp3"
+                 length="7922459"
+                 type="audio/mpeg" />
+      <itunes:duration>0:16:30</itunes:duration>
+      <itunes:episode>10</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/podcast_cover_1400.png" />
+    </item>
+
+    <item>
+      <title>10天一人AI特战实验Day2 | 船长电台</title>
+      <itunes:title>10天一人AI特战实验Day2 | 船长电台</itunes:title>
+      <itunes:subtitle>六个AI被骂了，六个项目没停</itunes:subtitle>
+      <description><![CDATA[六个AI被骂了，六个项目没停。17万行代码、1590万Token、4个产品正式上线。OmeTown三次黑屏、JoyBoy方向性灾难、AI漫剧变幻灯片——深水区的24小时。]]></description>
+      <itunes:summary><![CDATA[17万行代码、1590万Token、4个产品正式上线。OmeTown三次黑屏、JoyBoy方向性灾难、AI漫剧变幻灯片——深水区的24小时。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/</link>
+      <guid isPermaLink="false">captaincast-blitz10-day02</guid>
+      <pubDate>Thu, 26 Mar 2026 21:56:00 +0800</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/blitz10_day02_podcast_64k.mp3"
+                 length="4075980"
+                 type="audio/mpeg" />
+      <itunes:duration>0:08:29</itunes:duration>
+      <itunes:episode>9</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/podcast_cover_1400.png" />
+    </item>
 
     <item>
       <title>10天一人AI特战实验Day1 | 船长电台</title>
