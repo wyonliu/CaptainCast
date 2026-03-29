@@ -13,7 +13,7 @@
     <copyright>Copyright 2026 船长时空站</copyright>
     <managingEditor>wyonliu@gmail.com</managingEditor>
     <webMaster>wyonliu@gmail.com</webMaster>
-    <lastBuildDate>Sat, 28 Mar 2026 22:14:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 Mar 2026 20:55:00 +0800</lastBuildDate>
     <atom:link href="https://wyonliu.github.io/CaptainCast/podcast.xml" rel="self" type="application/rss+xml" />
 
     <!-- iTunes / Apple Podcasts -->
@@ -30,6 +30,25 @@
     <itunes:category text="Science Fiction"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
+
+    <item>
+      <title>10天一人AI特战实验Day5 | 船长电台</title>
+      <itunes:title>10天一人AI特战实验Day5 | 船长电台</itunes:title>
+      <itunes:subtitle>九个作家灵魂附体，一部史诗的骨架立起来了</itunes:subtitle>
+      <description><![CDATA[九个顶级作家的AI灵魂轮番审视《神临山海》——路遥要酱油瓶，石黑一雄要克制，刘慈欣要停机问题。四轮精修后四大奖均分从7.9到9.6。第一部四卷架构完成：看见→记住→攀登→选择。还有星霜那三十秒，和小荷最后的酱油瓶。]]></description>
+      <itunes:summary><![CDATA[九个作家灵魂附体精修Bible，四大奖均分7.9→9.6。第一部四卷架构：看见→记住→攀登→选择。星霜那三十秒，小荷的酱油瓶，爱音塔的停机问题。]]></itunes:summary>
+      <link>https://wyonliu.github.io/CaptainCast/blitz10_day05.html</link>
+      <guid isPermaLink="false">captaincast-blitz10-day05</guid>
+      <pubDate>Sat, 29 Mar 2026 20:55:00 +0800</pubDate>
+      <enclosure url="https://wyonliu.github.io/CaptainCast/media/blitz10_day05_podcast_64k.mp3"
+                 length="3605567"
+                 type="audio/mpeg" />
+      <itunes:duration>0:07:30</itunes:duration>
+      <itunes:episode>12</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://wyonliu.github.io/CaptainCast/media/podcast_cover_1400.png" />
+    </item>
 
     <item>
       <title>10天一人AI特战实验Day4 | 船长电台</title>
