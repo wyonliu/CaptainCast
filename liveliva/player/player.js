@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const $=id=>document.getElementById(id),cfg=JSON.parse($('episode-config').textContent),a=$('episode-audio'),root=$('player'),play=$('play'),seek=$('seek'),speed=$('speed'),status=$('audio-status'),timer=$('sleep'),key='captaincast-liveliva-v7-listening';
+const $=id=>document.getElementById(id),cfg=JSON.parse($('episode-config').textContent),a=$('episode-audio'),root=$('player'),play=$('play'),seek=$('seek'),speed=$('speed'),status=$('audio-status'),timer=$('sleep'),key='captaincast-liveliva-v8-listening';
 const fmt=s=>{s=Math.max(0,Math.floor(Number(s)||0));return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;};
 let saved={},lastSave=0,pendingSeek=null,dragging=false,deadline=null,stopAt=null;
 try{saved=JSON.parse(localStorage.getItem(key)||'{}');}catch(e){}
