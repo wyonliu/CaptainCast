@@ -37,3 +37,6 @@ root.classList.add('enhanced-audio');update();volumeUI();window.addEventListener
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{$('return-audio').classList.toggle('visible',!entries[0].isIntersecting);},{threshold:0}).observe(root);
 if('mediaSession' in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:cfg.title,artist:'Shirley×船长',album:'船长电台',artwork:[{src:new URL(cfg.cover,location.href).href,type:'image/png'}]});for(const [name,fn] of Object.entries({play:()=>{if(a.paused)play.click();},pause:()=>a.pause(),seekbackward:d=>jump(current()-(d.seekOffset||15)),seekforward:d=>jump(current()+(d.seekOffset||15)),seekto:d=>jump(d.seekTime),previoustrack:()=>$('previous').click(),nexttrack:()=>$('next').click()})){try{navigator.mediaSession.setActionHandler(name,fn);}catch(e){}}}
 })();
+
+// Keep the film and the conversation from talking over each other.
+document.addEventListener("play",event=>{if(event.target instanceof HTMLMediaElement)document.querySelectorAll("audio,video").forEach(media=>{if(media!==event.target&&!media.paused)media.pause();});},true);
